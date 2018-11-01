@@ -1,5 +1,6 @@
 # Linky
 
+[![Version][version-src]][version-href]
 [![Build Status][build-src]][build-href]
 
 > Récupération facile de la consommation éléctrique Linky
@@ -25,7 +26,7 @@ const linky = require('@bokub/linky');
 const session = await linky.login('my-email@example.com', 'password');
 
 // Récupération de la consommation
-const data = await session.getDailyData();
+let data = await session.getDailyData();
 console.log(data);
 // [
 //   { date: '2018-09-28 00:00:00', value: 2.944 },
@@ -81,3 +82,5 @@ Il n'est pas possible d'utiliser une période de temps personnalisée
 
 [build-src]: https://flat.badgen.net/travis/bokub/linky
 [build-href]: https://travis-ci.org/bokub/linky
+[version-src]: https://flat.badgen.net/npm/v/@bokub/linky
+[version-href]: https://www.npmjs.com/package/@bokub/linky
