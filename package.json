@@ -16,7 +16,7 @@
   "main": "index.js",
   "repository": "https://github.com/bokub/linky",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "xo"
   },
   "xo": {
     "rules": {
@@ -25,5 +25,8 @@
       "camelcase": 0,
       "unicorn/prefer-type-error": 0
     }
+  },
+  "devDependencies": {
+    "xo": "^0.23.0"
   }
 }
