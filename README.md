@@ -8,8 +8,6 @@
 
 #### If you are looking for a command-line tool, check out  [linky-cli](https://github.com/bokub/linky-cli)
 
-#### > [Lire en français](https://github.com/bokub/linky/blob/master/README.fr.md) <
-
 
 ## Install
 

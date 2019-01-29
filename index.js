@@ -1,6 +1,7 @@
 const axios = require('axios');
 const dayjs = require('dayjs');
 
+const enedisNotice = ' - Check the Enedis website if the error persists';
 const get = (p, o) => p.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, o);
 const parseDate = dt => dayjs(`${dt.substr(6, 4)}-${dt.substr(3, 2)}-${dt.substr(0, 2)}`);
 
@@ -20,7 +21,7 @@ async function login(email, password) {
 		});
 	} catch (err) {
 		if (!err.response || err.response.status !== 302) {
-			throw new Error('Unexpected login response (2): ' + err.message);
+			throw new Error('Unexpected login response (2): ' + err.message + enedisNotice);
 		}
 
 		const cookies = err.response.headers['set-cookie']
@@ -28,7 +29,7 @@ async function login(email, password) {
 			.filter(el => el.indexOf('Expires=Thu, 01-Jan-1970 00:00:10 GMT') === -1);
 
 		if (!cookies || cookies.length === 0) {
-			throw new Error('Unexpected login response (3)');
+			throw new Error('Unexpected login response (3)' + enedisNotice);
 		}
 		const authCookies = cookies.filter(h => h.indexOf('iPlanetDirectoryPro=') === 0);
 		if (authCookies.length === 0) {
@@ -37,7 +38,7 @@ async function login(email, password) {
 		return new LinkySession(cookies);
 	}
 
-	throw new Error('Unexpected login response (1)');
+	throw new Error('Unexpected login response (1)' + enedisNotice);
 }
 
 class LinkySession {
@@ -100,7 +101,7 @@ class LinkySession {
 			});
 		} catch (err) {
 			if (!err.response || err.response.status !== 302 || this.calledOnce) {
-				throw new Error('Unexpected export response (2): ' + err.message);
+				throw new Error('Unexpected export response (2): ' + err.message + enedisNotice);
 			}
 			const newCookies = err.response.headers['set-cookie'];
 			this.cookies = this.cookies.concat(newCookies);
@@ -117,7 +118,7 @@ class LinkySession {
 				});
 				return resp.data;
 			} catch (err) {
-				throw new Error('Unexpected export response (3): ' + err.message);
+				throw new Error('Unexpected export response (3): ' + err.message + enedisNotice);
 			}
 		}
 
@@ -129,7 +130,7 @@ class LinkySession {
 			throw new Error('Please log in manually and accept the new terms of service');
 		}
 
-		throw new Error('Unexpected export response (1): ' + resp.data);
+		throw new Error('Unexpected export response (1): ' + resp.data + enedisNotice);
 	}
 
 	getCookie() {
@@ -151,7 +152,7 @@ class LinkySession {
 
 		const values = get(['graphe', 'data'], input);
 		if (!Array.isArray(values)) {
-			throw new Error(`Unexpected data: ${JSON.stringify(input)}`);
+			throw new Error(`Unexpected data: ${JSON.stringify(input)}` + enedisNotice);
 		}
 
 		const start = parseDate(get(['graphe', 'periode', 'dateDebut'], input));

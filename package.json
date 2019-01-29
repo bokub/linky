@@ -1,12 +1,12 @@
 {
   "name": "@bokub/linky",
   "description": "Easily retrieve your Linky power consumption",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "bokub",
   "bugs": "https://github.com/bokub/linky/issues",
   "dependencies": {
     "axios": "^0.18.0",
-    "dayjs": "^1.7.7"
+    "dayjs": "^1.8.0"
   },
   "devDependencies": {
     "xo": "^0.23.0"
