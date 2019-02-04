@@ -1,3 +1,4 @@
+const {URLSearchParams} = require('url');
 const axios = require('axios');
 const dayjs = require('dayjs');
 
@@ -175,6 +176,4 @@ class LinkySession {
 	}
 }
 
-module.exports = {
-	login
-};
+module.exports = {login};

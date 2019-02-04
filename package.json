@@ -32,7 +32,7 @@
   "repository": "https://github.com/bokub/linky",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "test": "xo && nyc ava -s"
+    "test": "xo && nyc ava -s --fail-fast"
   },
   "xo": {
     "rules": {
