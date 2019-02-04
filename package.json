@@ -1,7 +1,7 @@
 {
   "name": "@bokub/linky",
   "description": "Easily retrieve your Linky power consumption",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "bokub",
   "bugs": "https://github.com/bokub/linky/issues",
   "dependencies": {

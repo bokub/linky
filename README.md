@@ -3,6 +3,8 @@
 [![Version][version-src]][version-href]
 [![Build Status][build-src]][build-href]
 [![Engines][engine-src]][engine-href]
+[![Coverage][coverage-src]][coverage-href]
+![Code style][style-src]
 
 > Easily retrieve your Linky power consumption
 
@@ -85,5 +87,8 @@ You cannot use a custom time period
 [build-href]: https://travis-ci.org/bokub/linky
 [version-src]: https://flat.badgen.net/npm/v/@bokub/linky
 [version-href]: https://www.npmjs.com/package/@bokub/linky
-[engine-src]: https://flat.badgen.net/npm/node/@bokub/linky?color=cyan
+[engine-src]: https://flat.badgen.net/badge/node/%3E=%207.6.0?color=cyan
 [engine-href]: https://www.npmjs.com/package/@bokub/linky
+[coverage-src]: https://flat.badgen.net/codecov/c/github/bokub/linky
+[coverage-href]: https://codecov.io/gh/bokub/linky
+[style-src]: https://flat.badgen.net/badge/code%20style/XO?color=5ED9C7
