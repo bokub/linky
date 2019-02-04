@@ -1,1 +1,7 @@
 node_modules
+.nyc_output
+coverage.lcov
+coverage
+
+.idea
+.vscode

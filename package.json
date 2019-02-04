@@ -9,6 +9,9 @@
     "dayjs": "^1.8.0"
   },
   "devDependencies": {
+    "ava": "^1.2.0",
+    "codecov": "^3.1.0",
+    "nyc": "^13.1.0",
     "xo": "^0.23.0"
   },
   "engines": {
@@ -28,7 +31,8 @@
   },
   "repository": "https://github.com/bokub/linky",
   "scripts": {
-    "test": "xo"
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "test": "xo && nyc ava -s"
   },
   "xo": {
     "rules": {

@@ -6,9 +6,13 @@ node_js:
 - '7.6.0'
 
 deploy:
-  provider: npm
+- provider: npm
   email: npm.bokub@mail.com
   api_key: $NPM_TOKEN
   on:
     tags: true
+    node: 'node'
+- provider: script
+  script: npm run coverage
+  on:
     node: 'node'
