@@ -1,4 +1,4 @@
-const {URLSearchParams} = require('url');
+const qs = require('querystring');
 const axios = require('axios');
 const dayjs = require('dayjs');
 
@@ -7,7 +7,7 @@ const get = (p, o) => p.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, o);
 const parseDate = dt => dayjs(`${dt.substr(6, 4)}-${dt.substr(3, 2)}-${dt.substr(0, 2)}`);
 
 async function login(email, password) {
-	const body = new URLSearchParams({
+	const body = qs.stringify({
 		IDToken1: email,
 		IDToken2: password,
 		SunQueryParamsString: 'cmVhbG09cGFydGljdWxpZXJz', // Base64 of 'realm=particuliers'
@@ -26,6 +26,8 @@ async function login(email, password) {
 		}
 
 		if (!err.response.headers || !err.response.headers['set-cookie']) {
+			console.log(err.response);
+			console.log(err.response.headers);
 			throw new Error('Unexpected login response (3)' + enedisNotice);
 		}
 
@@ -78,11 +80,12 @@ class LinkySession {
 	async getData(resource, opts) {
 		const reqPart = 'lincspartdisplaycdc_WAR_lincspartcdcportlet';
 
-		const body = new URLSearchParams();
-		body.append('_' + reqPart + '_dateDebut', opts.start ? opts.start.format('DD/MM/YYYY') : null);
-		body.append('_' + reqPart + '_dateFin', opts.end ? opts.end.format('DD/MM/YYYY') : null);
+		const body = qs.stringify({
+			['_' + reqPart + '_dateDebut']: opts.start ? opts.start.format('DD/MM/YYYY') : null,
+			['_' + reqPart + '_dateFin']: opts.end ? opts.end.format('DD/MM/YYYY') : null
+		});
 
-		const query = new URLSearchParams({
+		const query = qs.stringify({
 			p_p_id: reqPart,
 			p_p_lifecycle: 2,
 			p_p_state: 'normal',
@@ -92,7 +95,7 @@ class LinkySession {
 			p_p_col_id: 'column-1',
 			p_p_col_pos: 1,
 			p_p_col_count: 3
-		}).toString();
+		});
 
 		const url = 'https://espace-client-particuliers.enedis.fr/group/espace-particuliers/suivi-de-consommation?' + query;
 
@@ -101,7 +104,7 @@ class LinkySession {
 			// Call once
 			resp = await axios.post(url, body, {
 				maxRedirects: 0,
-				headers: {Cookie: this.getCookie()},
+				headers: {Cookie: this.getCookie(), 'content-type': 'application/x-www-form-urlencoded'},
 				withCredentials: true
 			});
 		} catch (err) {
