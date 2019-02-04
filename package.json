@@ -32,14 +32,15 @@
   "repository": "https://github.com/bokub/linky",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "test": "xo && nyc ava -s --fail-fast"
+    "test": "xo && nyc ava -v -s --fail-fast"
   },
   "xo": {
     "rules": {
       "no-prototype-builtins": 0,
       "unicorn/catch-error-name": 0,
       "camelcase": 0,
-      "unicorn/prefer-type-error": 0
+      "unicorn/prefer-type-error": 0,
+      "capitalized-comments": 0
     }
   }
 }

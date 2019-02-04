@@ -25,12 +25,16 @@ async function login(email, password) {
 			throw new Error('Unexpected login response (2): ' + err.message + enedisNotice);
 		}
 
+		if (!err.response.headers || !err.response.headers['set-cookie']) {
+			throw new Error('Unexpected login response (3)' + enedisNotice);
+		}
+
 		const cookies = err.response.headers['set-cookie']
 			.filter(el => el.indexOf('Domain=.enedis.fr') > -1)
 			.filter(el => el.indexOf('Expires=Thu, 01-Jan-1970 00:00:10 GMT') === -1);
 
 		if (!cookies || cookies.length === 0) {
-			throw new Error('Unexpected login response (3)' + enedisNotice);
+			throw new Error('Unexpected login response (4)' + enedisNotice);
 		}
 		const authCookies = cookies.filter(h => h.indexOf('iPlanetDirectoryPro=') === 0);
 		if (authCookies.length === 0) {
