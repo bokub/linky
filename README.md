@@ -24,28 +24,28 @@ $ npm i @bokub/linky
 const linky = require('@bokub/linky');
 
 // Log in
-const session = await linky.login('my-email@example.com', 'password');
+linky.login('my-email@example.com', 'password').then(session => {
 
-// Retrieve your power consumption
-let data = await session.getDailyData();
-console.log(data);
-// [
-//   { date: '2018-09-28 00:00:00', value: 2.944 },
-//   { date: '2018-09-29 00:00:00', value: 2.704 },
-//   { date: '2018-09-30 00:00:00', value: 3.477 },
-//   { date: '2018-10-01 00:00:00', value: null },
-//   { date: '2018-10-02 00:00:00', value: 4.063 },
-//   { date: '2018-10-03 00:00:00', value: 3.209 },
-//   { date: '2018-10-04 00:00:00', value: 4.355 },
-//   ...
-// ]
+    // Retrieve your power consumption
+    session.getDailyData().then(data => {
+        console.log(data);
+        // [
+        //   { date: '2018-09-28 00:00:00', value: 2.944 },
+        //   { date: '2018-09-29 00:00:00', value: 2.704 },
+        //   { date: '2018-09-30 00:00:00', value: 3.477 },
+        //   { date: '2018-10-01 00:00:00', value: null },
+        //   { date: '2018-10-02 00:00:00', value: 4.063 },
+        //   { date: '2018-10-03 00:00:00', value: 3.209 },
+        //   { date: '2018-10-04 00:00:00', value: 4.355 },
+        //   ...
+        // ]
+    });
 
-// Use a custom time period
-data = await session.getDailyData({
-  start: '24/08/2018',
-  end: '06/09/2018'
+    // Use a custom time period
+    session.getDailyData({ start: '24/08/2018', end: '06/09/2018' }).then(data => {
+        console.log(data);
+    });
 });
-
 ```
 
 
