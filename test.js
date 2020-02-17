@@ -22,14 +22,6 @@ test('Login works', async t => {
 	t.false(session.calledOnce);
 });
 
-test('Hourly data can be retrieved', async t => {
-	const data = await session.getHourlyData({
-		start: dayjs().add(-3, 'day').format('DD/MM/YYYY'),
-		end: dayjs().add(-2, 'day').format('DD/MM/YYYY')
-	});
-	t.true(data.length > 45);
-});
-
 test('Daily data can be retrieved', async t => {
 	const data = await session.getDailyData();
 	t.true(data.length > 25);
@@ -43,6 +35,14 @@ test('Monthly data can be retrieved', async t => {
 test('Yearly data can be retrieved', async t => {
 	const data = await session.getYearlyData();
 	t.true(data.length > 1);
+});
+
+test('Hourly data can be retrieved', async t => {
+	const data = await session.getHourlyData({
+		start: dayjs().add(-3, 'day').format('DD/MM/YYYY'),
+		end: dayjs().add(-2, 'day').format('DD/MM/YYYY')
+	});
+	t.true(data.length > 45);
 });
 
 test('Long periods cannot be retrieved', async t => {
