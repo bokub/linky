@@ -8,8 +8,7 @@
 
 > Easily retrieve your Linky power consumption
 
-#### If you are looking for a command-line tool, check out  [linky-cli](https://github.com/bokub/linky-cli)
-
+#### If you are looking for a command-line tool, check out [linky-cli](https://github.com/bokub/linky-cli)
 
 ## Install
 
@@ -17,17 +16,15 @@
 $ npm i @bokub/linky
 ```
 
-
 ## Usage
 
 ```js
 const linky = require('@bokub/linky');
 
 // Log in
-linky.login('my-email@example.com', 'password').then(session => {
-
+linky.login('my-email@example.com', 'password').then((session) => {
     // Retrieve your power consumption
-    session.getDailyData().then(data => {
+    session.getDailyData().then((data) => {
         console.log(data);
         // [
         //   { date: '2018-09-28 00:00:00', value: 2.944 },
@@ -42,12 +39,11 @@ linky.login('my-email@example.com', 'password').then(session => {
     });
 
     // Use a custom time period
-    session.getDailyData({ start: '24/08/2018', end: '06/09/2018' }).then(data => {
+    session.getDailyData({ start: '24/08/2018', end: '06/09/2018' }).then((data) => {
         console.log(data);
     });
 });
 ```
-
 
 ## API
 
@@ -59,7 +55,7 @@ Log into you customer area and retrieve a session that you can use to retrieve y
 
 Retrieve power consumption with a step of 30 minutes
 
-Default time period: *Yesterday*
+Default time period: _Yesterday_
 
 ### `session.getDailyData([options])`
 
@@ -67,7 +63,7 @@ Retrieve power consumption with a step of 1 day
 
 You **cannot** retrieve more than 31 days at once
 
-Default time period: *Last 31 days*
+Default time period: _Last 31 days_
 
 ### `session.getMonthlyData([options])`
 
@@ -75,7 +71,7 @@ Retrieve power consumption with a step of 1 month
 
 You **cannot** retrieve more than 12 months at once
 
-Default time period: *Last 12 months*
+Default time period: _Last 12 months_
 
 ### `session.getYearlyData([options])`
 
