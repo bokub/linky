@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cosmo/bootstrap.min.css" />
+        <title>Générateur de tokens Linky</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="jumbotron mt-5 py-5">
+                <!-- index -->
+                <h1 class="display-4">Linky auth</h1>
+                <h4>
+                    Générateur de tokens permettant d'utiliser
+                    <a href="https://github.com/bokub/linky"><code>bokub/linky</code></a>
+                    en tant que module javascript, ou en ligne de commande.
+                </h4>
+                <hr class="my-4" />
+                <p style="font-size: 1.1rem">
+                    <b>N.B:</b> Cet outil a pour seul but de servir de relais entre le module
+                    <code>bokub/linky</code> et les serveurs d'Enedis lors de la génération de tokens, nécéssaires pour
+                    accéder à votre consommation Linky.
+                    <br />
+                    <br />
+                    Vos tokens ne font que transiter et ne sont jamais stockés. Vos données de consommation ne passent
+                    pas par ce serveur et sont directement collectées par <code>bokub/linky</code>, sur votre machine.
+                    <br />
+                    <br />
+                    Le code de ce serveur est 100% open-source et peut être consulté
+                    <a href="https://github.com/bokub/linky/tree/master/server">sur Github</a>.
+                    <br />
+                    <br />
+                    Cliquez sur le boutton ci-dessous pour générer de nouveaux tokens. Vous serez redirigé vers le site
+                    d'Enedis qui vous demandera votre accord.
+                </p>
+                <div class="row justify-content-center mt-5">
+                    <div class="col-auto">
+                        <a class="btn btn-primary btn-lg" href="/api/auth" role="button">Générer des tokens</a>
+                    </div>
+                </div>
+                <!-- index -->
+                <form style="display: none">
+                    <h1 class="display-4">Vos tokens</h1>
+
+                    <div class="form-group row mt-4">
+                        <label for="accessToken" class="col-2 col-form-label">Access Token</label>
+                        <div class="col-10">
+                            <input type="text" readonly class="form-control" id="accessToken" value="%access_token%" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="accessToken" class="col-2 col-form-label">Refresh Token</label>
+                        <div class="col-10">
+                            <input
+                                type="text"
+                                readonly
+                                class="form-control"
+                                id="refreshToken"
+                                value="%refresh_token%"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="usagePointsId" class="col-2 col-form-label">Usage Points</label>
+                        <div class="col-10">
+                            <textarea class="form-control" id="usagePointsId" rows="3" readonly>
+%usage_points_id%</textarea
+                            >
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
