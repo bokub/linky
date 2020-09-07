@@ -8,7 +8,7 @@ export default (req: NowRequest, res: NowResponse) => {
     const { token } = req.query;
 
     if (!token) {
-        return res.send('Missing token parameter').status(400);
+        return res.status(400).send('Missing token parameter');
     }
 
     return axios({
@@ -26,5 +26,5 @@ export default (req: NowRequest, res: NowResponse) => {
         }),
     })
         .then((r) => res.json({ response: r.data }))
-        .catch((e) => res.send(e.response ? e.response.data : e).status(500));
+        .catch((e) => res.status(500).send(e.response ? e.response.data : e));
 };

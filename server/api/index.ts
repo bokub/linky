@@ -9,7 +9,7 @@ const { BASE_URI, REDIRECT_URI, CLIENT_ID, CLIENT_SECRET } = process.env;
 export default (req: NowRequest, res: NowResponse) => {
     const { state, code } = req.query;
     if (!state || !code) {
-        return res.send('state and code are mandatory').status(400);
+        return res.status(400).send('state and code are mandatory');
     }
 
     return axios({
@@ -38,5 +38,5 @@ export default (req: NowRequest, res: NowResponse) => {
                 .replace('%usage_points_id%', r.data.usage_points_id.replace(/,/g, '\n'));
             res.send(html);
         })
-        .catch((e) => res.send(e.response ? e.response.data : e).status(500));
+        .catch((e) => res.status(500).send(e.response ? e.response.data : e));
 };
