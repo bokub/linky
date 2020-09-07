@@ -14,6 +14,9 @@ test.before(async () => {
         refreshToken: authorizeResult.refresh_token,
         usagePointId: authorizeResult.usage_points_id,
         sandbox: true,
+        onTokenRefresh: (accessToken, refreshToken) => {
+            console.log(accessToken, refreshToken);
+        },
     };
     session = new Session(config);
 });
@@ -40,4 +43,14 @@ test('can retrieve load curve', async (t) => {
     t.is(data.data.length, 48);
     t.is(data.data[0].date, '2020-08-27 00:00:00');
     t.is(data.data[3].date, '2020-08-27 01:30:00');
+});
+
+test('can retrieve max power', async (t) => {
+    const data = await session.getMaxPower('2020-08-27', '2020-08-30');
+    t.is(data.unit, 'VA');
+    t.is(data.data.length, 3);
+    t.deepEqual(
+        data.data.map((d) => d.date.slice(0, 10)),
+        ['2020-08-27', '2020-08-28', '2020-08-29']
+    );
 });
