@@ -6,6 +6,10 @@
     "bugs": "https://github.com/bokub/linky/issues",
     "dependencies": {
         "axios": "^0.20.0",
+        "chalk": "^4.1.0",
+        "conf": "^7.1.2",
+        "meow": "^7.1.1",
+        "ora": "^5.1.0",
         "qs": "^6.9.4"
     },
     "devDependencies": {
@@ -20,8 +24,7 @@
         "typescript": "^4.0.2"
     },
     "files": [
-        "dist/src",
-        "dist/bin"
+        "dist"
     ],
     "homepage": "https://github.com/bokub/linky",
     "keywords": [

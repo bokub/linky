@@ -33,9 +33,10 @@ export default (req: NowRequest, res: NowResponse) => {
             const html = readFileSync(join(__dirname, '..', 'index.html'), 'utf8')
                 .replace(/<!-- index -->.+<!-- index -->/gs, '')
                 .replace('<form style="display: none">', '<form>')
-                .replace('%access_token%', r.data.access_token)
-                .replace('%refresh_token%', r.data.refresh_token)
-                .replace('%usage_points_id%', r.data.usage_points_id.replace(/,/g, '\n'));
+                .replace(/%access_token%/g, r.data.access_token)
+                .replace(/%refresh_token%/g, r.data.refresh_token)
+                .replace(/%usage_point_id%/g, r.data.usage_points_id.split(',')[0])
+                .replace(/%usage_points_id%/g, r.data.usage_points_id.replace(/,/g, '\n'));
             res.send(html);
         })
         .catch((e) => res.status(500).send(e.response ? e.response.data : e));

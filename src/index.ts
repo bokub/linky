@@ -84,7 +84,9 @@ export class Session {
                     );
                 }
                 if (err.request) {
-                    throw new Error(`No response from the Enedis API\nRequest: ${err.request}`);
+                    throw new Error(
+                        `No response from the Enedis API\nRequest: ` + JSON.stringify(err.request, null, 4)
+                    );
                 }
                 throw new Error(`Cannot call the Enedis API\nError: ${err.message}`);
             });
