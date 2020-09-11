@@ -1,7 +1,7 @@
 {
     "name": "@bokub/linky",
     "description": "Easily retrieve your Linky power consumption",
-    "version": "2.0.0-beta.0",
+    "version": "2.0.0-beta.1",
     "author": "bokub",
     "bugs": "https://github.com/bokub/linky/issues",
     "dependencies": {
@@ -9,12 +9,14 @@
         "chalk": "^4.1.0",
         "conf": "^7.1.2",
         "meow": "^7.1.1",
+        "mkdirp": "^1.0.4",
         "ora": "^5.1.0",
         "qs": "^6.9.4"
     },
     "devDependencies": {
         "@ava/typescript": "^1.1.1",
         "@bokub/prettier-config": "^1.0.1",
+        "@types/mkdirp": "^1.0.1",
         "@types/qs": "^6.9.4",
         "ava": "^3.12.1",
         "codecov": "^3.7.2",

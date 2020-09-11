@@ -30,6 +30,12 @@ const mainHelp = `
       linky (daily|loadcurve|maxpower):
         --start     -s    Date de début (AAAA-MM-JJ)
         --end       -e    Date de début (AAAA-MM-JJ)
+        --output    -o    Fichier .json de sortie. Optionnel
+        
+    Exemples:
+      linky auth -a Kft3SIZrcq -r F3AR0K8eoC -u 225169
+      linky daily --start 2020-08-01 --end 20202-08-15
+      linky loadcurve -s 2020-09-01 -e 2020-09-02 -o data/ma_conso.json
 `;
 
 const authCommand = 'auth';
@@ -50,6 +56,7 @@ try {
             usagePointId: { type: 'string', alias: 'u' },
             start: { type: 'string', alias: 's', isRequired: isMetering },
             end: { type: 'string', alias: 'e', isRequired: isMetering },
+            output: { type: 'string', alias: 'o' },
             sandbox: { type: 'boolean' }, // For test purposes
         },
     });
@@ -59,8 +66,9 @@ try {
 }
 
 const meteringFlags: MeteringFlags = {
-    start: cli.flags.start as string,
-    end: cli.flags.end as string,
+    start: cli.flags.start || '',
+    end: cli.flags.end || '',
+    output: cli.flags.output || null,
 };
 
 switch (cli.input[0]) {
