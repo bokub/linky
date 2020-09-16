@@ -1,7 +1,7 @@
 {
     "name": "@bokub/linky",
     "description": "Easily retrieve your Linky power consumption",
-    "version": "2.0.0-beta.1",
+    "version": "2.0.0-beta.2",
     "author": "bokub",
     "bugs": "https://github.com/bokub/linky/issues",
     "dependencies": {
@@ -52,7 +52,8 @@
     "scripts": {
         "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
         "test": "nyc ava --timeout=1m",
-        "prepublish": "rm -fr ./dist && tsc",
+        "prepublish": "npm run build",
+        "build": "rm -fr ./dist && tsc",
         "pkg": "rm -fr ./pkg && pkg . --out-path pkg",
         "prettier": "prettier --write **/*.{ts,md,json,yml,html}"
     },

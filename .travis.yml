@@ -2,6 +2,8 @@ language: node_js
 node_js:
     - 'node'
 
+before_deploy: npm run pkg
+
 after_success: npm run coverage
 
 deploy:
@@ -9,6 +11,7 @@ deploy:
       email: $NPM_EMAIL
       api_key: $NPM_TOKEN
       skip_cleanup: true
+      tag: beta # FIXME
       on:
           tags: true
     - provider: releases
