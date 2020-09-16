@@ -17,26 +17,43 @@
                     en tant que module javascript, ou en ligne de commande.
                 </h4>
                 <hr class="my-4" />
-                <p style="font-size: 1.1rem">
-                    <b>N.B:</b> Cet outil a pour seul but de servir de relais entre le module
-                    <code>bokub/linky</code> et les serveurs d'Enedis lors de la génération de tokens, nécéssaires pour
-                    accéder à votre consommation Linky.
+                <div style="font-size: 1.1rem">
+                    En utilisant le module npm
+                    <a href="https://github.com/bokub/linky/tree/datahub"><code>bokub/linky</code></a
+                    >, vous pouvez récupérer votre consommation éléctrique à des fins personnelles.
                     <br />
                     <br />
-                    Vos tokens ne font que transiter et ne sont jamais stockés. Vos données de consommation ne passent
-                    pas par ce serveur et sont directement collectées par <code>bokub/linky</code>, sur votre machine.
+                    Pour ce faire, vous avez besoin:<br />
+                    <ul>
+                        <li>D'un compteur Linky</li>
+                        <li>D'un espace personnel Enedis</li>
+                        <li>De tokens, que vous allez pouvoir générer grâce à cet outil</li>
+                    </ul>
                     <br />
-                    <br />
-                    Le code de ce serveur est 100% open-source et peut être consulté
-                    <a href="https://github.com/bokub/linky/tree/datahub/server">sur Github</a>.
-                    <br />
-                    <br />
-                    Cliquez sur le boutton ci-dessous pour générer de nouveaux tokens. Vous serez redirigé vers le site
-                    d'Enedis qui vous demandera votre accord.
-                </p>
+
+                    <div class="alert alert-light" role="alert">
+                        <b>N.B:</b> Cet outil a pour <u>seul but</u> de servir de relais entre le module
+                        <code>bokub/linky</code> et les serveurs d'Enedis lors de la génération de tokens, nécéssaires
+                        pour accéder à votre consommation Linky.
+                        <br />
+                        <br />
+                        Vos tokens ne font que transiter et ne sont jamais stockés. Vos données de consommation ne
+                        passent pas par ce serveur et sont directement collectées par <code>bokub/linky</code>, sur
+                        votre machine.
+                        <br />
+                        <br />
+                        Le code de ce serveur est 100% open-source et peut être consulté
+                        <a href="https://github.com/bokub/linky/tree/datahub/server">sur Github</a>.
+                    </div>
+
+                    Cliquez sur le boutton ci-dessous pour générer de nouveaux tokens. Vous serez redirigé vers votre
+                    espace personnel Enedis afin de donner votre accord
+                </div>
                 <div class="row justify-content-center mt-5">
                     <div class="col-auto">
-                        <a class="btn btn-primary btn-lg" href="/api/auth" role="button">Générer des tokens</a>
+                        <a class="btn-link" href="/api/auth" role="button">
+                            <img width="240" src="bleu-enedis.png" alt="J'accède à mon espace client Enedis" />
+                        </a>
                     </div>
                 </div>
                 <!-- index -->

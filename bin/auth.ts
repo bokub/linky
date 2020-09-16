@@ -11,7 +11,7 @@ export function auth(config: SessionConfig) {
                 chalk.cyan('    --access-token     ou   -a\n') +
                 chalk.cyan('    --refresh-token    ou   -r\n') +
                 chalk.cyan('    --usage-point-id   ou   -u\n\n') +
-                chalk.green('Pour obtenir ces informations, rendez-vous sur https://linky.bokub.vercel.app')
+                chalk.green('Pour obtenir ces informations, rendez-vous sur https://linky-auth.vercel.app')
         );
         throw new Error();
     }

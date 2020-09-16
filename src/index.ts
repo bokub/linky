@@ -46,7 +46,7 @@ export class Session {
         return this.request('daily_consumption_max_power', start, end);
     }
 
-    private request(endpoint: string, start: string, end: string): Promise<Consumption> {
+    private request(endpoint: string, start: string, end: string, retrying = false): Promise<Consumption> {
         return axios({
             method: 'get',
             url: `${this.baseURL}/v4/metering_data/${endpoint}?${qs.stringify({
@@ -72,8 +72,10 @@ export class Session {
             .catch((err) => {
                 if (err.response) {
                     // Access token is too old, renew it
-                    if (err.response.status === 401) {
-                        return this.refreshToken().then(() => this.request(endpoint, start, end));
+                    if ((err.response.status === 401 || err.response.status === 403) && !retrying) {
+                        // FIXME find code
+                        console.log(`Trying to refresh token because code is ${err.response.status}`);
+                        return this.refreshToken().then(() => this.request(endpoint, start, end, true));
                     }
                     if (err.response.status === 400 && err.response.data.error_description) {
                         throw new Error(`Invalid request: ${err.response.data.error_description}`);
@@ -95,7 +97,7 @@ export class Session {
     private refreshToken() {
         return axios({
             method: 'get',
-            url: `https://linky.bokub.vercel.app/api/refresh?token=${this.config.refreshToken}`,
+            url: `https://linky-auth.vercel.app/api/refresh?token=${this.config.refreshToken}`,
         })
             .then((res) => {
                 const { access_token, refresh_token } = res.data.response;
