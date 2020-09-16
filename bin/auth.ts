@@ -7,7 +7,7 @@ const store = new Conf();
 export function auth(config: SessionConfig) {
     if (!config.accessToken || !config.refreshToken || !config.usagePointId) {
         console.error(
-            chalk.yellow("L'authentification nécéssite 3 paramètres:\n") +
+            chalk.yellow("L'authentification nécessite 3 paramètres:\n") +
                 chalk.cyan('    --access-token     ou   -a\n') +
                 chalk.cyan('    --refresh-token    ou   -r\n') +
                 chalk.cyan('    --usage-point-id   ou   -u\n\n') +
@@ -38,7 +38,6 @@ export function getSession(): Session {
         usagePointId,
         sandbox: Boolean(store.get('linky/sandbox', false)),
         onTokenRefresh: (accessToken, refreshToken) => {
-            console.log('REFRESH DONE'); //FIXME
             store.set('linky/accessToken', accessToken);
             store.set('linky/refreshToken', refreshToken);
         },

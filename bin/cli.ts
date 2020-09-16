@@ -86,13 +86,25 @@ switch (cli.input[0]) {
 
         break;
     case dailyConsumptionCommand:
-        daily(meteringFlags).catch((e) => exit(e));
+        try {
+            daily(meteringFlags).catch((e) => exit(e));
+        } catch (e) {
+            exit(e);
+        }
         break;
     case loadCurveCommand:
-        loadCurve(meteringFlags).catch((e) => exit(e));
+        try {
+            loadCurve(meteringFlags).catch((e) => exit(e));
+        } catch (e) {
+            exit(e);
+        }
         break;
     case maxPowerCommand:
-        maxPower(meteringFlags).catch((e) => exit(e));
+        try {
+            maxPower(meteringFlags).catch((e) => exit(e));
+        } catch (e) {
+            exit(e);
+        }
         break;
     default:
         cli.showHelp();

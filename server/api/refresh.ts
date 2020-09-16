@@ -26,5 +26,5 @@ export default (req: NowRequest, res: NowResponse) => {
         }),
     })
         .then((r) => res.json({ response: r.data }))
-        .catch((e) => res.status(500).send(e.response ? e.response.data : e));
+        .catch((e) => res.status(e.response ? e.response.status : 500).send(e.response ? e.response.data : e));
 };

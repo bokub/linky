@@ -72,9 +72,7 @@ export class Session {
             .catch((err) => {
                 if (err.response) {
                     // Access token is too old, renew it
-                    if ((err.response.status === 401 || err.response.status === 403) && !retrying) {
-                        // FIXME find code
-                        console.log(`Trying to refresh token because code is ${err.response.status}`);
+                    if (err.response.status === 403 && !retrying) {
                         return this.refreshToken().then(() => this.request(endpoint, start, end, true));
                     }
                     if (err.response.status === 400 && err.response.data.error_description) {
