@@ -7,18 +7,16 @@
 
 > **N.B**: Because this tool is targeted for french people, the documentation is...in french
 
+Ce module vous permet de récupérer votre consommation électrique Linky via les nouvelles API _"Authorize V1"_ et _"Metering Data V4"_ d'Enedis
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/17952318/93326183-b5ba2400-f818-11ea-85cf-c278a1e32b58.gif" alt="Screenshot">
 </p>
 
-Ce module vous permet de récupérer votre consommation électrique Linky via les nouvelles API _"Authorize V1"_ et _"Metering Data V4"_ d'Enedis
-
 Il peut s'utiliser de 2 façons :
 
-1. En ligne de commande
-2. En tant que module Node.js, depuis un autre programme
-
-Les documentations pour ces 2 usages sont décrites ci-dessous
+1. [En ligne de commande](#1-linky-en-ligne-de-commande)
+2. [En tant que module Node.js](#2-linky-comme-module-nodejs), depuis un autre programme
 
 Notez qu'il vous faut un compteur Linky et un espace client Enedis pour pouvoir utiliser ce module
 
@@ -32,7 +30,7 @@ Si vous avez Node.js sur votre machine :
 npm i -g @bokub/linky@beta
 ```
 
-Dans le cas contraire, vous pouvez télécharger le binaire correspondant à votre plateforme dans les [assets de la dernière release](https://github.com/bokub/linky/releases/latest).
+Dans le cas contraire, vous pouvez télécharger le binaire correspondant à votre plateforme dans les [assets de la dernière release](https://github.com/bokub/linky/releases).
 
 > **N.B :** Si vous choisissez d'utiliser un binaire, il faudra adapter les exemples de cette documentation en replaçant la commande `linky` par le nom du binaire.
 >
@@ -69,7 +67,13 @@ Vous pouvez sauvegarder vos résultats dans un fichier JSON grâce à l'option `
 linky loadcurve --start 2020-09-01 --end 2020-09-02 --output data/ma_conso.json
 ```
 
-## 1. Linky comme module Node.js
+Pour voir l'aide détaillée :
+
+```bash
+linky --help
+```
+
+## 2. Linky comme module Node.js
 
 ### Installation
 
