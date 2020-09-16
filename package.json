@@ -21,6 +21,7 @@
         "ava": "^3.12.1",
         "codecov": "^3.7.2",
         "nyc": "^15.1.0",
+        "pkg": "^4.4.9",
         "prettier": "^2.1.1",
         "ts-node": "^9.0.0",
         "typescript": "^4.0.2"
@@ -52,6 +53,7 @@
         "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
         "test": "nyc ava --timeout=1m",
         "prepublish": "rm -fr ./dist && tsc",
+        "pkg": "rm -fr ./pkg && pkg . --out-path pkg",
         "prettier": "prettier --write **/*.{ts,md,json,yml,html}"
     },
     "prettier": "@bokub/prettier-config",

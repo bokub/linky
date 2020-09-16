@@ -55,7 +55,9 @@ function handle(promise: Promise<Consumption>, spinnerText: string, displayTime:
                 }
             }
             spinner.succeed();
-            ora(`Résultats sauvegardés dans ${output}`).succeed();
+            if (output) {
+                ora(`Résultats sauvegardés dans ${output}`).succeed();
+            }
 
             display(consumption, displayTime);
         })

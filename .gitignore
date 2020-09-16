@@ -3,6 +3,7 @@ node_modules
 coverage.lcov
 coverage
 dist
+pkg
 
 .env
 .vercel
