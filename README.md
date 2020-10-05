@@ -45,7 +45,7 @@ Rendez-vous sur [linky-auth.vercel.app](https://linky-auth.vercel.app) pour donn
 Puis, créez une connexion à votre compte avec la commande suivante:
 
 ```bash
-linky auth -a <access token> -r <refresh token> -u <usage point ID>
+linky auth -a <access token> -r <refresh token> -u <usage point ID> --sandbox
 ```
 
 Si tout se passe bien, vous pourrez alors récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
