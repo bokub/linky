@@ -34,7 +34,7 @@ const mainHelp = `
         
     Exemples:
       linky auth -a Kft3SIZrcq -r F3AR0K8eoC -u 225169
-      linky daily --start 2020-08-01 --end 20202-08-15
+      linky daily --start 2020-08-01 --end 2020-08-15
       linky loadcurve -s 2020-09-01 -e 2020-09-02 -o data/ma_conso.json
 `;
 
