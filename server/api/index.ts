@@ -34,14 +34,17 @@ export default (req: NowRequest, res: NowResponse) => {
             if (state.indexOf('test') === 0) {
                 return res.json({ response: r.data });
             }
-            const html = readFileSync(join(__dirname, '..', 'index.html'), 'utf8')
-                .replace(/<!-- index -->.+<!-- index -->/gs, '')
-                .replace('<form style="display: none">', '<form>')
+            const html = readFileSync(join(__dirname, '..', 'tokens.html'), 'utf8')
                 .replace(/%access_token%/g, r.data.access_token)
                 .replace(/%refresh_token%/g, r.data.refresh_token)
                 .replace(/%usage_point_id%/g, r.data.usage_points_id.split(',')[0])
                 .replace(/%usage_points_id%/g, r.data.usage_points_id.replace(/,/g, '\n'));
             res.send(html);
         })
-        .catch((e) => res.status(500).send(e.response ? e.response.data : e));
+        .catch((e) => {
+            const code = e.response ? e.response.status : 0;
+            const body = e.response ? e.response.data : e;
+            console.error(`error getting token.\nCode = ${code}.\nError = ${body}`);
+            res.status(code || 500).send(body || e);
+        });
 };

@@ -26,5 +26,10 @@ export default (req: NowRequest, res: NowResponse) => {
         }),
     })
         .then((r) => res.json({ response: r.data }))
-        .catch((e) => res.status(e.response ? e.response.status : 500).send(e.response ? e.response.data : e));
+        .catch((e) => {
+            const code = e.response ? e.response.status : 0;
+            const body = e.response ? e.response.data : e;
+            console.error(`error getting token.\nCode = ${code}.\nError = ${body}`);
+            res.status(code || 500).send(body || e);
+        });
 };

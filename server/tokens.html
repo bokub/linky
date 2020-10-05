@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cosmo/bootstrap.min.css" />
+        <title>Générateur de tokens Linky</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="jumbotron mt-5 py-5">
+                <form>
+                    <h1 class="display-4">Vos tokens</h1>
+
+                    <div class="alert alert-warning" role="alert">
+                        <b>Attention:</b> Les tokens affichés sur cette page permettent d'accéder à toutes vos données
+                        de consommation pendant plusieurs années.<br />
+                        Ils doivent rester secrets au même titre qu'un mot de passe. Ne les utilisez pas dans un outil
+                        autre que <code>bokub/linky</code>.
+                    </div>
+
+                    <div class="form-group row mt-4">
+                        <label for="accessToken" class="col-2 col-form-label">Access Token</label>
+                        <div class="col-10">
+                            <input
+                                type="text"
+                                readonly
+                                class="form-control text-monospace"
+                                id="accessToken"
+                                value="%access_token%"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="accessToken" class="col-2 col-form-label">Refresh Token</label>
+                        <div class="col-10">
+                            <input
+                                type="text"
+                                readonly
+                                class="form-control text-monospace"
+                                id="refreshToken"
+                                value="%refresh_token%"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="usagePointsId" class="col-2 col-form-label">Usage Point IDs</label>
+                        <div class="col-10">
+                            <textarea class="form-control text-monospace" id="usagePointsId" rows="2" readonly>
+%usage_points_id%</textarea
+                            >
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="command" class="col-2 col-form-label"
+                            >Exemple de commande pour <code>bokub/linky</code></label
+                        >
+                        <div class="col-10">
+                            <textarea class="form-control text-monospace" id="command" rows="2" readonly>
+linky auth -a %access_token% -r %refresh_token% -u %usage_point_id%</textarea
+                            >
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-5">
+                        <div class="col-auto">
+                            <a class="btn btn-primary btn-lg" href="/" role="button">Retour à l'accueil</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
