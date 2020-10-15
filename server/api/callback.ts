@@ -8,7 +8,7 @@ const { BASE_URI, REDIRECT_URI, CLIENT_ID, CLIENT_SECRET } = process.env;
 
 export default (req: NowRequest, res: NowResponse) => {
     const { state, code, error } = req.query;
-    const intCode = parseInt(code.toString(), 10);
+    const intCode = parseInt(code ? code.toString() : '', 10);
     if (error && intCode) {
         return res.status(intCode).send(error + '\n' + (req.query.error_description || ''));
     }

@@ -95,7 +95,7 @@ export class Session {
     private refreshToken() {
         return axios({
             method: 'get',
-            url: `https://linky-auth.vercel.app/api/refresh?token=${this.config.refreshToken}`,
+            url: `https://conso.vercel.app/api/refresh?token=${this.config.refreshToken}`,
         })
             .then((res) => {
                 const { access_token, refresh_token } = res.data.response;

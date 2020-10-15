@@ -16,7 +16,7 @@ const mainHelp = `
     linky <commande> [options]
     
     Commandes:
-      linky auth        Crée une connexion à un compte Enedis. Vous pouvez obtenir vos tokens sur https://linky-auth.vercel.app
+      linky auth        Crée une connexion à un compte Enedis. Vous pouvez obtenir vos tokens sur https://conso.vercel.app
       linky daily       Récupère la consommation quotidienne
       linky loadcurve   Récupère la puissance moyenne consommée quotidiennement, sur un intervalle de 30 min
       linky maxpower    Récupère la puissance maximale de consommation atteinte quotidiennement

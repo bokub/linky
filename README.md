@@ -27,7 +27,7 @@ Notez qu'il vous faut un compteur Linky et un espace client Enedis pour pouvoir 
 Si vous avez Node.js sur votre machine :
 
 ```bash
-npm i -g @bokub/linky@beta
+npm i -g linky
 ```
 
 Dans le cas contraire, vous pouvez télécharger le binaire correspondant à votre plateforme dans les [assets de la dernière release](https://github.com/bokub/linky/releases).
@@ -40,7 +40,7 @@ Dans le cas contraire, vous pouvez télécharger le binaire correspondant à vot
 
 Avant toute chose, il faudra vous connecter à votre espace client Enedis et leur donner l'autorisation de partager vos données avec une application extérieure.
 
-Rendez-vous sur [linky-auth.vercel.app](https://linky-auth.vercel.app) pour donner votre accord et récupérer un jeu de tokens.
+Rendez-vous sur [conso.vercel.app](https://conso.vercel.app) pour donner votre accord et récupérer un jeu de tokens.
 
 Puis, créez une connexion à votre compte avec la commande suivante:
 
