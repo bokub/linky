@@ -2,9 +2,12 @@ language: node_js
 node_js:
     - 'node'
 
-before_deploy: npm run pkg
-
+script:
+  - npm test
+  - npm run build
 after_success: npm run coverage
+
+before_deploy: npm run pkg
 
 deploy:
     - provider: npm
