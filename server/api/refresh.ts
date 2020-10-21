@@ -2,7 +2,7 @@ import { NowRequest, NowResponse } from '@vercel/node';
 import axios from 'axios';
 import qs from 'qs';
 
-const { BASE_URI, REDIRECT_URI, CLIENT_ID, CLIENT_SECRET } = process.env;
+const { REDIRECT_URI, CLIENT_ID, CLIENT_SECRET, SANDBOX } = process.env;
 
 export default (req: NowRequest, res: NowResponse) => {
     const { token } = req.query;
@@ -10,10 +10,10 @@ export default (req: NowRequest, res: NowResponse) => {
     if (!token) {
         return res.status(400).send('Missing token parameter');
     }
-
+    const baseURI = SANDBOX ? 'https://gw.hml.api.enedis.fr' : 'https://gw.prd.api.enedis.fr';
     return axios({
         method: 'post',
-        url: `${BASE_URI}/v1/oauth2/token`,
+        url: `${baseURI}/v1/oauth2/token`,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },

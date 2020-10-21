@@ -4,7 +4,7 @@ import { join } from 'path';
 import axios from 'axios';
 import * as qs from 'qs';
 
-const { BASE_URI, REDIRECT_URI, CLIENT_ID, CLIENT_SECRET } = process.env;
+const { REDIRECT_URI, CLIENT_ID, CLIENT_SECRET, SANDBOX } = process.env;
 
 export default (req: NowRequest, res: NowResponse) => {
     const { state, code, error } = req.query;
@@ -16,9 +16,10 @@ export default (req: NowRequest, res: NowResponse) => {
         return res.status(400).send('state and code are mandatory');
     }
 
+    const baseURI = SANDBOX ? 'https://gw.hml.api.enedis.fr' : 'https://gw.prd.api.enedis.fr';
     return axios({
         method: 'post',
-        url: `${BASE_URI}/v1/oauth2/token`,
+        url: `${baseURI}/v1/oauth2/token`,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },

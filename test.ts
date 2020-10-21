@@ -8,9 +8,18 @@ test.before(async () => {
     console.info('Generating authorization code...');
     const authorizeURL = await axios
         .get('https://linky.bokub.vercel.app/api/auth?state=test1') // This is a test server with fake data
-        .then((r) => r.data.match('var url = "(.+)"')[1].replace('conso', 'linky.bokub'));
+        .then((r) => r.data.match('var url = "(.+)"')[1].replace('conso', 'linky.bokub').replace('-auth', '.bokub'));
     console.info('Generating tokens...');
-    const authorizeResult = await axios.get(authorizeURL).then((r) => r.data.response);
+    const authorizeResult = await axios
+        .get(authorizeURL)
+        .then((r) => r.data.response)
+        .catch((e) => {
+            const code = e.response ? e.response.status : 0;
+            const body = e.response ? e.response.data : e;
+            throw new Error(
+                `error getting tokens\nURL = ${authorizeURL}\nCode = ${code}.\nError = ${JSON.stringify(body)}`
+            );
+        });
     console.info('Tokens successfully retrieved!');
 
     const config: SessionConfig = {

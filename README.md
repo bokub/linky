@@ -42,10 +42,10 @@ Avant toute chose, il faudra vous connecter à votre espace client Enedis et leu
 
 Rendez-vous sur [conso.vercel.app](https://conso.vercel.app) pour donner votre accord et récupérer un jeu de tokens.
 
-Puis, créez une connexion à votre compte avec la commande suivante:
+Puis, créez une connexion à votre compte avec la commande suivante :
 
 ```bash
-linky auth -a <access token> -r <refresh token> -u <usage point ID> --sandbox
+linky auth -a <access token> -r <refresh token> -u <usage point ID>
 ```
 
 Si tout se passe bien, vous pourrez alors récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
@@ -54,7 +54,7 @@ Si tout se passe bien, vous pourrez alors récupérer votre consommation quotidi
 # Récupère la consommation quotidienne du 1er au 7 septembre 2020 inclus
 linky daily --start 2020-09-01 --end 2020-09-08
 
-# Récupère la puissance moyenne consommée le 1er semptembre 2020, sur un intervalle de 30 min
+# Récupère la puissance moyenne consommée le 1er septembre 2020, sur un intervalle de 30 min
 linky loadcurve --start 2020-09-01 --end 2020-09-02
 
 # Récupère la puissance maximale de consommation atteinte quotidiennement du 24 au 31 août inclus
@@ -93,7 +93,7 @@ const session = new linky.Session({
     refreshToken: 'refresh token',
     usagePointId: 'usage point ID',
     onTokenRefresh: (accessToken, refreshToken) => {
-        // Cette fonction sera appellée si les tokens sont rafaîchis
+        // Cette fonction sera appelée si les tokens sont rafraîchis
         // Les tokens précédents ne seront plus valides
         // Il faudra utiliser ces nouveaux tokens à la prochaine création de session
     },
@@ -112,7 +112,7 @@ session.getDailyConsumption('2020-09-01', '2020-09-08').then((result) => {
     */
 });
 
-// Récupère la puissance moyenne consommée le 1er semptembre 2020, sur un intervalle de 30 min
+// Récupère la puissance moyenne consommée le 1er septembre 2020, sur un intervalle de 30 min
 session.getLoadCurve('2020-09-01', '2020-09-02').then((result) => {
     console.log(result);
     /*
@@ -141,8 +141,8 @@ session.getMaxPower('2020-08-24', '2020-09-01').then((result) => {
 
 [build-src]: https://flat.badgen.net/travis/bokub/linky
 [build-href]: https://travis-ci.org/bokub/linky
-[version-src]: https://runkit.io/bokub/npm-version/branches/master/%40bokub%2Flinky?style=flat
-[version-href]: https://www.npmjs.com/package/@bokub/linky
+[version-src]: https://runkit.io/bokub/npm-version/branches/master/linky?style=flat
+[version-href]: https://www.npmjs.com/package/linky
 [coverage-src]: https://flat.badgen.net/codecov/c/github/bokub/linky
 [coverage-href]: https://codecov.io/gh/bokub/linky
 [style-src]: https://flat.badgen.net/badge/code%20style/prettier/ff69b4
