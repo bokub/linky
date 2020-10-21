@@ -2,6 +2,10 @@ node_modules
 .nyc_output
 coverage.lcov
 coverage
+dist
+pkg
 
+.env
+.vercel
 .idea
 .vscode

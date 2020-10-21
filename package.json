@@ -1,46 +1,78 @@
 {
-  "name": "@bokub/linky",
-  "description": "Easily retrieve your Linky power consumption",
-  "version": "0.2.2",
-  "author": "bokub",
-  "bugs": "https://github.com/bokub/linky/issues",
-  "dependencies": {
-    "axios": "^0.19.0",
-    "dayjs": "^1.8.17"
-  },
-  "devDependencies": {
-    "ava": "^1.2.0",
-    "codecov": "^3.1.0",
-    "nyc": "^14.1.1",
-    "xo": "^0.23.0"
-  },
-  "engines": {
-    "node": ">= 7.6.0"
-  },
-  "files": [
-    "index.js"
-  ],
-  "homepage": "https://github.com/bokub/linky",
-  "keywords": [
-    "linky"
-  ],
-  "license": "GPL-3.0-or-later",
-  "main": "index.js",
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": "https://github.com/bokub/linky",
-  "scripts": {
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "test": "xo && nyc ava -v -s --fail-fast"
-  },
-  "xo": {
-    "rules": {
-      "no-prototype-builtins": 0,
-      "unicorn/catch-error-name": 0,
-      "camelcase": 0,
-      "unicorn/prefer-type-error": 0,
-      "capitalized-comments": 0
+    "name": "linky",
+    "description": "Easily retrieve your Linky power consumption",
+    "version": "1.0.1",
+    "author": "bokub",
+    "bugs": "https://github.com/bokub/linky/issues",
+    "dependencies": {
+        "axios": "^0.20.0",
+        "chalk": "^4.1.0",
+        "conf": "^7.1.2",
+        "meow": "^7.1.1",
+        "mkdirp": "^1.0.4",
+        "ora": "^5.1.0",
+        "qs": "^6.9.4"
+    },
+    "devDependencies": {
+        "@ava/typescript": "^1.1.1",
+        "@bokub/prettier-config": "^1.0.1",
+        "@types/mkdirp": "^1.0.1",
+        "@types/qs": "^6.9.4",
+        "ava": "^3.12.1",
+        "codecov": "^3.7.2",
+        "nyc": "^15.1.0",
+        "pkg": "^4.4.9",
+        "prettier": "^2.1.1",
+        "ts-node": "^9.0.0",
+        "typescript": "^4.0.2"
+    },
+    "files": [
+        "dist"
+    ],
+    "homepage": "https://github.com/bokub/linky",
+    "keywords": [
+        "linky",
+        "enedis",
+        "datahub",
+        "power",
+        "api",
+        "cli",
+        "consumption"
+    ],
+    "license": "GPL-3.0-or-later",
+    "main": "dist/src/index.js",
+    "bin": {
+        "linky": "dist/bin/cli.js"
+    },
+    "types": "dist/src/index.d.ts",
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": "https://github.com/bokub/linky",
+    "scripts": {
+        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+        "test": "nyc ava --timeout=1m",
+        "prepublish": "npm run build",
+        "build": "rm -fr ./dist && tsc",
+        "pkg": "rm -fr ./pkg && pkg . --out-path pkg",
+        "prettier": "prettier --write **/*.{ts,md,json,yml,html}"
+    },
+    "prettier": "@bokub/prettier-config",
+    "ava": {
+        "extensions": [
+            "ts"
+        ],
+        "require": [
+            "ts-node/register"
+        ]
+    },
+    "nyc": {
+        "extension": [
+            ".ts"
+        ],
+        "exclude": [
+            "**/*.d.ts",
+            "test.ts"
+        ]
     }
-  }
 }

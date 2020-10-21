@@ -1,0 +1,6 @@
+{
+    "github": {
+        "silent": true
+    },
+    "routes": [{ "src": "/api", "dest": "/api/callback" }]
+}

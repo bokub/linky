@@ -1,16 +1,22 @@
-sudo: false
 language: node_js
 node_js:
-- 'node'
-- 'lts/*'
-- '7.6.0'
+    - 'node'
+
+before_deploy: npm run pkg
 
 after_success: npm run coverage
 
 deploy:
-  provider: npm
-  email: npm.bokub@mail.com
-  api_key: $NPM_TOKEN
-  on:
-    tags: true
-    node: 'node'
+    - provider: npm
+      email: $NPM_EMAIL
+      api_key: $NPM_TOKEN
+      skip_cleanup: true
+      on:
+          tags: true
+    - provider: releases
+      api_key: $GH_TOKEN
+      file_glob: true
+      file: pkg/*
+      skip_cleanup: true
+      on:
+          tags: true
