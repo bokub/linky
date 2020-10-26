@@ -79,13 +79,13 @@ linky --help
 
 ```bash
 # Depuis un projet Node.js
-npm i @bokub/linky
+npm i linky
 ```
 
 ### Utilisation
 
 ```js
-const linky = require('@bokub/linky');
+const linky = require('linky');
 
 // Créez une session
 const session = new linky.Session({
