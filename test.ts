@@ -8,7 +8,7 @@ test.before(async () => {
     console.info('Generating authorization code...');
     const authorizeURL = await axios
         .get('https://linky.bokub.vercel.app/api/auth?state=test1') // This is a test server with fake data
-        .then((r) => r.data.match('var url = "(.+)"')[1].replace('conso', 'linky.bokub').replace('-auth', '.bokub'));
+        .then((r) => 'https://linky.bokub.vercel.app/api/callback?' + r.data.match('var url = ".+\\?(.+)')[1]);
     console.info('Generating tokens...');
     const authorizeResult = await axios
         .get(authorizeURL)

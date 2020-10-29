@@ -21,7 +21,9 @@ export default (req: NowRequest, res: NowResponse) => {
         timeout = true;
         return res
             .status(504)
-            .send("Le serveur d'Enedis a mis trop longtemps à répondre. Rafraichissez la page (F5) pour réessayer, ou revenez plus tard.");
+            .send(
+                "Le serveur d'Enedis a mis trop longtemps à répondre. Rafraichissez la page (F5) pour réessayer, ou revenez plus tard."
+            );
     }, 10000 - 20);
 
     const baseURI = SANDBOX ? 'https://gw.hml.api.enedis.fr' : 'https://gw.prd.api.enedis.fr';
