@@ -1,8 +1,6 @@
 import { Session, SessionConfig } from '../src';
-import Conf from 'conf';
+import * as store from './store';
 import chalk from 'chalk';
-
-const store = new Conf();
 
 export function auth(config: SessionConfig) {
     if (!config.accessToken || !config.refreshToken || !config.usagePointId) {
@@ -15,18 +13,18 @@ export function auth(config: SessionConfig) {
         );
         throw new Error();
     }
-    store.set('linky/accessToken', config.accessToken);
-    store.set('linky/refreshToken', config.refreshToken);
-    store.set('linky/usagePointId', config.usagePointId);
-    store.set('linky/sandbox', config.sandbox);
+    store.setAccessToken(config.accessToken);
+    store.setRefreshToken(config.refreshToken);
+    store.setUsagePointID(config.usagePointId);
+    store.setSandbox(config.sandbox || false);
 
     console.info(chalk.green('Vos tokens ont été sauvegardés avec succès'));
 }
 
 export function getSession(): Session {
-    const accessToken = store.get('linky/accessToken', '') as string;
-    const refreshToken = store.get('linky/refreshToken', '') as string;
-    const usagePointId = store.get('linky/usagePointId', '') as string;
+    const accessToken = store.getAccessToken();
+    const refreshToken = store.getRefreshToken();
+    const usagePointId = store.getUsagePointID();
 
     if (!accessToken || !refreshToken || !usagePointId) {
         throw new Error("Vous n'êtes pas connecté à votre compte Enedis\nLancez 'linky auth' pour vous connecter");
@@ -36,10 +34,10 @@ export function getSession(): Session {
         accessToken,
         refreshToken,
         usagePointId,
-        sandbox: Boolean(store.get('linky/sandbox', false)),
+        sandbox: store.getSandbox(),
         onTokenRefresh: (accessToken, refreshToken) => {
-            store.set('linky/accessToken', accessToken);
-            store.set('linky/refreshToken', refreshToken);
+            store.setAccessToken(accessToken);
+            store.setRefreshToken(refreshToken);
         },
     });
 }

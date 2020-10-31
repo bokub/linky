@@ -1,5 +1,6 @@
 import { getSession } from './auth';
 import { Consumption } from '../src';
+import * as store from './store';
 import chalk from 'chalk';
 import ora from 'ora';
 import mkdirp from 'mkdirp';
@@ -44,6 +45,8 @@ export function maxPower(flags: MeteringFlags) {
 
 function handle(promise: Promise<Consumption>, spinnerText: string, displayTime: boolean, output: string | null) {
     const spinner = ora().start(spinnerText);
+    const previousAccessToken = store.getAccessToken();
+
     return promise
         .then(async (consumption) => {
             if (output) {
@@ -55,6 +58,11 @@ function handle(promise: Promise<Consumption>, spinnerText: string, displayTime:
                 }
             }
             spinner.succeed();
+
+            if (store.getAccessToken() !== previousAccessToken) {
+                ora('Vos tokens ont été automatiquement renouvelés').succeed();
+            }
+
             if (output) {
                 ora(`Résultats sauvegardés dans ${output}`).succeed();
             }

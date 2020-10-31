@@ -48,7 +48,11 @@ Puis, créez une connexion à votre compte avec la commande suivante :
 linky auth -a <access token> -r <refresh token> -u <usage point ID>
 ```
 
-Si tout se passe bien, vous pourrez alors récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
+> **Attention :** Les tokens générés ont une durée de vie de quelques heures. Ils seront renouvelés automatiquement par cet outil et stockés sur votre ordinateur.
+>
+> Ne **relancez pas** `linky auth` avec de vieux tokens, cela rendrait votre connexion invalide et vous devrez recommencer le process depuis le début.
+
+Une fois vos tokens sauvegardés, vous pourrez récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
 
 ```bash
 # Récupère la consommation quotidienne du 1er au 7 septembre 2020 inclus
@@ -93,7 +97,7 @@ const session = new linky.Session({
     refreshToken: 'refresh token',
     usagePointId: 'usage point ID',
     onTokenRefresh: (accessToken, refreshToken) => {
-        // Cette fonction sera appelée si les tokens sont rafraîchis
+        // Cette fonction sera appelée si les tokens sont renouvelés
         // Les tokens précédents ne seront plus valides
         // Il faudra utiliser ces nouveaux tokens à la prochaine création de session
     },
