@@ -2,6 +2,7 @@ import test from 'ava';
 import axios from 'axios';
 import { Session, SessionConfig } from './src';
 
+let config: SessionConfig;
 let session: Session;
 
 test.before(async () => {
@@ -22,14 +23,11 @@ test.before(async () => {
         });
     console.info('Tokens successfully retrieved!');
 
-    const config: SessionConfig = {
+    config = {
         accessToken: authorizeResult.access_token,
         refreshToken: authorizeResult.refresh_token,
         usagePointId: authorizeResult.usage_points_id,
         sandbox: true,
-        onTokenRefresh: (accessToken, refreshToken) => {
-            console.log(accessToken, refreshToken);
-        },
     };
     session = new Session(config);
 });
@@ -66,4 +64,18 @@ test('can retrieve max power', async (t) => {
         data.data.map((d) => d.date.slice(0, 10)),
         ['2020-08-24', '2020-08-25', '2020-08-26']
     );
+});
+
+test.after('token is renewed automatically', async (t) => {
+    t.plan(2);
+
+    config.accessToken = 'blablabla';
+    config.onTokenRefresh = () => {
+        console.log('Tokens renewed!');
+        t.pass(); // This MUST be called for the test to succeed
+    };
+
+    const expiredSession = new Session(config);
+    const data = await expiredSession.getDailyConsumption('2020-08-24', '2020-08-25');
+    t.is(data.data.length, 1);
 });

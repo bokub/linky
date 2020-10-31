@@ -93,9 +93,10 @@ export class Session {
     }
 
     private refreshToken() {
+        const host = this.config.sandbox ? 'linky.bokub.vercel.app' : 'conso.vercel.app';
         return axios({
             method: 'get',
-            url: `https://conso.vercel.app/api/refresh?token=${this.config.refreshToken}`,
+            url: `https://${host}/api/refresh?token=${this.config.refreshToken}`,
         })
             .then((res) => {
                 const { access_token, refresh_token } = res.data.response;
