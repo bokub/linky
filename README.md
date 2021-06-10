@@ -100,6 +100,8 @@ const session = new linky.Session({
         // Cette fonction sera appelée si les tokens sont renouvelés
         // Les tokens précédents ne seront plus valides
         // Il faudra utiliser ces nouveaux tokens à la prochaine création de session
+        // Si accessToken et refreshToken sont vides, cela signifie que les tokens ne peuvent plus
+        // être utilisés. Il faut alors en récupérer des nouveaux sur conso.vercel.app
     },
 });
 
@@ -150,4 +152,4 @@ session.getMaxPower('2020-08-24', '2020-09-01').then((result) => {
 [coverage-src]: https://flat.badgen.net/codecov/c/github/bokub/linky
 [coverage-href]: https://codecov.io/gh/bokub/linky
 [style-src]: https://flat.badgen.net/badge/code%20style/prettier/ff69b4
-[style-href]: https://github.com/prettier/prettier
+[style-href]: https://github.com/bokub/prettier-config

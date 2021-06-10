@@ -110,12 +110,20 @@ export class Session {
                 this.config.accessToken = access_token;
                 this.config.refreshToken = refresh_token;
 
-                if (this.onTokenRefresh) {
+                if (this.onTokenRefresh && typeof this.onTokenRefresh === 'function') {
                     this.onTokenRefresh(access_token, refresh_token);
                 }
             })
             .catch((err) => {
                 if (err.response) {
+                    if (
+                        err.response.status === 401 &&
+                        this.onTokenRefresh &&
+                        typeof this.onTokenRefresh === 'function'
+                    ) {
+                        // Refresh token is not valid anymore: reset credentials
+                        this.onTokenRefresh('', '');
+                    }
                     throw new Error(
                         `Cannot refresh token\nCode: ${err.response.status}\nResponse: ` +
                             JSON.stringify(err.response.data, null, 4)

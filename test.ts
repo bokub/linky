@@ -67,15 +67,25 @@ test('can retrieve max power', async (t) => {
 });
 
 test.after('token is renewed automatically', async (t) => {
-    t.plan(2);
+    t.plan(4);
 
-    config.accessToken = 'blablabla';
-    config.onTokenRefresh = () => {
-        console.log('Tokens renewed!');
-        t.pass(); // This MUST be called for the test to succeed
+    config.accessToken = 'expired';
+    config.onTokenRefresh = (a, r) => {
+        t.truthy(r); // This MUST be called for the test to succeed
+        console.log('Tokens renewed');
     };
 
     const expiredSession = new Session(config);
     const data = await expiredSession.getDailyConsumption('2020-08-24', '2020-08-25');
     t.is(data.data.length, 1);
+
+    config.refreshToken = 'invalid';
+    config.accessToken = 'expired';
+    config.onTokenRefresh = (a, r) => {
+        t.falsy(r); // This MUST be called for the test to succeed
+        console.log('Tokens expired');
+    };
+
+    const invalidSession = new Session(config);
+    await t.throwsAsync(invalidSession.getDailyConsumption('2020-08-24', '2020-08-25'));
 });

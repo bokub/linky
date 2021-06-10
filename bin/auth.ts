@@ -38,6 +38,11 @@ export function getSession(): Session {
         onTokenRefresh: (accessToken, refreshToken) => {
             store.setAccessToken(accessToken);
             store.setRefreshToken(refreshToken);
+            if (!refreshToken) {
+                throw new Error(
+                    "Vos tokens sont invalides et ont été supprimés\nRelancez 'linky auth' pour vous connecter"
+                );
+            }
         },
     });
 }
