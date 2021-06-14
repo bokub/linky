@@ -4,6 +4,9 @@ import meow, { IsRequiredPredicate } from 'meow';
 import { auth } from './auth';
 import { daily, loadCurve, maxPower, MeteringFlags } from './metering';
 import chalk from 'chalk';
+import updateNotifier from 'update-notifier';
+
+import * as pkg from '../package.json';
 
 function exit(e: Error) {
     if (e.message) {
@@ -70,6 +73,18 @@ const meteringFlags: MeteringFlags = {
     end: cli.flags.end || '',
     output: cli.flags.output || null,
 };
+
+const notifier = updateNotifier({ pkg });
+notifier.notify({
+    message:
+        'Mise à jour disponible: ' +
+        chalk.dim('{currentVersion}') +
+        chalk.reset(' → ') +
+        chalk.green('{latestVersion}') +
+        ' \nLancez ' +
+        chalk.cyan('npm i -g linky') +
+        ' pour mettre à jour',
+});
 
 switch (cli.input[0]) {
     case authCommand:
