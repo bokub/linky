@@ -10,7 +10,20 @@ export default (req: NowRequest, res: NowResponse) => {
     const { state, code, error } = req.query;
     const intCode = parseInt(code ? code.toString() : '', 10);
     if (error && intCode) {
-        return res.status(intCode).send(error + '\n' + (req.query.error_description || ''));
+        if (req.query.error_description === 'lincs-internal-server-error') {
+            return res
+                .status(intCode)
+                .send(
+                    '<h2>Le serveur d\'Enedis est KO...</h2>Veuillez <a href="/">réessayer</a>, et si le problème persiste, revenez dans quelques heures.'
+                );
+        }
+        return res
+            .status(intCode)
+            .send(
+                `<h2>L'appel à Enedis a échoué...</h2><div><b>Erreur:</b> <code>${error}</code></div><div><b>Description:</b> <code>${
+                    req.query.error_description || ''
+                }</code></div>`
+            );
     }
     if (!state || !code) {
         return res.status(400).send('Les paramètres state et code sont obligatoires');
