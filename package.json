@@ -21,7 +21,6 @@
         "@types/qs": "^6.9.4",
         "@types/update-notifier": "^5.0.0",
         "ava": "^3.12.1",
-        "codecov": "^3.7.2",
         "nyc": "^15.1.0",
         "pkg": "^4.4.9",
         "prettier": "^2.1.1",
@@ -52,12 +51,12 @@
     },
     "repository": "https://github.com/bokub/linky",
     "scripts": {
-        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+        "coverage": "nyc report --reporter=text-lcov > coverage.lcov",
         "test": "nyc ava --timeout=1m",
         "prepublish": "npm run build",
         "build": "rm -fr ./dist && tsc",
-        "pkg": "rm -fr ./pkg && pkg . --out-path pkg -t node12-linux-x64,node12-macos-x64,node12-win-x64",
-        "prettier": "prettier --write **/*.{ts,md,json,yml,html}",
+        "pkg": "rm -fr ./pkg && pkg . --out-path pkg -t node14-linux-x64,node14-macos-x64,node14-win-x64",
+        "prettier": "prettier --write .",
         "deploy": "vercel --prod && vercel"
     },
     "prettier": "@bokub/prettier-config",
