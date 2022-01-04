@@ -10,6 +10,7 @@
             defer
             data-website-id="e777f55e-8d52-4b76-89d7-5d4e1ed07de3"
             src="https://metrics.boris.sh/umami.js"
+            data-auto-track="false"
         ></script>
         <link
             href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAh1BMVEUAAAD/AAD/qir/nSf/sSf/rzD/tC3/qiv/rS3/rTX/rDL/qDL/qjH/qzT/rTP/qjH/qjT/qzP/qzT/rDP/qzP/rTP/qzP/rDL/qzL/rDH/rTP/qzP/rDL/rDP/qzL/rDP/rDL/rDP/rDL/rDP/rDP/qzP/rTP/rDP/rDP/qzP/rDL/rDP/rDPZsORwAAAALHRSTlMAAQYNDRAREiIiLjg5QEFUVFVeX2RkdHuAgYKDor/A1NXX6enq7u72+fr9/hDXxuAAAABvSURBVBgZVcFHAoIwAEXBD4oFK0bBggVFae/+5zMbEpiRt3lq5FDfNBCcu18kL8whkzd/QDmVsyyAVM76AzQmsWJZ+4pee5R0aulVO1lxYpkGeK/kpECxkDMp4T6Tl0Eeyou+3SXQwLU2Gnlt5fwBhbYMRZmI/YgAAAAASUVORK5CYII=
@@ -74,5 +75,8 @@
                 </div>
             </div>
         </div>
+        <script>
+          umami.trackView(document.location.href.split('?')[0], document.referrer.split('?')[0]);
+        </script>
     </body>
 </html>
