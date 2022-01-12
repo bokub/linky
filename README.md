@@ -118,8 +118,8 @@ const session = new linky.Session({
     },
 });
 
-// Récupère la consommation quotidienne du 1er au 7 septembre 2020 inclus
-session.getDailyConsumption('2020-09-01', '2020-09-08').then((result) => {
+// Récupère la consommation quotidienne du 1er au 7 janvier 2022 inclus
+session.getDailyConsumption('2022-01-01', '2022-01-08').then((result) => {
     console.log(result);
     /*
     {
@@ -131,8 +131,8 @@ session.getDailyConsumption('2020-09-01', '2020-09-08').then((result) => {
     */
 });
 
-// Récupère la puissance moyenne consommée le 1er septembre 2020, sur un intervalle de 30 min
-session.getLoadCurve('2020-09-01', '2020-09-02').then((result) => {
+// Récupère la puissance moyenne consommée le 31 décembre 2021, sur un intervalle de 30 min
+session.getLoadCurve('2021-12-31', '2022-01-01').then((result) => {
     console.log(result);
     /*
     {
@@ -144,8 +144,8 @@ session.getLoadCurve('2020-09-01', '2020-09-02').then((result) => {
     */
 });
 
-// Récupère la puissance maximale de consommation atteinte quotidiennement du 24 au 31 août inclus
-session.getMaxPower('2020-08-24', '2020-09-01').then((result) => {
+// Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 7 janvier 2022 inclus
+session.getMaxPower('2022-01-01', '2022-01-08').then((result) => {
     console.log(result);
     /*
     {
