@@ -1,13 +1,14 @@
 {
     "name": "linky",
     "description": "Easily retrieve your Linky power consumption",
-    "version": "1.3.0",
+    "version": "1.4.1",
     "author": "bokub",
     "bugs": "https://github.com/bokub/linky/issues",
     "dependencies": {
-        "axios": "^0.21.1",
+        "axios": "^0.21.4",
         "chalk": "^4.1.0",
         "conf": "^7.1.2",
+        "dayjs": "^1.10.7",
         "meow": "^7.1.1",
         "mkdirp": "^1.0.4",
         "ora": "^5.1.0",
@@ -16,20 +17,19 @@
     },
     "devDependencies": {
         "@ava/typescript": "^1.1.1",
-        "@bokub/prettier-config": "^1.0.1",
+        "@bokub/prettier-config": "^1.1.0",
         "@types/mkdirp": "^1.0.1",
         "@types/qs": "^6.9.4",
         "@types/update-notifier": "^5.0.0",
         "ava": "^3.12.1",
+        "husky": "^7.0.0",
         "nyc": "^15.1.0",
         "pkg": "^4.4.9",
-        "prettier": "^2.1.1",
+        "prettier": "^2.5.1",
+        "pretty-quick": "^3.1.3",
         "ts-node": "^9.0.0",
         "typescript": "^4.0.2"
     },
-    "files": [
-        "dist"
-    ],
     "homepage": "https://github.com/bokub/linky",
     "keywords": [
         "linky",
@@ -53,6 +53,7 @@
     "scripts": {
         "coverage": "nyc report --reporter=text-lcov > coverage.lcov",
         "test": "nyc ava --timeout=1m",
+        "prepare": "husky install",
         "prepublish": "npm run build",
         "build": "rm -fr ./dist && tsc",
         "pkg": "rm -fr ./pkg && pkg . --out-path pkg -t node14-linux-x64,node14-macos-x64,node14-win-x64",

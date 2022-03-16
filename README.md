@@ -55,20 +55,33 @@ linky auth -a <access token> -r <refresh token> -u <usage point ID>
 Une fois vos tokens sauvegardés, vous pourrez récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
 
 ```bash
-# Récupère la consommation quotidienne du 1er au 7 septembre 2020 inclus
-linky daily --start 2020-09-01 --end 2020-09-08
+# Récupère la consommation quotidienne du 1er au 7 janvier 2022 inclus
+linky daily --start 2022-01-01 --end 2022-01-08
 
-# Récupère la puissance moyenne consommée le 1er septembre 2020, sur un intervalle de 30 min
-linky loadcurve --start 2020-09-01 --end 2020-09-02
+# Récupère la puissance moyenne consommée le 31 décembre 2021, sur un intervalle de 30 min
+linky loadcurve --start 2021-12-31 --end 2022-01-01
 
-# Récupère la puissance maximale de consommation atteinte quotidiennement du 24 au 31 août inclus
-linky maxpower --start 2020-08-24 --end 2020-09-01
+# Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 7 janvier 2022 inclus
+linky maxpower --start 2022-01-01 --end 2022-01-08
+```
+
+En l'absence des paramètres `--start` et `--end`, vous récupérez la consommation / puissance de la veille.
+
+```bash
+# Récupère la consommation de la journée d'hier
+linky daily
+
+# Récupère la puissance moyenne consommée pendant la journée d'hier, sur un intervalle de 30 min
+linky loadcurve
+
+# Récupère la puissance maximale de consommation atteinte durant la journée d'hier
+linky maxpower
 ```
 
 Vous pouvez sauvegarder vos résultats dans un fichier JSON grâce à l'option `--output`
 
 ```bash
-linky loadcurve --start 2020-09-01 --end 2020-09-02 --output data/ma_conso.json
+linky loadcurve --start 2021-12-31 --end 2022-01-01 --output data/ma_conso.json
 ```
 
 Pour voir l'aide détaillée :
@@ -105,41 +118,41 @@ const session = new linky.Session({
     },
 });
 
-// Récupère la consommation quotidienne du 1er au 7 septembre 2020 inclus
-session.getDailyConsumption('2020-09-01', '2020-09-08').then((result) => {
+// Récupère la consommation quotidienne du 1er au 7 janvier 2022 inclus
+session.getDailyConsumption('2022-01-01', '2022-01-08').then((result) => {
     console.log(result);
     /*
     {
         "unit": "Wh",
         "data": [
-            { "date": "2020-09-01", "value": 12278 },
-            { "date": "2020-09-02", "value": 15637 },
+            { "date": "2022-01-01", "value": 12278 },
+            { "date": "2022-01-02", "value": 15637 },
             ...
     */
 });
 
-// Récupère la puissance moyenne consommée le 1er septembre 2020, sur un intervalle de 30 min
-session.getLoadCurve('2020-09-01', '2020-09-02').then((result) => {
+// Récupère la puissance moyenne consommée le 31 décembre 2021, sur un intervalle de 30 min
+session.getLoadCurve('2021-12-31', '2022-01-01').then((result) => {
     console.log(result);
     /*
     {
         "unit": "W",
         "data": [
-            { "date": "2020-09-01 00:00:00", "value": 582 },
-            { "date": "2020-09-01 00:30:00", "value": 448 },
+            { "date": "2021-12-31 00:30:00", "value": 582 },
+            { "date": "2021-12-31 01:00:00", "value": 448 },
             ...
     */
 });
 
-// Récupère la puissance maximale de consommation atteinte quotidiennement du 24 au 31 août inclus
-session.getMaxPower('2020-08-24', '2020-09-01').then((result) => {
+// Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 7 janvier 2022 inclus
+session.getMaxPower('2022-01-01', '2022-01-08').then((result) => {
     console.log(result);
     /*
     {
         "unit": "VA",
         "data": [
-            { "date": "2020-08-24 13:54:04", "value": 1941 },
-            { "date": "2020-08-25 01:48:26", "value": 1648 },
+            { "date": "2022-01-01 13:54:04", "value": 1941 },
+            { "date": "2022-01-02 09:48:26", "value": 1648 },
             ...
     */
 });

@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-import meow, { IsRequiredPredicate } from 'meow';
+import meow from 'meow';
 import { auth } from './auth';
 import {daily, dailyProduction, loadCurve, loadCurveProduction, maxPower, MeteringFlags} from './metering';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';
+import dayjs from 'dayjs';
 
 import * as pkg from '../package.json';
 
@@ -33,14 +34,16 @@ const mainHelp = `
         --usage-point-id    -u    Usage Point ID
 
       linky (daily|loadcurve|maxpower):
-        --start     -s    Date de début (AAAA-MM-JJ)
-        --end       -e    Date de début (AAAA-MM-JJ)
+        --start     -s    Date de début (AAAA-MM-JJ). Par défaut: hier
+        --end       -e    Date de début (AAAA-MM-JJ). Par défaut: aujourd'hui
         --output    -o    Fichier .json de sortie. Optionnel
         
     Exemples:
       linky auth -a Kft3SIZrcq -r F3AR0K8eoC -u 225169
-      linky daily --start 2020-08-01 --end 2020-08-15
-      linky loadcurve -s 2020-09-01 -e 2020-09-02 -o data/ma_conso.json
+      linky daily --start 2022-01-01 --end 2022-01-08
+      linky maxpower --start 2021-08-01 --end 2021-08-15
+      linky loadcurve -s 2022-01-01 -e 2022-01-08 -o data/ma_conso.json
+      linky daily
 `;
 
 const authCommand = 'auth';
@@ -50,8 +53,9 @@ const loadCurveCommand = 'loadcurve';
 const loadCurveProductionCommand = 'loadcurveprod';
 const maxPowerCommand = 'maxpower';
 
-const isMetering: IsRequiredPredicate = (flags, input) =>
-    [dailyConsumptionCommand, loadCurveCommand, maxPowerCommand, loadCurveProductionCommand, dailyProductionCommand].indexOf(input[0]) > -1;
+
+const today = dayjs().format('YYYY-MM-DD');
+const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
 
 let cli;
 try {
@@ -61,8 +65,8 @@ try {
             accessToken: { type: 'string', alias: 'a' },
             refreshToken: { type: 'string', alias: 'r' },
             usagePointId: { type: 'string', alias: 'u' },
-            start: { type: 'string', alias: 's', isRequired: isMetering },
-            end: { type: 'string', alias: 'e', isRequired: isMetering },
+            start: { type: 'string', alias: 's', default: yesterday },
+            end: { type: 'string', alias: 'e', default: today },
             output: { type: 'string', alias: 'o' },
             sandbox: { type: 'boolean' }, // For test purposes
         },
@@ -73,8 +77,8 @@ try {
 }
 
 const meteringFlags: MeteringFlags = {
-    start: cli.flags.start || '',
-    end: cli.flags.end || '',
+    start: cli.flags.start,
+    end: cli.flags.end,
     output: cli.flags.output || null,
 };
 

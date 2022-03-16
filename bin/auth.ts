@@ -36,13 +36,27 @@ export function getSession(): Session {
         usagePointId,
         sandbox: store.getSandbox(),
         onTokenRefresh: (accessToken, refreshToken) => {
-            store.setAccessToken(accessToken);
-            store.setRefreshToken(refreshToken);
-            if (!refreshToken) {
+            if (accessToken && refreshToken) {
+                store.setAccessToken(accessToken);
+                store.setRefreshToken(refreshToken);
+                store.setFailedRefreshAttempts(0);
+                return;
+            }
+
+            let failedRefreshAttempts = store.incrementFailedRefreshAttempts();
+            // If it failed less than 3 times, just print a warning
+            if (failedRefreshAttempts < 3) {
                 throw new Error(
-                    "Vos tokens sont invalides et ont été supprimés\nRelancez 'linky auth' pour vous connecter"
+                    "Impossible de rafraichir vos tokens...\nVeuillez réessayer plus tard ou relancez 'linky auth' avec de nouveaux tokens"
                 );
             }
+            // If it failed 3 times or more, reset tokens
+            store.setAccessToken(accessToken);
+            store.setRefreshToken(refreshToken);
+            store.setFailedRefreshAttempts(0);
+            throw new Error(
+                "Impossible de rafraichir vos tokens...\nVos tokens sont invalides et ont été supprimés\nRelancez 'linky auth' pour vous connecter"
+            );
         },
     });
 }
