@@ -6,30 +6,34 @@ import ora from 'ora';
 import mkdirp from 'mkdirp';
 import fs from 'fs';
 import path from 'path';
+import { getLastUsagePointID } from './store';
 
 export type MeteringFlags = {
     start: string;
     end: string;
     output: string | null;
+    usagePointId?: string;
 };
 
 export function daily(flags: MeteringFlags) {
-    const session = getSession();
+    const session = getSession(flags.usagePointId);
     return handle(
         session.getDailyConsumption(flags.start, flags.end),
         'Récupération de la consommation quotidienne',
         false,
-        flags.output
+        flags.output,
+        flags.usagePointId
     );
 }
 
 export function loadCurve(flags: MeteringFlags) {
-    const session = getSession();
+    const session = getSession(flags.usagePointId);
     return handle(
         session.getLoadCurve(flags.start, flags.end),
         'Récupération de la courbe de charge',
         true,
-        flags.output
+        flags.output,
+        flags.usagePointId
     );
 }
 
@@ -54,18 +58,27 @@ export function loadCurveProduction(flags: MeteringFlags) {
 }
 
 export function maxPower(flags: MeteringFlags) {
-    const session = getSession();
+    const session = getSession(flags.usagePointId);
     return handle(
         session.getMaxPower(flags.start, flags.end),
         'Récupération de la puissance maximale quotidienne',
         true,
-        flags.output
+        flags.output,
+        flags.usagePointId
     );
 }
 
-function handle(promise: Promise<Consumption>, spinnerText: string, displayTime: boolean, output: string | null) {
+function handle(
+    promise: Promise<Consumption>,
+    spinnerText: string,
+    displayTime: boolean,
+    output: string | null,
+    prm?: string
+) {
+    const usagePointId = prm ?? getLastUsagePointID();
+
     const spinner = ora().start(spinnerText);
-    const previousAccessToken = store.getAccessToken();
+    const previousAccessToken = store.getAccessToken(usagePointId);
 
     return promise
         .then(async (consumption) => {
@@ -79,7 +92,7 @@ function handle(promise: Promise<Consumption>, spinnerText: string, displayTime:
             }
             spinner.succeed();
 
-            if (store.getAccessToken() !== previousAccessToken) {
+            if (store.getAccessToken(usagePointId) !== previousAccessToken) {
                 ora('Vos tokens ont été automatiquement renouvelés').succeed();
             }
 

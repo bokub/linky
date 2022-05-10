@@ -70,7 +70,7 @@ try {
             sandbox: { type: 'boolean' }, // For test purposes
         },
     });
-} catch (e) {
+} catch (e: any) {
     exit(e);
     process.exit(1);
 }
@@ -79,6 +79,7 @@ const meteringFlags: MeteringFlags = {
     start: cli.flags.start,
     end: cli.flags.end,
     output: cli.flags.output || null,
+    usagePointId: cli.flags.usagePointId,
 };
 
 const notifier = updateNotifier({ pkg });
