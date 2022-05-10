@@ -2,7 +2,7 @@
 
 import meow from 'meow';
 import { auth } from './auth';
-import { daily, loadCurve, maxPower, MeteringFlags } from './metering';
+import {daily, dailyProduction, loadCurve, loadCurveProduction, maxPower, MeteringFlags} from './metering';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';
 import dayjs from 'dayjs';
@@ -20,10 +20,12 @@ const mainHelp = `
     linky <commande> [options]
     
     Commandes:
-      linky auth        Crée une connexion à un compte Enedis. Vous pouvez obtenir vos tokens sur https://conso.vercel.app
-      linky daily       Récupère la consommation quotidienne
-      linky loadcurve   Récupère la puissance moyenne consommée quotidiennement, sur un intervalle de 30 min
-      linky maxpower    Récupère la puissance maximale de consommation atteinte quotidiennement
+      linky auth            Crée une connexion à un compte Enedis. Vous pouvez obtenir vos tokens sur https://conso.vercel.app
+      linky daily           Récupère la consommation quotidienne
+      linky loadcurve       Récupère la puissance moyenne consommée quotidiennement, sur un intervalle de 30 min
+      linky maxpower        Récupère la puissance maximale de consommation atteinte quotidiennement
+      linky dailyprod       Récupère la production quotidienne
+      linky loadcurveprod   Récupère la puissance moyenne produite quotidiennement, sur un intervalle de 30 min
     
     Options:
       linky auth:
@@ -46,8 +48,11 @@ const mainHelp = `
 
 const authCommand = 'auth';
 const dailyConsumptionCommand = 'daily';
+const dailyProductionCommand = 'dailyprod';
 const loadCurveCommand = 'loadcurve';
+const loadCurveProductionCommand = 'loadcurveprod';
 const maxPowerCommand = 'maxpower';
+
 
 const today = dayjs().format('YYYY-MM-DD');
 const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
@@ -113,6 +118,20 @@ switch (cli.input[0]) {
     case loadCurveCommand:
         try {
             loadCurve(meteringFlags).catch((e) => exit(e));
+        } catch (e) {
+            exit(e);
+        }
+        break;
+    case dailyProductionCommand:
+        try {
+            dailyProduction(meteringFlags).catch((e) => exit(e));
+        } catch (e) {
+            exit(e);
+        }
+        break;
+    case loadCurveProductionCommand:
+        try {
+            loadCurveProduction(meteringFlags).catch((e) => exit(e));
         } catch (e) {
             exit(e);
         }

@@ -46,6 +46,14 @@ export class Session {
         return this.request('daily_consumption_max_power', start, end);
     }
 
+    getDailyProduction(start: string, end: string) {
+        return this.request('daily_production', start, end);
+    }
+
+    getProductionLoadCurve(start: string, end: string) {
+        return this.request('production_load_curve', start, end)
+    }
+
     private request(endpoint: string, start: string, end: string, retrying = false): Promise<Consumption> {
         return axios({
             method: 'get',

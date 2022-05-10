@@ -33,6 +33,26 @@ export function loadCurve(flags: MeteringFlags) {
     );
 }
 
+export function dailyProduction(flags: MeteringFlags) {
+    const session = getSession();
+    return handle(
+        session.getDailyProduction(flags.start, flags.end),
+        'Récupération de la production quotidienne',
+        false,
+        flags.output
+    );
+}
+
+export function loadCurveProduction(flags: MeteringFlags) {
+    const session = getSession();
+    return handle(
+        session.getProductionLoadCurve(flags.start, flags.end),
+        'Récupération de la courbe de charge de production',
+        true,
+        flags.output
+    );
+}
+
 export function maxPower(flags: MeteringFlags) {
     const session = getSession();
     return handle(
