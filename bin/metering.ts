@@ -6,7 +6,6 @@ import ora from 'ora';
 import mkdirp from 'mkdirp';
 import fs from 'fs';
 import path from 'path';
-import { getLastUsagePointID } from './store';
 
 export type MeteringFlags = {
     start: string;
@@ -38,7 +37,7 @@ export function loadCurve(flags: MeteringFlags) {
 }
 
 export function dailyProduction(flags: MeteringFlags) {
-    const session = getSession();
+    const session = getSession(flags.usagePointId);
     return handle(
         session.getDailyProduction(flags.start, flags.end),
         'Récupération de la production quotidienne',
@@ -48,7 +47,7 @@ export function dailyProduction(flags: MeteringFlags) {
 }
 
 export function loadCurveProduction(flags: MeteringFlags) {
-    const session = getSession();
+    const session = getSession(flags.usagePointId);
     return handle(
         session.getProductionLoadCurve(flags.start, flags.end),
         'Récupération de la courbe de charge de production',
@@ -73,12 +72,12 @@ function handle(
     spinnerText: string,
     displayTime: boolean,
     output: string | null,
-    prm?: string
+    usagePointId?: string
 ) {
-    const usagePointId = prm ?? getLastUsagePointID();
+    const session = store.getStoredSession(usagePointId);
 
     const spinner = ora().start(spinnerText);
-    const previousAccessToken = store.getAccessToken(usagePointId);
+    const previousAccessToken = session?.accessToken;
 
     return promise
         .then(async (consumption) => {
@@ -92,7 +91,7 @@ function handle(
             }
             spinner.succeed();
 
-            if (store.getAccessToken(usagePointId) !== previousAccessToken) {
+            if (store.getStoredSession(session?.usagePointId)?.accessToken !== previousAccessToken) {
                 ora('Vos tokens ont été automatiquement renouvelés').succeed();
             }
 

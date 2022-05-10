@@ -1,7 +1,6 @@
 import { Session, SessionConfig } from '../src';
 import * as store from './store';
 import chalk from 'chalk';
-import { getLastUsagePointID } from './store';
 
 export function auth(config: SessionConfig) {
     if (!config.accessToken || !config.refreshToken || !config.usagePointId) {
@@ -14,38 +13,31 @@ export function auth(config: SessionConfig) {
         );
         throw new Error();
     }
-    store.setAccessToken(config.accessToken, config.usagePointId);
-    store.setRefreshToken(config.refreshToken, config.usagePointId);
-    store.setLastUsagePointID(config.usagePointId);
-    store.setSandbox(config.sandbox || false);
-
+    store.saveSession(config.usagePointId, config.accessToken, config.refreshToken, config.sandbox || false);
+    store.setLastUsagePointId(config.usagePointId);
     console.info(chalk.green('Vos tokens ont été sauvegardés avec succès'));
 }
 
-export function getSession(prm?: string): Session {
-    const usagePointId = prm ?? getLastUsagePointID();
+export function getSession(usagePointId?: string): Session {
+    const storedSession = store.getStoredSession(usagePointId);
 
-    const accessToken = store.getAccessToken(usagePointId);
-    const refreshToken = store.getRefreshToken(usagePointId);
+    if (usagePointId) {
+        store.setLastUsagePointId(usagePointId);
+    }
 
-    if (!accessToken || !refreshToken || !usagePointId) {
+    if (!storedSession || !storedSession.accessToken || !storedSession.accessToken) {
         throw new Error("Vous n'êtes pas connecté à votre compte Enedis\nLancez 'linky auth' pour vous connecter");
     }
 
     return new Session({
-        accessToken,
-        refreshToken,
-        usagePointId,
-        sandbox: store.getSandbox(),
+        ...storedSession,
         onTokenRefresh: (accessToken, refreshToken) => {
             if (accessToken && refreshToken) {
-                store.setAccessToken(accessToken, usagePointId);
-                store.setRefreshToken(refreshToken, usagePointId);
-                store.setFailedRefreshAttempts(0, usagePointId);
+                store.saveSession(storedSession.usagePointId, accessToken, refreshToken);
                 return;
             }
 
-            let failedRefreshAttempts = store.incrementFailedRefreshAttempts(usagePointId);
+            let failedRefreshAttempts = store.incrementFailedRefreshAttempts(storedSession.usagePointId);
             // If it failed less than 3 times, just print a warning
             if (failedRefreshAttempts < 3) {
                 throw new Error(
@@ -53,9 +45,7 @@ export function getSession(prm?: string): Session {
                 );
             }
             // If it failed 3 times or more, reset tokens
-            store.setAccessToken(accessToken, usagePointId);
-            store.setRefreshToken(refreshToken, usagePointId);
-            store.setFailedRefreshAttempts(0, usagePointId);
+            store.deleteSession(storedSession.usagePointId);
             throw new Error(
                 "Impossible de rafraichir vos tokens...\nVos tokens sont invalides et ont été supprimés\nRelancez 'linky auth' pour vous connecter"
             );
