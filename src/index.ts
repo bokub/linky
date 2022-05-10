@@ -51,7 +51,7 @@ export class Session {
     }
 
     getProductionLoadCurve(start: string, end: string) {
-        return this.request('production_load_curve', start, end)
+        return this.request('production_load_curve', start, end);
     }
 
     private request(endpoint: string, start: string, end: string, retrying = false): Promise<Consumption> {

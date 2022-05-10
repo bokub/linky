@@ -2,7 +2,7 @@
 
 import meow from 'meow';
 import { auth } from './auth';
-import {daily, dailyProduction, loadCurve, loadCurveProduction, maxPower, MeteringFlags} from './metering';
+import { daily, dailyProduction, loadCurve, loadCurveProduction, maxPower, MeteringFlags } from './metering';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';
 import dayjs from 'dayjs';
@@ -52,7 +52,6 @@ const dailyProductionCommand = 'dailyprod';
 const loadCurveCommand = 'loadcurve';
 const loadCurveProductionCommand = 'loadcurveprod';
 const maxPowerCommand = 'maxpower';
-
 
 const today = dayjs().format('YYYY-MM-DD');
 const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
