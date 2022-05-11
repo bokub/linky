@@ -1,13 +1,14 @@
 # Linky
 
-[![Version][version-src]][version-href]
-[![Build Status][build-src]][build-href]
-[![Coverage][coverage-src]][coverage-href]
-[![Code style][style-src]][style-href]
+[![Version](https://runkit.io/bokub/npm-version/branches/master/linky?style=flat)](https://www.npmjs.com/package/linky)
+[![Build Status](https://flat.badgen.net/github/checks/bokub/linky?label=tests)](https://github.com/bokub/linky/actions/workflows/run.yml?query=branch%3Amaster)
+[![Codecov](https://flat.badgen.net/codecov/c/github/bokub/linky/master)](https://codecov.io/gh/bokub/linky)
+[![Downloads](https://flat.badgen.net/npm/dy/linky?color=FF9800)](https://www.npmjs.com/package/linky)
+[![Code style](https://flat.badgen.net/badge/code%20style/prettier/ff69b4)](https://github.com/bokub/prettier-config)
 
 > **N.B**: Because this tool is targeted for french people, the documentation is...in french
 
-Ce module vous permet de récupérer votre consommation électrique Linky via les nouvelles API _"Authorize V1"_ et _"Metering Data V4"_ d'Enedis
+Ce module vous permet de récupérer votre consommation et production électrique Linky via les nouvelles API _"Authorize V1"_ et _"Metering Data V4"_ d'Enedis
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/17952318/93326183-b5ba2400-f818-11ea-85cf-c278a1e32b58.gif" alt="Screenshot">
@@ -65,7 +66,17 @@ linky loadcurve --start 2021-12-31 --end 2022-01-01
 linky maxpower --start 2022-01-01 --end 2022-01-08
 ```
 
-En l'absence des paramètres `--start` et `--end`, vous récupérez la consommation / puissance de la veille.
+Si vous produisez de l'électricité, vous pouvez également récupérer votre production quotidienne et votre courbe de charge (production par demi-heure).
+
+```bash
+# Récupère la production quotidienne du 1er au 7 janvier 2022 inclus
+linky dailyprod --start 2022-01-01 --end 2022-01-08
+
+# Récupère la puissance moyenne produite le 31 décembre 2021, sur un intervalle de 30 min
+linky loadcurveprod --start 2021-12-31 --end 2022-01-01
+```
+
+En l'absence des paramètres `--start` et `--end`, vous récupérez la consommation / production / puissance de la veille.
 
 ```bash
 # Récupère la consommation de la journée d'hier
@@ -76,6 +87,28 @@ linky loadcurve
 
 # Récupère la puissance maximale de consommation atteinte durant la journée d'hier
 linky maxpower
+
+# Récupère la production de la journée d'hier
+linky dailyprod
+
+# Récupère la production moyenne consommée pendant la journée d'hier, sur un intervalle de 30 min
+linky loadcurveprod
+```
+
+Pour gérer plusieurs compteurs (PRM), précisez simplement l'usage point ID dans chaque commande avec le paramètre `-u`
+
+```bash
+# Enregistre les identifiants du compteur 111222333
+linky auth -a Tk42pB -r 8peqHT -u 111222333
+
+# Enregistre les identifiants du compteur 777888999
+linky auth -a 9urfYR -r 5wcCPq -u 777888999
+
+# Récupère la consommation du compteur 111222333
+linky daily -u 111222333
+
+# Récupère la production du compteur 777888999
+linky dailyprod -u 777888999
 ```
 
 Vous pouvez sauvegarder vos résultats dans un fichier JSON grâce à l'option `--output`
@@ -156,13 +189,30 @@ session.getMaxPower('2022-01-01', '2022-01-08').then((result) => {
             ...
     */
 });
-```
 
-[build-src]: https://flat.badgen.net/travis/bokub/linky
-[build-href]: https://travis-ci.org/bokub/linky
-[version-src]: https://runkit.io/bokub/npm-version/branches/master/linky?style=flat
-[version-href]: https://www.npmjs.com/package/linky
-[coverage-src]: https://flat.badgen.net/codecov/c/github/bokub/linky
-[coverage-href]: https://codecov.io/gh/bokub/linky
-[style-src]: https://flat.badgen.net/badge/code%20style/prettier/ff69b4
-[style-href]: https://github.com/bokub/prettier-config
+// Récupère la production quotidienne du 1er au 7 janvier 2022 inclus
+session.getDailyProduction('2022-01-01', '2022-01-08').then((result) => {
+    console.log(result);
+    /*
+  {
+      "unit": "Wh",
+      "data": [
+          { "date": "2022-01-01", "value": 1278 },
+          { "date": "2022-01-02", "value": 1567 },
+          ...
+  */
+});
+
+// Récupère la puissance moyenne produite le 31 décembre 2021, sur un intervalle de 30 min
+session.getProductionLoadCurve('2021-12-31', '2022-01-01').then((result) => {
+    console.log(result);
+    /*
+  {
+      "unit": "W",
+      "data": [
+          { "date": "2021-12-31 00:30:00", "value": 82 },
+          { "date": "2021-12-31 01:00:00", "value": 48 },
+          ...
+  */
+});
+```

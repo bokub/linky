@@ -33,17 +33,19 @@ const mainHelp = `
         --refresh-token     -r    Refresh Token
         --usage-point-id    -u    Usage Point ID
 
-      linky (daily|loadcurve|maxpower):
-        --start     -s    Date de début (AAAA-MM-JJ). Par défaut: hier
-        --end       -e    Date de début (AAAA-MM-JJ). Par défaut: aujourd'hui
-        --output    -o    Fichier .json de sortie. Optionnel
+      linky (daily|loadcurve|maxpower|dailyprod|loadcurveprod):
+        --start             -s    Date de début (AAAA-MM-JJ). Par défaut: hier
+        --end               -e    Date de début (AAAA-MM-JJ). Par défaut: aujourd'hui
+        --usage-point-id    -u    Usage Point ID (PRM). Par défaut: le dernier utilisé
+        --output            -o    Fichier .json de sortie. Optionnel
         
     Exemples:
       linky auth -a Kft3SIZrcq -r F3AR0K8eoC -u 225169
-      linky daily --start 2022-01-01 --end 2022-01-08
+      linky daily
+      linky dailyprod --start 2022-01-01 --end 2022-01-08
       linky maxpower --start 2021-08-01 --end 2021-08-15
       linky loadcurve -s 2022-01-01 -e 2022-01-08 -o data/ma_conso.json
-      linky daily
+      linky loadcurveprod -u 225169
 `;
 
 const authCommand = 'auth';
