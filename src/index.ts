@@ -76,11 +76,11 @@ export class Session {
         }
     }
 
-    getDailyConsumption(start: string, end: string): Promise<Consumption> {
+    getDailyConsumption(start: string, end: string) {
         return this.request('daily_consumption', start, end);
     }
 
-    getLoadCurve(start: string, end: string): Promise<Consumption> {
+    getLoadCurve(start: string, end: string) {
         return this.request('consumption_load_curve', start, end);
     }
 
