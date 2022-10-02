@@ -2,7 +2,7 @@
 
 import meow from 'meow';
 import { auth } from './auth';
-import { daily, dailyProduction, loadCurve, loadCurveProduction, maxPower, MeteringFlags } from './metering';
+import { daily, dailyProduction, loadCurve, loadCurveProduction, maxPower, MeteringFlags, Format } from './metering';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';
 import dayjs from 'dayjs';
@@ -37,6 +37,8 @@ const mainHelp = `
         --start             -s    Date de début (AAAA-MM-JJ). Par défaut: hier
         --end               -e    Date de début (AAAA-MM-JJ). Par défaut: aujourd'hui
         --usage-point-id    -u    Usage Point ID (PRM). Par défaut: le dernier utilisé
+        --format            -f    Determine le format d'affichage de sortie du script. Options: pretty, json. Par défaut: pretty
+        --quiet             -q    N'affiche pas les messages et animations de progression. Optionnel
         --output            -o    Fichier .json de sortie. Optionnel
         
     Exemples:
@@ -69,6 +71,8 @@ try {
             start: { type: 'string', alias: 's', default: yesterday },
             end: { type: 'string', alias: 'e', default: today },
             output: { type: 'string', alias: 'o' },
+            format: { type: 'string', alias: 'f', default: 'pretty' },
+            quiet: { type: 'boolean', alias: 'q', default: false },
             sandbox: { type: 'boolean' }, // For test purposes
         },
     });
@@ -81,6 +85,8 @@ const meteringFlags: MeteringFlags = {
     start: cli.flags.start,
     end: cli.flags.end,
     output: cli.flags.output || null,
+    quiet: cli.flags.quiet,
+    format: cli.flags.format as Format,
     usagePointId: cli.flags.usagePointId,
 };
 
