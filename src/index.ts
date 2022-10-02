@@ -19,6 +19,48 @@ export type ConsumptionData = {
     value: number;
 };
 
+type ReadingTypeLoadCurve = {
+    measurement_kind: 'power';
+    unit: 'W';
+    aggregate: 'average';
+};
+
+type ReadingTypeMaxPower = {
+    measurement_kind: 'power';
+    unit: 'VA';
+    aggregate: 'maximum';
+};
+
+type ReadingTypeConsumption = {
+    measurement_kind: 'energy';
+    unit: 'Wh';
+    aggregate: 'sum';
+};
+
+type ReadingType = ReadingTypeLoadCurve | ReadingTypeMaxPower | ReadingTypeConsumption;
+type IntervalReading = {
+    value: string;
+    date: string;
+};
+
+type MeteringResponse = {
+    meter_reading: {
+        usage_point_id: string;
+        start: string;
+        end: string;
+        quality: string;
+        reading_type: ReadingType;
+        interval_reading: IntervalReading[];
+    };
+};
+
+type RefreshTokenResponse = {
+    response: {
+        access_token?: string;
+        refresh_token?: string;
+    };
+};
+
 export type TokenRefreshCallback = (accessToken: string, refreshToken: string) => void;
 
 export class Session {
@@ -55,23 +97,24 @@ export class Session {
     }
 
     private request(endpoint: string, start: string, end: string, retrying = false): Promise<Consumption> {
-        return axios({
-            method: 'get',
-            url: `${this.baseURL}/v4/metering_data/${endpoint}?${qs.stringify({
-                start: start,
-                end: end,
-                usage_point_id: this.config.usagePointId,
-            })}`,
-            headers: {
-                Authorization: `Bearer ${this.config.accessToken}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-                Accept: 'application/json',
-            },
-        })
+        const url = `${this.baseURL}/v4/metering_data/${endpoint}?${qs.stringify({
+            start: start,
+            end: end,
+            usage_point_id: this.config.usagePointId,
+        })}`;
+
+        return axios
+            .get<MeteringResponse>(url, {
+                headers: {
+                    Authorization: `Bearer ${this.config.accessToken}`,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    Accept: 'application/json',
+                },
+            })
             .then((res) => {
                 return {
                     unit: res.data.meter_reading.reading_type.unit,
-                    data: res.data.meter_reading.interval_reading.map((d: any) => ({
+                    data: res.data.meter_reading.interval_reading.map((d) => ({
                         date: d.date,
                         value: parseFloat(d.value),
                     })),
@@ -102,10 +145,9 @@ export class Session {
 
     private refreshToken() {
         const host = this.config.sandbox ? 'linky.bokub.vercel.app' : 'conso.vercel.app';
-        return axios({
-            method: 'get',
-            url: `https://${host}/api/refresh?token=${this.config.refreshToken}`,
-        })
+        const url = `https://${host}/api/refresh?token=${this.config.refreshToken}`;
+        return axios
+            .get<RefreshTokenResponse>(url)
             .then((res) => {
                 const { access_token, refresh_token } = res.data.response;
                 if (!access_token) {
