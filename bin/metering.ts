@@ -93,30 +93,27 @@ function handle(
     const session = store.getStoredSession(usagePointId);
     const previousAccessToken = session?.accessToken;
 
-    const spinner = ora();
-    if (!quiet) spinner.start(spinnerText);
+    const spinner = ora({ isSilent: quiet }).start(spinnerText);
 
     return promise
         .then(async (consumption) => {
             if (output) {
                 try {
                     await mkdirp(path.dirname(output));
-                    fs.writeFileSync(output, JSON.stringify(consumption, null, 4));
+                    fs.writeFileSync(output, JSON.stringify(consumption, null, 2));
                 } catch (e) {
                     throw new Error(`Impossible d'écrire dans ${output}:\n${e.message}`);
                 }
             }
 
-            if (!quiet) {
-                spinner.succeed();
+            spinner.succeed();
 
-                if (store.getStoredSession(session?.usagePointId)?.accessToken !== previousAccessToken) {
-                    ora('Vos tokens ont été automatiquement renouvelés').succeed();
-                }
+            if (store.getStoredSession(session?.usagePointId)?.accessToken !== previousAccessToken) {
+                ora({ isSilent: quiet }).succeed('Vos tokens ont été automatiquement renouvelés');
+            }
 
-                if (output) {
-                    ora(`Résultats sauvegardés dans ${output}`).succeed();
-                }
+            if (output) {
+                ora({ isSilent: quiet }).succeed(`Résultats sauvegardés dans ${output}`);
             }
 
             if (!output) {
@@ -124,41 +121,42 @@ function handle(
             }
         })
         .catch((e) => {
-            spinner.fail(e.message);
+            spinner.stop();
+            ora(e.message).fail();
             throw new Error();
         });
 }
 
-function render(format: Format, ...args: [Consumption, boolean]) {
-    Rendered[format](...args);
-}
-
-const Rendered = {
-    json(consumption: Consumption, displayTime: boolean) {
-        console.log(JSON.stringify(consumption, null, 2));
-    },
-    pretty(consumption: Consumption, displayTime: boolean) {
-        const maxValue = Math.max(...consumption.data.map((x) => x.value));
-        const chartLength = 30;
-        // Headers
-        console.info(
-            '\n' +
-                chalk.yellow.underline(`Date${' '.repeat(displayTime ? 16 : 7)}`) +
-                ' ' +
-                chalk.green.underline(`Valeur (${consumption.unit})`) +
-                ' ' +
-                chalk.cyan.underline(`Graphique${' '.repeat(chartLength - 9)}`)
-        );
-
-        for (const line of consumption.data) {
+function render(format: Format, consumption: Consumption, displayTime: boolean) {
+    switch (format) {
+        case 'json':
+            console.info(JSON.stringify(consumption, null, 2));
+            break;
+        case 'pretty':
+            const maxValue = Math.max(...consumption.data.map((x) => x.value));
+            const chartLength = 30;
+            // Headers
             console.info(
-                chalk.yellow(`${line.date}  `) +
-                    chalk.green(`${line.value}`) +
-                    ' '.repeat(10 + consumption.unit.length - line.value.toString().length) +
-                    chalk.cyan(
-                        '■'.repeat(maxValue && line.value ? Math.ceil((chartLength * line.value) / maxValue) : 0)
-                    )
+                '\n' +
+                    chalk.yellow.underline(`Date${' '.repeat(displayTime ? 16 : 7)}`) +
+                    ' ' +
+                    chalk.green.underline(`Valeur (${consumption.unit})`) +
+                    ' ' +
+                    chalk.cyan.underline(`Graphique${' '.repeat(chartLength - 9)}`)
             );
-        }
-    },
-};
+            // Data
+            for (const line of consumption.data) {
+                console.info(
+                    chalk.yellow(`${line.date}  `) +
+                        chalk.green(`${line.value}`) +
+                        ' '.repeat(10 + consumption.unit.length - line.value.toString().length) +
+                        chalk.cyan(
+                            '■'.repeat(maxValue && line.value ? Math.ceil((chartLength * line.value) / maxValue) : 0)
+                        )
+                );
+            }
+            break;
+        default:
+            ora(`Le format "${format}" est invalide. Formats acceptés: "pretty", "json".`).fail();
+    }
+}

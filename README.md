@@ -117,7 +117,19 @@ Vous pouvez sauvegarder vos résultats dans un fichier JSON grâce à l'option `
 linky loadcurve --start 2021-12-31 --end 2022-01-01 --output data/ma_conso.json
 ```
 
-Pour voir l'aide détaillée :
+Vous pouvez changer le format d'affichage de sortie grâce à l'option `--format`
+
+```bash
+linky daily --start 2022-01-01 --end 2022-01-08 --format json
+```
+
+Vous pouvez masquer les messages et animations de progression grâce à l'option `--quiet`
+
+```bash
+linky maxpower --quiet
+```
+
+Pour voir l'aide détaillée et plus d'exemples :
 
 ```bash
 linky --help

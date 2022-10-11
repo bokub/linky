@@ -45,7 +45,7 @@ const mainHelp = `
       linky auth -a Kft3SIZrcq -r F3AR0K8eoC -u 225169
       linky daily
       linky dailyprod --start 2022-01-01 --end 2022-01-08
-      linky maxpower --start 2021-08-01 --end 2021-08-15
+      linky maxpower --start 2021-08-01 --end 2021-08-15 --format json --quiet
       linky loadcurve -s 2022-01-01 -e 2022-01-08 -o data/ma_conso.json
       linky loadcurveprod -u 225169
 `;
