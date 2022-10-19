@@ -1,10 +1,13 @@
 import test from 'ava';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { Session, SessionConfig } from './src';
 
 let config: SessionConfig;
 let consumptionSession: Session;
 let productionSession: Session;
+
+const daysAgo = (n: number) => dayjs().subtract(n, 'days').format('YYYY-MM-DD');
 
 test.before(async () => {
     console.info('Generating authorization code...');
@@ -37,55 +40,55 @@ test.before(async () => {
 });
 
 test('propagates errors', async (t) => {
-    await t.throwsAsync(() => consumptionSession.getDailyConsumption('2020-08-24', '2020-08-22'), {
+    await t.throwsAsync(() => consumptionSession.getDailyConsumption(daysAgo(200), daysAgo(203)), {
         message: 'Invalid request: Start date should be before end date.',
     });
 });
 
 test('can retrieve daily consumption', async (t) => {
-    const data = await consumptionSession.getDailyConsumption('2020-08-24', '2020-08-27');
+    const data = await consumptionSession.getDailyConsumption(daysAgo(203), daysAgo(200));
     t.is(data.unit, 'Wh');
     t.is(data.data.length, 3);
     t.deepEqual(
         data.data.map((d) => d.date),
-        ['2020-08-24', '2020-08-25', '2020-08-26']
+        [daysAgo(203), daysAgo(202), daysAgo(201)]
     );
 });
 
 test('can retrieve load curve', async (t) => {
-    const data = await consumptionSession.getLoadCurve('2020-08-24', '2020-08-25');
+    const data = await consumptionSession.getLoadCurve(daysAgo(200), daysAgo(199));
     t.is(data.unit, 'W');
     t.is(data.data.length, 48);
-    t.is(data.data[0].date, '2020-08-24 00:00:00');
-    t.is(data.data[3].date, '2020-08-24 01:30:00');
+    t.is(data.data[0].date, `${daysAgo(200)} 00:00:00`);
+    t.is(data.data[3].date, `${daysAgo(200)} 01:30:00`);
 });
 
 test('can retrieve max power', async (t) => {
-    const data = await consumptionSession.getMaxPower('2020-08-24', '2020-08-27');
+    const data = await consumptionSession.getMaxPower(daysAgo(203), daysAgo(200));
     t.is(data.unit, 'VA');
     t.is(data.data.length, 3);
     t.deepEqual(
         data.data.map((d) => d.date.slice(0, 10)),
-        ['2020-08-24', '2020-08-25', '2020-08-26']
+        [daysAgo(203), daysAgo(202), daysAgo(201)]
     );
 });
 
 test('can retrieve daily production', async (t) => {
-    const data = await productionSession.getDailyProduction('2020-08-24', '2020-08-27');
+    const data = await productionSession.getDailyProduction(daysAgo(203), daysAgo(200));
     t.is(data.unit, 'Wh');
     t.is(data.data.length, 3);
     t.deepEqual(
         data.data.map((d) => d.date),
-        ['2020-08-24', '2020-08-25', '2020-08-26']
+        [daysAgo(203), daysAgo(202), daysAgo(201)]
     );
 });
 
 test('can retrieve production load curve', async (t) => {
-    const data = await productionSession.getProductionLoadCurve('2020-08-24', '2020-08-25');
+    const data = await productionSession.getProductionLoadCurve(daysAgo(202), daysAgo(201));
     t.is(data.unit, 'W');
     t.is(data.data.length, 48);
-    t.is(data.data[0].date, '2020-08-24 00:00:00');
-    t.is(data.data[3].date, '2020-08-24 01:30:00');
+    t.is(data.data[0].date, `${daysAgo(202)} 00:00:00`);
+    t.is(data.data[3].date, `${daysAgo(202)} 01:30:00`);
 });
 
 test.after('token is renewed automatically', async (t) => {
@@ -98,7 +101,7 @@ test.after('token is renewed automatically', async (t) => {
     };
 
     const expiredSession = new Session(config);
-    const data = await expiredSession.getDailyConsumption('2020-08-24', '2020-08-25');
+    const data = await expiredSession.getDailyConsumption(daysAgo(201), daysAgo(200));
     t.is(data.data.length, 1);
 
     config.refreshToken = 'invalid';
@@ -109,5 +112,5 @@ test.after('token is renewed automatically', async (t) => {
     };
 
     const invalidSession = new Session(config);
-    await t.throwsAsync(invalidSession.getDailyConsumption('2020-08-24', '2020-08-25'));
+    await t.throwsAsync(invalidSession.getDailyConsumption(daysAgo(201), daysAgo(200)));
 });
