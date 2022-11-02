@@ -1,7 +1,7 @@
 {
     "name": "linky",
     "description": "Easily retrieve your Linky power consumption",
-    "version": "1.6.0",
+    "version": "1.7.0",
     "author": "bokub",
     "license": "GPL-3.0-or-later",
     "main": "dist/src/index.js",
@@ -19,7 +19,7 @@
         "coverage": "c8 report --reporter=text-lcov > coverage.lcov",
         "test": "c8 ava --timeout=1m",
         "prepare": "husky install",
-        "prepublish": "npm run build",
+        "prepublishOnly": "npm run build",
         "build": "rm -fr ./dist && tsc",
         "pkg": "rm -fr ./pkg && pkg . --out-path pkg -t node16-linux-x64,node16-macos-x64,node16-win-x64",
         "lint": "prettier --check --ignore-path .gitignore .",

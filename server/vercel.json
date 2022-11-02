@@ -2,28 +2,13 @@
     "redirects": [
         {
             "source": "/api/refresh",
-            "has": [{ "type": "query", "key": "token", "value": "75OxzdDV2Y8I1gAeOWx9jHTRH33UM36ILfpvHVPZn2QhXT" }],
-            "destination": "https://pastebin.com/raw/T6tHEygU"
+            "has": [{ "type": "query", "key": "token", "value": "7L1oV2LUJsavwbCLIuVOZP1tOkVC3cbws2AyIor7sa45pO" }],
+            "destination": "https://pastebin.com/raw/sL5Hzt6a"
         },
         {
             "source": "/api/refresh",
-            "has": [{ "type": "query", "key": "token", "value": "GnL5ReToBSUCn4SwDeeYiGXtjTTBWcrhiV2mIdJjYHATaN" }],
-            "destination": "https://pastebin.com/raw/YvjYNyuD"
-        },
-        {
-            "source": "/api/refresh",
-            "has": [{ "type": "query", "key": "token", "value": "U4M0jxyUcIYJKAQISq7CXUFeuAYVKXSvB69pvcyBc5gFfs" }],
-            "destination": "https://pastebin.com/raw/YvjYNyuD"
-        },
-        {
-            "source": "/api/refresh",
-            "has": [{ "type": "query", "key": "token", "value": "5tyWWlVetWpzCi5NgcC6NUF3ZWbpOxXb2r8J5YCGh94OYJ" }],
-            "destination": "https://pastebin.com/raw/YvjYNyuD"
-        },
-        {
-            "source": "/api/refresh",
-            "has": [{ "type": "query", "key": "token", "value": "aAz0bYPjp4430lBfwrXXbrd7Nr6g8z44kyBj01czcrghNa" }],
-            "destination": "https://pastebin.com/raw/YvjYNyuD"
+            "has": [{ "type": "query", "key": "token", "value": "GMEaJNdrMrU8oCMeXMBNystNPBTGimotZj3PU8GMchxdgn" }],
+            "destination": "https://pastebin.com/raw/sL5Hzt6a"
         }
     ]
 }
