@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+import { createHash } from 'crypto';
 
 export type SessionConfig = {
     accessToken: string;
@@ -66,11 +67,13 @@ export type TokenRefreshCallback = (accessToken: string, refreshToken: string) =
 export class Session {
     private config: SessionConfig;
     private baseURL: string;
+    private uid: string;
     private onTokenRefresh?: TokenRefreshCallback;
 
     constructor(config: SessionConfig) {
         this.config = config;
         this.baseURL = config.sandbox ? 'https://gw.hml.api.enedis.fr' : 'https://gw.prd.api.enedis.fr';
+        this.uid = createHash('sha256').update(config.usagePointId).digest('hex').slice(-7);
         if (config.onTokenRefresh) {
             this.onTokenRefresh = config.onTokenRefresh;
         }
@@ -145,7 +148,7 @@ export class Session {
 
     private refreshToken() {
         const host = this.config.sandbox ? 'linky.bokub.vercel.app' : 'conso.vercel.app';
-        const url = `https://${host}/api/refresh?token=${this.config.refreshToken}`;
+        const url = `https://${host}/api/refresh?token=${this.config.refreshToken}&uid=${this.uid}`;
         return axios
             .get<RefreshTokenResponse>(url)
             .then((res) => {
