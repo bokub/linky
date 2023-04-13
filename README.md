@@ -10,7 +10,7 @@
 
 Ce module vous permet de récupérer votre consommation et production électrique Linky via les nouvelles API _"Authorize V1"_ et _"Metering Data V4"_ d'Enedis
 
-#### Attention: Ces API seront désactivées par Enedis le 30 avril 2023. Une migration vers les nouvelles API _"Metering V5"_ et _"Token V3"_ est prévue pour les mois à venir. En tant qu'utilisateur de ce module, attendez-vous à devoir faire une mise à jour prochainement.
+#### Attention: Ces API seront désactivées par Enedis le 17 septembre 2023. Une migration vers les nouvelles API _"Metering V5"_ et _"Token V3"_ est prévue pour les mois à venir. En tant qu'utilisateur de ce module, attendez-vous à devoir faire une mise à jour prochainement.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/17952318/93326183-b5ba2400-f818-11ea-85cf-c278a1e32b58.gif" alt="Screenshot">
