@@ -40,7 +40,7 @@ export default (req: NowRequest, res: NowResponse) => {
             const body = e.response ? e.response.data : e.message;
             if (code === 401) {
                 if (isLimitReached(token as string)) {
-                    res.status(429).send({
+                    res.status(404).send({
                         response: `
                             === Limite d'appels API atteinte ===
                             Cela fait de nombreuses fois que vous tentez de rafraichir vos tokens alors que vos identifiants ont expiré.
