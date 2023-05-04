@@ -1,26 +1,25 @@
 #!/usr/bin/env node
 
 import meow from 'meow';
-import { auth } from './auth';
-import { daily, dailyProduction, loadCurve, loadCurveProduction, maxPower, MeteringFlags, Format } from './metering';
+import { auth } from './auth.js';
+import { type MeteringFlags, type Format, MeteringHandler } from './metering.js';
 import chalk from 'chalk';
 import updateNotifier from 'update-notifier';
 import dayjs from 'dayjs';
-
-import * as pkg from '../package.json';
+import pkg from '../package.json' assert { type: 'json' };
 
 function exit(e: Error) {
-    if (e.message) {
-        console.error(chalk.yellow(e.message));
-    }
-    process.exit(1);
+  if (e.message) {
+    console.error(chalk.yellow(e.message));
+  }
+  process.exit(1);
 }
 
 const mainHelp = `
     linky <commande> [options]
     
     Commandes:
-      linky auth            Crée une connexion à un compte Enedis. Vous pouvez obtenir vos tokens sur https://conso.vercel.app
+      linky auth            Crée une connexion à un compte Enedis. Vous pouvez obtenir un token sur https://conso.boris.sh
       linky daily           Récupère la consommation quotidienne
       linky loadcurve       Récupère la puissance moyenne consommée quotidiennement, sur un intervalle de 30 min
       linky maxpower        Récupère la puissance maximale de consommation atteinte quotidiennement
@@ -29,25 +28,24 @@ const mainHelp = `
     
     Options:
       linky auth:
-        --access-token      -a    Access Token
-        --refresh-token     -r    Refresh Token
-        --usage-point-id    -u    Usage Point ID
+        --token     -t      Token 
 
       linky (daily|loadcurve|maxpower|dailyprod|loadcurveprod):
-        --start             -s    Date de début (AAAA-MM-JJ). Par défaut: hier
-        --end               -e    Date de début (AAAA-MM-JJ). Par défaut: aujourd'hui
-        --usage-point-id    -u    Usage Point ID (PRM). Par défaut: le dernier utilisé
-        --format            -f    Determine le format d'affichage de sortie du script. Options: pretty, json. Par défaut: pretty
-        --quiet             -q    N'affiche pas les messages et animations de progression. Optionnel
-        --output            -o    Fichier .json de sortie. Optionnel
+        --start     -s      Date de début (AAAA-MM-JJ). Par défaut: hier
+        --end       -e      Date de début (AAAA-MM-JJ). Par défaut: aujourd'hui
+        --prm       -p      Numéro de PRM, obligatoire si le token permet d'accéder à plusieurs PRMs, optionnel sinon.
+        --token     -t      Token, pour utiliser un token différent de celui enregistré avec la commande auth. Optionnel
+        --format    -f      Determine le format d'affichage de sortie du script. Options: pretty, json, csv. Par défaut: pretty
+        --quiet     -q      N'affiche pas les messages et animations de progression. Optionnel
+        --output    -o      Fichier de sortie. Optionnel
         
     Exemples:
-      linky auth -a Kft3SIZrcq -r F3AR0K8eoC -u 225169
+      linky auth --token xxx.yyy.zzz
       linky daily
-      linky dailyprod --start 2022-01-01 --end 2022-01-08
-      linky maxpower --start 2021-08-01 --end 2021-08-15 --format json --quiet
-      linky loadcurve -s 2022-01-01 -e 2022-01-08 -o data/ma_conso.json
-      linky loadcurveprod -u 225169
+      linky dailyprod --start 2023-01-01 --end 2023-01-08
+      linky maxpower --start 2023-05-01 --end 2023-05-15 --format json --quiet
+      linky loadcurve -s 2023-01-01 -e 2023-01-08 -o data/ma_conso.json --format json
+      linky loadcurveprod -p 225169
 `;
 
 const authCommand = 'auth';
@@ -60,97 +58,86 @@ const maxPowerCommand = 'maxpower';
 const today = dayjs().format('YYYY-MM-DD');
 const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
 
-let cli;
-try {
-    cli = meow(mainHelp, {
-        description: false,
-        flags: {
-            accessToken: { type: 'string', alias: 'a' },
-            refreshToken: { type: 'string', alias: 'r' },
-            usagePointId: { type: 'string', alias: 'u' },
-            start: { type: 'string', alias: 's', default: yesterday },
-            end: { type: 'string', alias: 'e', default: today },
-            output: { type: 'string', alias: 'o' },
-            format: { type: 'string', alias: 'f', default: 'pretty' },
-            quiet: { type: 'boolean', alias: 'q', default: false },
-            sandbox: { type: 'boolean' }, // For test purposes
-        },
-    });
-} catch (e: any) {
-    exit(e);
-    process.exit(1);
-}
+const cli = meow(mainHelp, {
+  importMeta: import.meta,
+  description: false,
+  flags: {
+    prm: { type: 'string', shortFlag: 'p' },
+    token: { type: 'string', shortFlag: 't' },
+    start: { type: 'string', shortFlag: 's', default: yesterday },
+    end: { type: 'string', shortFlag: 'e', default: today },
+    output: { type: 'string', shortFlag: 'o' },
+    format: { type: 'string', shortFlag: 'f', default: 'pretty' },
+    quiet: { type: 'boolean', shortFlag: 'q', default: false },
+  },
+});
 
 const meteringFlags: MeteringFlags = {
-    start: cli.flags.start,
-    end: cli.flags.end,
-    output: cli.flags.output || null,
-    quiet: cli.flags.quiet,
-    format: cli.flags.format as Format,
-    usagePointId: cli.flags.usagePointId,
+  start: cli.flags.start,
+  end: cli.flags.end,
+  output: cli.flags.output,
+  quiet: cli.flags.quiet,
+  format: cli.flags.format as Format,
+  prm: cli.flags.prm,
+  token: cli.flags.token,
 };
 
 const notifier = updateNotifier({ pkg });
 notifier.notify({
-    message:
-        'Mise à jour disponible: ' +
-        chalk.dim('{currentVersion}') +
-        chalk.reset(' → ') +
-        chalk.green('{latestVersion}') +
-        ' \nLancez ' +
-        chalk.cyan('npm i -g linky') +
-        ' pour mettre à jour',
+  message:
+    'Mise à jour disponible: ' +
+    chalk.dim('{currentVersion}') +
+    chalk.reset(' → ') +
+    chalk.green('{latestVersion}') +
+    ' \nLancez ' +
+    chalk.cyan('npm i -g linky') +
+    ' pour mettre à jour',
 });
 
 switch (cli.input[0]) {
-    case authCommand:
-        try {
-            auth({
-                accessToken: cli.flags.accessToken as string,
-                refreshToken: cli.flags.refreshToken as string,
-                usagePointId: cli.flags.usagePointId as string,
-                sandbox: Boolean(cli.flags.sandbox),
-            });
-        } catch (e) {
-            exit(e);
-        }
+  case authCommand:
+    try {
+      auth(cli.flags.token);
+    } catch (e) {
+      exit(e as Error);
+    }
 
-        break;
-    case dailyConsumptionCommand:
-        try {
-            daily(meteringFlags).catch((e) => exit(e));
-        } catch (e) {
-            exit(e);
-        }
-        break;
-    case loadCurveCommand:
-        try {
-            loadCurve(meteringFlags).catch((e) => exit(e));
-        } catch (e) {
-            exit(e);
-        }
-        break;
-    case dailyProductionCommand:
-        try {
-            dailyProduction(meteringFlags).catch((e) => exit(e));
-        } catch (e) {
-            exit(e);
-        }
-        break;
-    case loadCurveProductionCommand:
-        try {
-            loadCurveProduction(meteringFlags).catch((e) => exit(e));
-        } catch (e) {
-            exit(e);
-        }
-        break;
-    case maxPowerCommand:
-        try {
-            maxPower(meteringFlags).catch((e) => exit(e));
-        } catch (e) {
-            exit(e);
-        }
-        break;
-    default:
-        cli.showHelp();
+    break;
+  case dailyConsumptionCommand:
+    try {
+      await new MeteringHandler(meteringFlags).daily();
+    } catch (e) {
+      exit(e as Error);
+    }
+    break;
+  case loadCurveCommand:
+    try {
+      await new MeteringHandler(meteringFlags).loadCurve();
+    } catch (e) {
+      exit(e as Error);
+    }
+    break;
+  case maxPowerCommand:
+    try {
+      await new MeteringHandler(meteringFlags).maxPower();
+    } catch (e) {
+      exit(e as Error);
+    }
+    break;
+  case dailyProductionCommand:
+    try {
+      await new MeteringHandler(meteringFlags).dailyProduction();
+    } catch (e) {
+      exit(e as Error);
+    }
+    break;
+  case loadCurveProductionCommand:
+    try {
+      await new MeteringHandler(meteringFlags).loadCurveProduction();
+    } catch (e) {
+      exit(e as Error);
+    }
+    break;
+  default:
+    cli.showHelp();
 }
