@@ -8,9 +8,9 @@
 
 > **N.B**: Because this tool is targeted for french people, the documentation is...in french
 
-Ce module vous permet de récupérer votre consommation et production électrique Linky via les nouvelles API _"Authorize V1"_ et _"Metering Data V4"_ d'Enedis
+Ce module vous permet de récupérer votre consommation et production électrique Linky via les API _"Token V3"_ et _"Metering Data V5"_ d'Enedis
 
-#### Attention: Ces API seront désactivées par Enedis le 17 septembre 2023. Une migration vers les nouvelles API _"Metering V5"_ et _"Token V3"_ est prévue pour les mois à venir. En tant qu'utilisateur de ce module, attendez-vous à devoir faire une mise à jour prochainement.
+### Attention : Cette documentation est valable uniquement pour la version 2 du module. La documentation pour la version 1 est toujours disponible sur la [branche v1](https://github.com/bokub/linky/tree/v1#readme)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/17952318/93326183-b5ba2400-f818-11ea-85cf-c278a1e32b58.gif" alt="Screenshot">
@@ -41,42 +41,44 @@ Dans le cas contraire, vous pouvez télécharger le binaire correspondant à vot
 
 ### Utilisation
 
+#### Authentification
+
 Avant toute chose, il faudra vous connecter à votre espace client Enedis et leur donner l'autorisation de partager vos données avec une application extérieure.
 
-Rendez-vous sur [conso.vercel.app](https://conso.vercel.app) pour donner votre accord et récupérer un jeu de tokens.
+Rendez-vous sur [conso.boris.sh](https://conso.boris.sh) pour donner votre accord et récupérer un token
 
-Puis, créez une connexion à votre compte avec la commande suivante :
+Puis, créez une connexion à votre compte avec la commande suivante:
 
 ```bash
-linky auth -a <access token> -r <refresh token> -u <usage point ID>
+linky auth --token <votre-token>
 ```
 
-> **Attention :** Les tokens générés ont une durée de vie de quelques heures. Ils seront renouvelés automatiquement par cet outil et stockés sur votre ordinateur.
->
-> Ne **relancez pas** `linky auth` avec de vieux tokens, cela rendrait votre connexion invalide et vous devrez recommencer le process depuis le début.
+#### Récupération des données
 
-Une fois vos tokens sauvegardés, vous pourrez récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
+Une fois votre token sauvegardé, vous pourrez récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
 
 ```bash
-# Récupère la consommation quotidienne du 1er au 7 janvier 2022 inclus
-linky daily --start 2022-01-01 --end 2022-01-08
+# Récupère la consommation quotidienne du 1er au 3 mai 2023 inclus
+linky daily --start 2023-05-01 --end 2023-05-04
 
-# Récupère la puissance moyenne consommée le 31 décembre 2021, sur un intervalle de 30 min
-linky loadcurve --start 2021-12-31 --end 2022-01-01
+# Récupère la puissance moyenne consommée le 1 mai 2023, sur un intervalle de 30 min
+linky loadcurve --start 2023-05-01 --end 2023-05-02
 
-# Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 7 janvier 2022 inclus
-linky maxpower --start 2022-01-01 --end 2022-01-08
+# Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023 inclus
+linky maxpower --start 2023-05-01 --end 2023-05-04
 ```
 
 Si vous produisez de l'électricité, vous pouvez également récupérer votre production quotidienne et votre courbe de charge (production par demi-heure).
 
 ```bash
-# Récupère la production quotidienne du 1er au 7 janvier 2022 inclus
-linky dailyprod --start 2022-01-01 --end 2022-01-08
+# Récupère la production quotidienne du 1er au 3 mai 2023 inclus
+linky dailyprod --start 2023-05-01 --end 2023-05-04
 
-# Récupère la puissance moyenne produite le 31 décembre 2021, sur un intervalle de 30 min
-linky loadcurveprod --start 2021-12-31 --end 2022-01-01
+# Récupère la puissance moyenne produite le 1 mai 2023, sur un intervalle de 30 min
+linky loadcurveprod --start 2023-05-01 --end 2023-05-02
 ```
+
+#### Dates par défaut
 
 En l'absence des paramètres `--start` et `--end`, vous récupérez la consommation / production / puissance de la veille.
 
@@ -97,38 +99,52 @@ linky dailyprod
 linky loadcurveprod
 ```
 
-Pour gérer plusieurs compteurs (PRM), précisez simplement l'usage point ID dans chaque commande avec le paramètre `-u`
+#### Multi-PRM et multi-token
+
+Si votre token donne accès aux données de plusieurs PRMs, vous pouvez préciser le numéro de PRM à utiliser dans chaque commande avec le paramètre `--prm`
 
 ```bash
-# Enregistre les identifiants du compteur 111222333
-linky auth -a Tk42pB -r 8peqHT -u 111222333
+# Récupère la consommation de la veille pour le compteur 111222333
+linky daily --prm 111222333
 
-# Enregistre les identifiants du compteur 777888999
-linky auth -a 9urfYR -r 5wcCPq -u 777888999
-
-# Récupère la consommation du compteur 111222333
-linky daily -u 111222333
-
-# Récupère la production du compteur 777888999
-linky dailyprod -u 777888999
+# Récupère la production de la veille pour le compteur 777888999
+linky dailyprod --prm 777888999
 ```
 
-Vous pouvez sauvegarder vos résultats dans un fichier JSON grâce à l'option `--output`
+Si vous possédez plusieurs tokens, vous pouvez passer l'étape d'authentification et préciser le token à utiliser dans chaque commande avec le paramètre `--token`
 
 ```bash
-linky loadcurve --start 2021-12-31 --end 2022-01-01 --output data/ma_conso.json
+# Récupère la consommation de la veille avec le token aaa.bbb.ccc
+linky daily --token aaa.bbb.ccc
+
+# Récupère la production de la veille avec le token xxx.yyy.zzz
+linky dailyprod --token xxx.yyy.zzz
 ```
 
-Vous pouvez changer le format d'affichage de sortie grâce à l'option `--format`
+#### Paramètres supplémentaires
+
+Vous pouvez changer le format d'affichage de sortie grâce au paramètre `--format`
+
+Les formats disponibles sont `json`, `csv` et `pretty` (par défaut)
 
 ```bash
-linky daily --start 2022-01-01 --end 2022-01-08 --format json
+linky daily --start 2023-05-01 --end 2023-05-02 --format json
 ```
 
-Vous pouvez masquer les messages et animations de progression grâce à l'option `--quiet`
+Vous pouvez sauvegarder vos résultats dans un fichier en combinant les paramètres `--output` et `--format`
 
 ```bash
-linky maxpower --quiet
+# Sauvegarde la courbe de charge de la veille au format JSON
+linky loadcurve --output chemin/vers/ma_conso.json --format json
+
+# Sauvegarde une semaine de consommation au format CSV
+linky daily --start 2023-05-01 --end 2023-05-07 --output chemin/vers/ma_conso.csv --format csv
+```
+
+Vous pouvez masquer les messages et animations de progression grâce au paramètre `--quiet` afin de faciliter l'intégration dans des scripts
+
+```bash
+linky maxpower --quiet --format json | jq '.interval_reading[0].value'
 ```
 
 Pour voir l'aide détaillée et plus d'exemples :
@@ -150,83 +166,101 @@ npm i linky
 
 ```js
 const linky = require('linky');
+// Ou import linky from 'linky';
 
-// Créez une session
-const session = new linky.Session({
-    accessToken: 'access token',
-    refreshToken: 'refresh token',
-    usagePointId: 'usage point ID',
-    onTokenRefresh: (accessToken, refreshToken) => {
-        // Cette fonction sera appelée si les tokens sont renouvelés
-        // Les tokens précédents ne seront plus valides
-        // Il faudra utiliser ces nouveaux tokens à la prochaine création de session
-        // Si accessToken et refreshToken sont vides, cela signifie que les tokens ne peuvent plus
-        // être utilisés. Il faut alors en récupérer des nouveaux sur conso.vercel.app
-    },
-});
+// Créez une session à partir du token
+const token = 'xxx.yyy.zzz';
+let session = new linky.Session(token);
 
-// Récupère la consommation quotidienne du 1er au 7 janvier 2022 inclus
-session.getDailyConsumption('2022-01-01', '2022-01-08').then((result) => {
-    console.log(result);
-    /*
+// Si le token permet d'accéder à plusieurs PRMs, vous pouvez préciser celui à utiliser
+const prm = '123456';
+session = new linky.Session(token, prm);
+
+// Récupère la consommation quotidienne du 1er au 3 mai 2023 inclus
+session.getDailyConsumption('2023-05-01', '2023-05-04').then((result) => {
+  console.log(result);
+  /*
     {
+      "reading_type": {
         "unit": "Wh",
-        "data": [
-            { "date": "2022-01-01", "value": 12278 },
-            { "date": "2022-01-02", "value": 15637 },
-            ...
+        "measurement_kind": "energy"
+      },
+      "interval_reading": [
+        { "value": "12873", "date": "2023-05-01" },
+        { "value": "12296", "date": "2023-05-02" },
+        { "value": "14679", "date": "2023-05-03" }
+      ]
+    ...
     */
 });
 
-// Récupère la puissance moyenne consommée le 31 décembre 2021, sur un intervalle de 30 min
-session.getLoadCurve('2021-12-31', '2022-01-01').then((result) => {
-    console.log(result);
-    /*
+// Récupère la puissance moyenne consommée le 1er mai 2023, sur un intervalle de 30 min
+session.getLoadCurve('2023-05-01', '2023-05-02').then((result) => {
+  console.log(result);
+  /*
     {
+      "reading_type": {
         "unit": "W",
-        "data": [
-            { "date": "2021-12-31 00:30:00", "value": 582 },
-            { "date": "2021-12-31 01:00:00", "value": 448 },
-            ...
+        "measurement_kind": "power"
+      },
+      "interval_reading": [
+        { "value": "752", "date": "2023-05-01 00:30:00" },
+        { "value": "346", "date": "2023-05-01 01:00:00" },
+        { "value": "250", "date": "2023-05-01 01:30:00" },
+        ...
     */
 });
 
-// Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 7 janvier 2022 inclus
-session.getMaxPower('2022-01-01', '2022-01-08').then((result) => {
-    console.log(result);
-    /*
+// Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023 inclus
+session.getMaxPower('2023-05-01', '2023-05-04').then((result) => {
+  console.log(result);
+  /*
     {
+      "reading_type": {
         "unit": "VA",
-        "data": [
-            { "date": "2022-01-01 13:54:04", "value": 1941 },
-            { "date": "2022-01-02 09:48:26", "value": 1648 },
-            ...
+        "measurement_kind": "power"
+      },
+      "interval_reading": [
+        { "value": "4638", "date": "2023-05-01 12:06:20" },
+        { "value": "4410", "date": "2023-05-02 19:27:46" },
+        { "value": "3570", "date": "2023-05-03 21:42:12" }
+      ]
+    ...
     */
 });
 
-// Récupère la production quotidienne du 1er au 7 janvier 2022 inclus
-session.getDailyProduction('2022-01-01', '2022-01-08').then((result) => {
-    console.log(result);
-    /*
-  {
-      "unit": "Wh",
-      "data": [
-          { "date": "2022-01-01", "value": 1278 },
-          { "date": "2022-01-02", "value": 1567 },
-          ...
-  */
+// Récupère la production quotidienne du 1er au 3 mai 2023 inclus
+session.getDailyProduction('2023-05-01', '2023-05-04').then((result) => {
+  console.log(result);
+  /*
+    {
+      "reading_type": {
+        "unit": "Wh",
+        "measurement_kind": "energy"
+      },
+      "interval_reading": [
+        { "value": "12873", "date": "2023-05-01" },
+        { "value": "12296", "date": "2023-05-02" },
+        { "value": "14679", "date": "2023-05-03" }
+      ]
+    ...
+    */
 });
 
-// Récupère la puissance moyenne produite le 31 décembre 2021, sur un intervalle de 30 min
-session.getProductionLoadCurve('2021-12-31', '2022-01-01').then((result) => {
-    console.log(result);
-    /*
-  {
-      "unit": "W",
-      "data": [
-          { "date": "2021-12-31 00:30:00", "value": 82 },
-          { "date": "2021-12-31 01:00:00", "value": 48 },
-          ...
-  */
+// Récupère la puissance moyenne produite le 1er mai 2023, sur un intervalle de 30 min
+session.getProductionLoadCurve('2023-05-01', '2023-05-02').then((result) => {
+  console.log(result);
+  /*
+    {
+      "reading_type": {
+        "unit": "W",
+        "measurement_kind": "power"
+      },
+      "interval_reading": [
+        { "value": "752", "date": "2023-05-01 00:30:00" },
+        { "value": "346", "date": "2023-05-01 01:00:00" },
+        { "value": "250", "date": "2023-05-01 01:30:00" },
+        ...
+    */
 });
 ```
