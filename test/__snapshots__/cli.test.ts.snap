@@ -1,12 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cli consumption command "daily" should display a graph 1`] = `
+exports[`cli command "daily" should display a graph 1`] = `
 "
 Date        Valeur (Wh) Graphique                     
 2023-04-01  11776       ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
 `;
 
-exports[`cli consumption command "loadcurve" should display a graph 1`] = `
+exports[`cli command "dailyprod" should display a graph 1`] = `
+"
+Date        Valeur (Wh) Graphique                     
+2023-04-01  643         ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
+`;
+
+exports[`cli command "loadcurve" should display a graph 1`] = `
 "
 Date                 Valeur (W) Graphique                     
 2023-04-01 00:30:00  752        ■■■■■■■■
@@ -59,19 +65,7 @@ Date                 Valeur (W) Graphique
 2023-04-02 00:00:00  88         ■"
 `;
 
-exports[`cli consumption command "maxpower" should display a graph 1`] = `
-"
-Date                 Valeur (VA) Graphique                     
-2023-04-01 12:06:20  4638        ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
-`;
-
-exports[`cli production command "dailyprod" should display a graph 1`] = `
-"
-Date        Valeur (Wh) Graphique                     
-2023-04-01  643         ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
-`;
-
-exports[`cli production command "loadcurveprod" should display a graph 1`] = `
+exports[`cli command "loadcurveprod" should display a graph 1`] = `
 "
 Date                 Valeur (W) Graphique                     
 2023-04-01 00:30:00  0          
@@ -122,4 +116,10 @@ Date                 Valeur (W) Graphique
 2023-04-01 23:00:00  0          
 2023-04-01 23:30:00  0          
 2023-04-02 00:00:00  0          "
+`;
+
+exports[`cli command "maxpower" should display a graph 1`] = `
+"
+Date                 Valeur (VA) Graphique                     
+2023-04-01 12:06:20  4638        ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
 `;

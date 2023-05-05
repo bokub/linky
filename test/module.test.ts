@@ -1,31 +1,33 @@
-import { Session } from '../lib/index.js';
-import dotenv from 'dotenv';
-dotenv.config({ path: '.env' });
+import { APIError, Session } from '../lib/index.js';
+import jwt from 'jsonwebtoken';
 
-const consumptionSession: Session = new Session(process.env.CONSUMPTION_TOKEN as string);
-const productionSession: Session = new Session(process.env.PRODUCTION_TOKEN as string);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import('./fixtures/fixtures.cjs');
+
+const session = new Session(jwt.sign({ sub: ['12345123451234'] }, 'secret'));
 
 describe('Linky module', () => {
   it('propagates API errors', async () => {
     expect.assertions(3);
     try {
-      await consumptionSession.getDailyConsumption('2023-04-02', '2023-04-01');
+      await session.getDailyConsumption('2023-04-02', '2023-04-01');
     } catch (e) {
-      expect((e as Error).message).toContain('400');
-      expect((e as Error).message).toContain('Invalid_request');
-      expect((e as Error).message).toContain('Start date should be before end date');
+      expect((e as APIError).message).toContain('Conso API a répondu avec une erreur');
+      expect((e as APIError).code).toBe(400);
+      expect((e as APIError).toString()).toContain('Invalid_request');
     }
   });
 
   it('can retrieve daily consumption', async () => {
-    const data = await consumptionSession.getDailyConsumption('2023-04-01', '2023-04-04');
+    const data = await session.getDailyConsumption('2023-04-01', '2023-04-04');
     expect(data.reading_type.unit).toBe('Wh');
     expect(data.interval_reading.length).toBe(3);
     expect(data.interval_reading.map((d) => d.date)).toStrictEqual(['2023-04-01', '2023-04-02', '2023-04-03']);
   });
 
   it('can retrieve load curve', async () => {
-    const data = await consumptionSession.getLoadCurve('2023-04-01', '2023-04-02');
+    const data = await session.getLoadCurve('2023-04-01', '2023-04-02');
     expect(data.reading_type.unit).toBe('W');
     expect(data.interval_reading.length).toBe(48);
     expect(data.interval_reading[0].date).toBe(`2023-04-01 00:30:00`);
@@ -33,7 +35,7 @@ describe('Linky module', () => {
   });
 
   it('can retrieve max power', async () => {
-    const data = await consumptionSession.getMaxPower('2023-04-01', '2023-04-04');
+    const data = await session.getMaxPower('2023-04-01', '2023-04-04');
     expect(data.reading_type.unit).toBe('VA');
     expect(data.interval_reading.length).toBe(3);
     expect(data.interval_reading.map((d) => d.date.slice(0, 10))).toStrictEqual([
@@ -44,14 +46,14 @@ describe('Linky module', () => {
   });
 
   it('can retrieve daily production', async () => {
-    const data = await productionSession.getDailyProduction('2023-04-01', '2023-04-04');
+    const data = await session.getDailyProduction('2023-04-01', '2023-04-04');
     expect(data.reading_type.unit).toBe('Wh');
     expect(data.interval_reading.length).toBe(3);
     expect(data.interval_reading.map((d) => d.date)).toStrictEqual(['2023-04-01', '2023-04-02', '2023-04-03']);
   });
 
   it('can retrieve production load curve', async () => {
-    const data = await productionSession.getProductionLoadCurve('2023-04-01', '2023-04-02');
+    const data = await session.getProductionLoadCurve('2023-04-01', '2023-04-02');
     expect(data.reading_type.unit).toBe('W');
     expect(data.interval_reading.length).toBe(48);
     expect(data.interval_reading[0].date).toBe(`2023-04-01 00:30:00`);

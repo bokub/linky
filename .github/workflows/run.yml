@@ -30,9 +30,6 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm test
-        env:
-          CONSUMPTION_TOKEN: ${{ secrets.CONSUMPTION_TOKEN }}
-          PRODUCTION_TOKEN: ${{ secrets.PRODUCTION_TOKEN }}
       - run: npm run build
       - run: npm run coverage
       - uses: codecov/codecov-action@v3

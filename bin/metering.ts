@@ -89,6 +89,12 @@ export class MeteringHandler {
       .catch((e) => {
         spinner.stop();
         ora(e.message).fail();
+        if (e.code) {
+          ora('Code: ' + e.code).fail();
+        }
+        if (e.response) {
+          ora('Réponse: ' + JSON.stringify(e.response, null, 4)).fail();
+        }
         throw new Error();
       });
   }

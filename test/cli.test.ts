@@ -1,18 +1,16 @@
 import { node } from 'execa';
 import jwt from 'jsonwebtoken';
 import { getToken } from '../bin/store.js';
-import dotenv from 'dotenv';
 
-dotenv.config({ path: '.env' });
 process.env.FORCE_COLOR = '0';
-const CONSUMPTION_TOKEN = process.env.CONSUMPTION_TOKEN;
-const PRODUCTION_TOKEN = process.env.PRODUCTION_TOKEN;
 
 const bin = './bin/cli.ts';
 const linky = (args: string) =>
   node(bin, args.split(' '), { nodeOptions: ['--experimental-vm-modules', '--loader=ts-node/esm'] });
 
 describe('cli', () => {
+  const validToken = jwt.sign({ sub: ['12345123451234'] }, 'secret');
+  const invalidToken = jwt.sign({ sub: ['99999999999999'] }, 'secret');
   describe('auth', () => {
     it('should return an error when the token parameter is missing', async () => {
       expect.assertions(1);
@@ -60,30 +58,31 @@ describe('cli', () => {
 
   describe('daily command', () => {
     it('should display API errors', async () => {
-      expect.assertions(1);
-      await linky(`auth -t ${CONSUMPTION_TOKEN}`);
+      expect.assertions(2);
+      await linky(`auth -t ${validToken}`);
       try {
         await linky(`daily -s 2023-04-02 -e 2023-04-01`);
       } catch (e) {
+        expect((e as Error).message).toMatch('"status": 400');
         expect((e as Error).message).toMatch('Start date should be before end date');
       }
     });
 
     it('should bypass the saved token when there is a token parameter', async () => {
       expect.assertions(2);
-      await linky(`auth -t ${jwt.sign({ sub: ['12345123451234'] }, 'secret')}`);
+      await linky(`auth -t ${invalidToken}`);
       try {
         await linky(`daily -s 2023-04-01 -e 2023-04-02`);
       } catch (e) {
-        expect((e as Error).message).toMatch('Votre token est invalide');
+        expect((e as Error).message).toMatch('"status": 401');
       }
 
-      await expect(linky(`daily -s 2023-04-01 -e 2023-04-02 -t ${CONSUMPTION_TOKEN}`)).resolves.toBeTruthy();
+      await expect(linky(`daily -s 2023-04-01 -e 2023-04-02 -t ${validToken}`)).resolves.toBeTruthy();
     });
 
     it('should throw an error when the PRM cannot be accessed', async () => {
       expect.assertions(1);
-      await linky(`auth -t ${jwt.sign({ sub: ['12345123451234'] }, 'secret')}`);
+      await linky(`auth -t ${validToken}`);
       try {
         await linky(`daily -s 2023-04-01 -e 2023-04-02 -p 88888999990000`);
       } catch (e) {
@@ -93,7 +92,7 @@ describe('cli', () => {
 
     it('should use the first of multiple PRMs', async () => {
       expect.assertions(1);
-      await linky(`auth -t ${jwt.sign({ sub: ['12345123451234', '1', '123'] }, 'secret')}`);
+      await linky(`auth -t ${invalidToken}`);
       try {
         await linky(`daily -s 2023-04-01 -e 2023-04-02`);
       } catch (e) {
@@ -103,34 +102,27 @@ describe('cli', () => {
 
     it('should use another PRM is there is a prm parameter', async () => {
       expect.assertions(1);
-      await linky(`auth -t ${jwt.sign({ sub: ['12345123451234', '1', '123'] }, 'secret')}`);
+      await linky(`auth -t ${jwt.sign({ sub: ['12345123451234', '0000', '99999999999999'] }, 'secret')}`);
       try {
-        await linky(`daily -s 2023-04-01 -e 2023-04-02 --prm 123`);
+        await linky(`daily -s 2023-04-01 -e 2023-04-02 --prm 99999999999999`);
       } catch (e) {
-        expect((e as Error).message).toMatch('"status": 400');
+        expect((e as Error).message).toMatch('"status": 401');
       }
     });
 
     // TODO test output, format, quiet
   });
 
-  describe('consumption command', () => {
+  describe('command', () => {
     beforeAll(async () => {
-      await linky(`auth -t ${CONSUMPTION_TOKEN}`);
+      await linky(`auth -t ${validToken}`);
     });
-    test.each(['daily', 'loadcurve', 'maxpower'])('"%s" should display a graph', async (command) => {
-      const { stdout } = await linky(`${command} -s 2023-04-01 -e 2023-04-02`);
-      expect(stdout).toMatchSnapshot();
-    });
-  });
-
-  describe('production command', () => {
-    beforeAll(async () => {
-      await linky(`auth -t ${PRODUCTION_TOKEN}`);
-    });
-    test.each(['dailyprod', 'loadcurveprod'])('"%s" should display a graph', async (command) => {
-      const { stdout } = await linky(`${command} -s 2023-04-01 -e 2023-04-02`);
-      expect(stdout).toMatchSnapshot();
-    });
+    test.each(['daily', 'loadcurve', 'maxpower', 'dailyprod', 'loadcurveprod'])(
+      '"%s" should display a graph',
+      async (command) => {
+        const { stdout } = await linky(`${command} -s 2023-04-01 -e 2023-04-02`);
+        expect(stdout).toMatchSnapshot();
+      }
+    );
   });
 });
