@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import qs from 'qs';
 import jwt from 'jsonwebtoken';
 
@@ -25,6 +25,18 @@ export type APIResponse = {
     measuring_period?: string;
   };
 };
+
+export class APIError extends Error {
+  constructor(public err: AxiosError, public code: string, public response: any) {
+    super('Conso API a répondu avec une erreur');
+  }
+
+  toString() {
+    return (
+      `Conso API a répondu avec une erreur\nCode: ${this.code}\nRéponse : ` + JSON.stringify(this.response, null, 4)
+    );
+  }
+}
 
 export type EnergyResponse = APIResponse & {
   reading_type: {
@@ -110,10 +122,7 @@ export class Session {
       .then((res) => res.data)
       .catch((err) => {
         if (err.response) {
-          throw new Error(
-            `Conso API a répondu avec une erreur\nCode: ${err.response.status}\nRéponse : ` +
-              JSON.stringify(err.response.data, null, 4)
-          );
+          throw new APIError(err, err.response.status, err.response.data);
         }
         if (err.request) {
           throw new Error(`Aucune réponse de Conso API\nRequête : ` + JSON.stringify(err.request, null, 4));
