@@ -8,13 +8,13 @@
 
 > **N.B**: Because this tool is targeted for french people, the documentation is...in french
 
-Ce module vous permet de récupérer votre consommation et production électrique Linky via les API _"Token V3"_ et _"Metering Data V5"_ d'Enedis
-
 ### Attention : Cette documentation est valable uniquement pour la version 2 du module. La documentation pour la version 1 est toujours disponible sur la [branche v1](https://github.com/bokub/linky/tree/v1#readme)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/17952318/93326183-b5ba2400-f818-11ea-85cf-c278a1e32b58.gif" alt="Screenshot">
 </p>
+
+Ce module vous permet de récupérer votre consommation et production électrique Linky via les API _"Token V3"_ et _"Metering Data V5"_ d'Enedis
 
 Il peut s'utiliser de 2 façons :
 
@@ -165,18 +165,17 @@ npm i linky
 ### Utilisation
 
 ```js
-const linky = require('linky');
-// Ou import linky from 'linky';
+import { Session } from 'linky';
 
 // Créez une session à partir du token
 const token = 'xxx.yyy.zzz';
-let session = new linky.Session(token);
+let session = new Session(token);
 
 // Si le token permet d'accéder à plusieurs PRMs, vous pouvez préciser celui à utiliser
 const prm = '123456';
-session = new linky.Session(token, prm);
+session = new Session(token, prm);
 
-// Récupère la consommation quotidienne du 1er au 3 mai 2023 inclus
+// Récupère la consommation quotidienne du 1er au 3 mai 2023
 session.getDailyConsumption('2023-05-01', '2023-05-04').then((result) => {
   console.log(result);
   /*
@@ -211,7 +210,7 @@ session.getLoadCurve('2023-05-01', '2023-05-02').then((result) => {
     */
 });
 
-// Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023 inclus
+// Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023
 session.getMaxPower('2023-05-01', '2023-05-04').then((result) => {
   console.log(result);
   /*
@@ -229,7 +228,7 @@ session.getMaxPower('2023-05-01', '2023-05-04').then((result) => {
     */
 });
 
-// Récupère la production quotidienne du 1er au 3 mai 2023 inclus
+// Récupère la production quotidienne du 1er au 3 mai 2023
 session.getDailyProduction('2023-05-01', '2023-05-04').then((result) => {
   console.log(result);
   /*
