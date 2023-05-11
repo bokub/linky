@@ -6,7 +6,7 @@
   "license": "GPL-3.0-or-later",
   "exports": "./dist/lib/index.js",
   "bin": {
-    "linky": "dist/bin/cli.js"
+    "linky": "dist/bin/index.cjs"
   },
   "types": "dist/lib/index.d.ts",
   "publishConfig": {
@@ -17,12 +17,12 @@
   },
   "type": "module",
   "scripts": {
-    "coverage": "c8 report --reporter=text-lcov > coverage.lcov",
-    "test": "NODE_OPTIONS=--experimental-vm-modules c8 jest",
+    "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:coverage": "c8 npm run test && c8 report --reporter=text-lcov > coverage.lcov",
     "generate-fixtures": "RECORDING=1 node --experimental-vm-modules --loader=ts-node/esm test/fixtures/generate.ts",
     "prepare": "husky install",
     "prepublishOnly": "npm run build",
-    "build": "rm -fr ./dist && tsc",
+    "build": "rm -fr ./dist && tsc && cp cli.cjs ./dist/bin/index.cjs",
     "pkg": "rm -fr ./pkg && pkg . --out-path pkg -t node18-linux-x64,node18-macos-x64,node18-win-x64",
     "lint": "npx prettier --check --ignore-path .gitignore . && npx eslint --ext ts,js ."
   },

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import meow from 'meow';
 import { auth } from './auth.js';
 import { type MeteringFlags, type Format, MeteringHandler } from './metering.js';
