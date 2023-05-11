@@ -53,20 +53,20 @@ linky auth --token <votre-token>
 Une fois votre token sauvegardé, vous pourrez récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
 
 ```bash
-# Récupère la consommation quotidienne du 1er au 3 mai 2023 inclus
+# Récupère la consommation quotidienne du 1er au 3 mai 2023
 linky daily --start 2023-05-01 --end 2023-05-04
 
 # Récupère la puissance moyenne consommée le 1 mai 2023, sur un intervalle de 30 min
 linky loadcurve --start 2023-05-01 --end 2023-05-02
 
-# Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023 inclus
+# Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023
 linky maxpower --start 2023-05-01 --end 2023-05-04
 ```
 
 Si vous produisez de l'électricité, vous pouvez également récupérer votre production quotidienne et votre courbe de charge (production par demi-heure).
 
 ```bash
-# Récupère la production quotidienne du 1er au 3 mai 2023 inclus
+# Récupère la production quotidienne du 1er au 3 mai 2023
 linky dailyprod --start 2023-05-01 --end 2023-05-04
 
 # Récupère la puissance moyenne produite le 1 mai 2023, sur un intervalle de 30 min
@@ -170,11 +170,9 @@ let session = new Session(token);
 const prm = '123456';
 session = new Session(token, prm);
 
-/*
-    Si vous prévoyez de rendre votre application / service /application accessible au grand public,
-    ajoutez un User-Agent au format string à la session.
-    Celui-ci doit permettre d'identifier l'origine des requêtes envoyées à Conso API.
- */
+// Si vous prévoyez de rendre votre application/service/module accessible au grand public,
+// ajoutez un User-Agent au format string à la session.
+// Celui-ci doit permettre d'identifier l'origine des requêtes envoyées à Conso API.
 session.userAgent = 'Mon super service';
 
 // Récupère la consommation quotidienne du 1er au 3 mai 2023
