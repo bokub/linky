@@ -66,6 +66,7 @@ export type MaxPowerResponse = APIResponse & {
 
 export class Session {
   private prms: string[] = [];
+  public userAgent = '@bokub/linky';
 
   constructor(private token: string, private prm?: string) {
     try {
@@ -116,7 +117,7 @@ export class Session {
         headers: {
           Authorization: `Bearer ${this.token}`,
           Accept: 'application/json',
-          'User-Agent': '@bokub/linky',
+          'User-Agent': this.userAgent,
         },
       })
       .then((res) => res.data)

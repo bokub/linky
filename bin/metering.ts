@@ -5,6 +5,7 @@ import { mkdirp } from 'mkdirp';
 import fs from 'fs';
 import path from 'path';
 import { type APIResponse, Session } from '../lib/index.js';
+import pkg from '../package.json' assert { type: 'json' };
 
 export type Format = 'pretty' | 'json' | 'csv';
 
@@ -22,6 +23,7 @@ export class MeteringHandler {
   session: Session;
   constructor(private flags: MeteringFlags) {
     this.session = getSession({ token: this.flags.token, prm: this.flags.prm });
+    this.session.userAgent = `@bokub/linky CLI (v${pkg.version})`;
   }
 
   daily() {

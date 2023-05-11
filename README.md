@@ -8,11 +8,11 @@
 
 > **N.B**: Because this tool is targeted for french people, the documentation is...in french
 
-### Attention : Cette documentation est valable uniquement pour la version 2 du module. La documentation pour la version 1 est toujours disponible sur la [branche v1](https://github.com/bokub/linky/tree/v1#readme)
-
 <p align="center">
   <img src="https://user-images.githubusercontent.com/17952318/93326183-b5ba2400-f818-11ea-85cf-c278a1e32b58.gif" alt="Screenshot">
 </p>
+
+### Attention : Cette documentation est valable uniquement pour la version 2 du module. La documentation pour la version 1 est toujours disponible sur la [branche v1](https://github.com/bokub/linky/tree/v1#readme)
 
 Ce module vous permet de récupérer votre consommation et production électrique Linky via les API _"Token V3"_ et _"Metering Data V5"_ d'Enedis
 
@@ -27,17 +27,12 @@ Notez qu'il vous faut un compteur Linky et un espace client Enedis pour pouvoir 
 
 ### Installation
 
-Si vous avez Node.js sur votre machine :
+1. Installez [Node.js](https://nodejs.org/en/download) sur votre machine
+2. Installez `linky` avec npm:
 
 ```bash
 npm i -g linky
 ```
-
-Dans le cas contraire, vous pouvez télécharger le binaire correspondant à votre plateforme dans les [assets de la dernière release](https://github.com/bokub/linky/releases/latest).
-
-> **N.B :** Si vous choisissez d'utiliser un binaire, il faudra adapter les exemples de cette documentation en replaçant la commande `linky` par le nom du binaire.
->
-> Par exemple, au lieu de faire `linky --help`, il faudra faire `./linky-win.exe --help`
 
 ### Utilisation
 
@@ -47,7 +42,7 @@ Avant toute chose, il faudra vous connecter à votre espace client Enedis et leu
 
 Rendez-vous sur [conso.boris.sh](https://conso.boris.sh) pour donner votre accord et récupérer un token
 
-Puis, créez une connexion à votre compte avec la commande suivante:
+Puis, créez une connexion à votre compte avec la commande suivante :
 
 ```bash
 linky auth --token <votre-token>
@@ -174,6 +169,13 @@ let session = new Session(token);
 // Si le token permet d'accéder à plusieurs PRMs, vous pouvez préciser celui à utiliser
 const prm = '123456';
 session = new Session(token, prm);
+
+/*
+    Si vous prévoyez de rendre votre application / service /application accessible au grand public,
+    ajoutez un User-Agent au format string à la session.
+    Celui-ci doit permettre d'identifier l'origine des requêtes envoyées à Conso API.
+ */
+session.userAgent = 'Mon super service';
 
 // Récupère la consommation quotidienne du 1er au 3 mai 2023
 session.getDailyConsumption('2023-05-01', '2023-05-04').then((result) => {
