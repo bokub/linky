@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 // @ts-ignore
 import('./fixtures/fixtures.cjs');
 
-const session = new Session(jwt.sign({ sub: ['12345123451234'] }, 'secret'));
+const session = new Session(jwt.sign({ sub: ['11111111111111'] }, 'secret'));
 
 describe('Linky module', () => {
   it('propagates API errors', async () => {

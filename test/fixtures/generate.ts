@@ -63,7 +63,7 @@ for (const key in dates) {
           result = await productionSession.getProductionLoadCurve(start, end);
           break;
       }
-      result.usage_point_id = '12345123451234';
+      result.usage_point_id = '11111111111111';
       fixtures += `.reply(200, ${JSON.stringify(result)}).persist();\n\n`;
       console.info(`saved response 200 for ${key} from ${start} to ${end}`);
     } catch (e) {

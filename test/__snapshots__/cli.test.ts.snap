@@ -123,3 +123,52 @@ exports[`cli command "maxpower" should display a graph 1`] = `
 Date                 Valeur (VA) Graphique                     
 2023-04-01 12:06:20  4638        ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
 `;
+
+exports[`cli daily command should create directory and write to file when output flag is used  1`] = `
+"{
+  "usage_point_id": "11111111111111",
+  "start": "2023-04-01",
+  "end": "2023-04-02",
+  "quality": "BRUT",
+  "reading_type": {
+    "unit": "Wh",
+    "measurement_kind": "energy",
+    "aggregate": "sum",
+    "measuring_period": "P1D"
+  },
+  "interval_reading": [
+    {
+      "value": "11776",
+      "date": "2023-04-01"
+    }
+  ]
+}"
+`;
+
+exports[`cli daily command should output CSV with 2 columns when --format=csv 1`] = `
+"
+Date,Valeur (Wh)
+2023-04-01,11776"
+`;
+
+exports[`cli daily command should output JSON when --format=json 1`] = `
+"
+{
+  "usage_point_id": "11111111111111",
+  "start": "2023-04-01",
+  "end": "2023-04-02",
+  "quality": "BRUT",
+  "reading_type": {
+    "unit": "Wh",
+    "measurement_kind": "energy",
+    "aggregate": "sum",
+    "measuring_period": "P1D"
+  },
+  "interval_reading": [
+    {
+      "value": "11776",
+      "date": "2023-04-01"
+    }
+  ]
+}"
+`;
