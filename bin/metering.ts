@@ -66,43 +66,43 @@ export class MeteringHandler {
 
     return promise
       .then(async (response) => {
+        spinner.succeed();
+
+        const rendered = render(this.flags.format, !this.flags.output, response);
+
         if (this.flags.output) {
           try {
             await mkdirp(path.dirname(this.flags.output));
-            const chalkLevel = chalk.level;
-            chalk.level = 0;
-            fs.writeFileSync(this.flags.output, render(this.flags.format, response));
-            chalk.level = chalkLevel;
-          } catch (e) {
-            throw new Error(`Impossible d'écrire dans ${this.flags.output}:\n${(e as Error).message}`);
+            fs.writeFileSync(this.flags.output, rendered);
+          } catch (e: any) {
+            ora().fail(`Impossible d'écrire dans ${this.flags.output}`);
+            if (e.message) {
+              ora().fail('Erreur : ' + e.message);
+            }
+            throw new Error();
           }
-        }
-
-        spinner.succeed();
-
-        if (this.flags.output) {
           ora({ isSilent: this.flags.quiet }).succeed(`Résultats sauvegardés dans ${this.flags.output}`);
-        }
-
-        if (!this.flags.output) {
-          console.info('\n' + render(this.flags.format, response));
+        } else {
+          console.info('\n' + rendered);
         }
       })
       .catch((e) => {
         spinner.stop();
-        ora(e.message).fail();
+        if (e.message) {
+          ora().fail(e.message);
+        }
         if (e.code) {
-          ora('Code: ' + e.code).fail();
+          ora().fail('Code : ' + e.code);
         }
         if (e.response) {
-          ora('Réponse: ' + JSON.stringify(e.response, null, 4)).fail();
+          ora().fail('Réponse : ' + JSON.stringify(e.response, null, 4));
         }
         throw new Error();
       });
   }
 }
 
-function render(format: Format, response: APIResponse): string {
+function render(format: Format, color: boolean, response: APIResponse): string {
   switch (format) {
     case 'json':
       return JSON.stringify(response, null, 2);
@@ -115,7 +115,11 @@ ${response.interval_reading.map((x: { date: string; value: string }) => `${x.dat
       const maxValue = Math.max(...response.interval_reading.map((x) => +x.value));
       const displayTime = response.reading_type.measurement_kind !== 'energy';
       const chartLength = 30;
-      return (
+      const chalkLevel = chalk.level;
+      if (!color) {
+        chalk.level = 0;
+      }
+      const result =
         // Headers
         [
           chalk.yellow.underline(`Date${' '.repeat(displayTime ? 16 : 7)}`),
@@ -132,11 +136,13 @@ ${response.interval_reading.map((x: { date: string; value: string }) => `${x.dat
               ' '.repeat(10 + response.reading_type.unit.length - line.value.toString().length) +
               chalk.cyan('■'.repeat(maxValue && line.value ? Math.ceil((chartLength * +line.value) / maxValue) : 0))
           )
-          .join('\n')
-      );
+          .join('\n');
+      chalk.level = chalkLevel;
+      return result;
     }
     default:
-      ora(`Le format "${format}" est invalide. Formats acceptés: "pretty", "json", "csv".`).fail();
-      return '';
+      ora().fail(`Le format "${format}" est invalide`);
+      ora().info(`Formats acceptés: "pretty", "json", "csv"`);
+      throw new Error();
   }
 }

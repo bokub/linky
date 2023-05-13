@@ -2,15 +2,16 @@ import meow from 'meow';
 import { auth } from './auth.js';
 import { type MeteringFlags, type Format, MeteringHandler } from './metering.js';
 import chalk from 'chalk';
+import ora from 'ora';
 import updateNotifier from 'update-notifier';
 import dayjs from 'dayjs';
 import pkg from '../package.json' assert { type: 'json' };
 
-function exit(e: Error) {
+function exit(e: any) {
   if (e.message) {
-    console.error(chalk.yellow(e.message));
+    ora().fail(e.message);
   }
-  process.exit(1);
+  process.exitCode = 1;
 }
 
 const mainHelp = `
@@ -26,7 +27,7 @@ const mainHelp = `
     
     Options:
       linky auth:
-        --token     -t      Token 
+        --token     -t      Token récupéré sur https://conso.boris.sh
 
       linky (daily|loadcurve|maxpower|dailyprod|loadcurveprod):
         --start     -s      Date de début (AAAA-MM-JJ). Par défaut: hier
@@ -97,7 +98,7 @@ switch (cli.input[0]) {
     try {
       auth(cli.flags.token);
     } catch (e) {
-      exit(e as Error);
+      exit(e);
     }
 
     break;
@@ -105,35 +106,35 @@ switch (cli.input[0]) {
     try {
       await new MeteringHandler(meteringFlags).daily();
     } catch (e) {
-      exit(e as Error);
+      exit(e);
     }
     break;
   case loadCurveCommand:
     try {
       await new MeteringHandler(meteringFlags).loadCurve();
     } catch (e) {
-      exit(e as Error);
+      exit(e);
     }
     break;
   case maxPowerCommand:
     try {
       await new MeteringHandler(meteringFlags).maxPower();
     } catch (e) {
-      exit(e as Error);
+      exit(e);
     }
     break;
   case dailyProductionCommand:
     try {
       await new MeteringHandler(meteringFlags).dailyProduction();
     } catch (e) {
-      exit(e as Error);
+      exit(e);
     }
     break;
   case loadCurveProductionCommand:
     try {
       await new MeteringHandler(meteringFlags).loadCurveProduction();
     } catch (e) {
-      exit(e as Error);
+      exit(e);
     }
     break;
   default:
