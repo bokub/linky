@@ -4,12 +4,13 @@
 [![Build Status](https://flat.badgen.net/github/checks/bokub/linky?label=tests)](https://github.com/bokub/linky/actions/workflows/run.yml?query=branch%3Amaster)
 [![Codecov](https://flat.badgen.net/codecov/c/github/bokub/linky/master)](https://codecov.io/gh/bokub/linky)
 [![Downloads](https://flat.badgen.net/npm/dy/linky?color=FF9800)](https://www.npmjs.com/package/linky)
+[![Node version](https://flat.badgen.net/badge/Node.js/>=%2016/blue)](https://github.com/bokub/prettier-config)
 [![Code style](https://flat.badgen.net/badge/code%20style/prettier/ff69b4)](https://github.com/bokub/prettier-config)
 
 > **N.B**: Because this tool is targeted for french people, the documentation is...in french
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/17952318/93326183-b5ba2400-f818-11ea-85cf-c278a1e32b58.gif" alt="Screenshot">
+  <img src="https://github.com/bokub/linky/assets/17952318/15aa5983-6c56-4ef0-b2e2-c663bf7f7087" alt="Linky CLI">
 </p>
 
 ### Attention : Cette documentation est valable uniquement pour la version 2 du module. La documentation pour la version 1 est toujours disponible sur la [branche v1](https://github.com/bokub/linky/tree/v1#readme)
@@ -27,8 +28,12 @@ Notez qu'il vous faut un compteur Linky et un espace client Enedis pour pouvoir 
 
 ### Installation
 
-1. Installez [Node.js](https://nodejs.org/en/download) sur votre machine
-2. Installez `linky` avec npm:
+1. Installez [Node.js](https://nodejs.org/fr/download) sur votre machine. La version minimale supportée est Node 16.
+   - [Instructions Debian, Ubuntu & Mint](https://github.com/nodesource/distributions#installation-instructions)
+   - [Installateur Windows](https://nodejs.org/dist/v18.16.0/node-v18.16.0-x86.msi)
+   - [Installateur MacOS](https://nodejs.org/dist/v18.16.0/node-v18.16.0.pkg)
+2. Ouvrez un terminal
+3. Installez `linky` avec `npm`:
 
 ```bash
 npm i -g linky
@@ -38,7 +43,7 @@ npm i -g linky
 
 #### Authentification
 
-Avant toute chose, il faudra vous connecter à votre espace client Enedis et leur donner l'autorisation de partager vos données avec une application extérieure.
+Avant toute chose, il faudra vous connecter à votre espace client Enedis et leur donner l'autorisation de partager vos données avec une application extérieure
 
 Rendez-vous sur [conso.boris.sh](https://conso.boris.sh) pour donner votre accord et récupérer un token
 
@@ -50,7 +55,7 @@ linky auth --token <votre-token>
 
 #### Récupération des données
 
-Une fois votre token sauvegardé, vous pourrez récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour.
+Une fois votre token sauvegardé, vous pourrez récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour
 
 ```bash
 # Récupère la consommation quotidienne du 1er au 3 mai 2023
@@ -63,7 +68,7 @@ linky loadcurve --start 2023-05-01 --end 2023-05-02
 linky maxpower --start 2023-05-01 --end 2023-05-04
 ```
 
-Si vous produisez de l'électricité, vous pouvez également récupérer votre production quotidienne et votre courbe de charge (production par demi-heure).
+Si vous produisez de l'électricité, vous pouvez également récupérer votre production quotidienne et votre courbe de charge (production par demi-heure)
 
 ```bash
 # Récupère la production quotidienne du 1er au 3 mai 2023
@@ -75,7 +80,7 @@ linky loadcurveprod --start 2023-05-01 --end 2023-05-02
 
 #### Dates par défaut
 
-En l'absence des paramètres `--start` et `--end`, vous récupérez la consommation / production / puissance de la veille.
+En l'absence des paramètres `--start` et `--end`, vous récupérez la consommation / production / puissance de la veille
 
 ```bash
 # Récupère la consommation de la journée d'hier
