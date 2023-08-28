@@ -7,9 +7,11 @@ assignees: ''
 
 ---
 
-Votre question concerne:
+<!--
+Si votre question concerne:
+- L'outil en ligne de commande
+- La librairie Node.js
+...vous êtes au bon endroit.
 
-- [ ] L'outil en ligne de commande
-- [ ] La librairie Node.js
-- [ ] La récupération de données - **vous êtes au mauvais endroit** !
-      Créez plutôt une issue sur [conso-api](https://github.com/bokub/conso-api/issues)
+En revanche, si votre question concerne la récupération de données (problèmes de serveur, réponse d'Enedis, etc...), il s'agit d'un problème avec Conso API, je vous invite donc à créer une issue là-bas: https://github.com/bokub/conso-api/issues
+-->
