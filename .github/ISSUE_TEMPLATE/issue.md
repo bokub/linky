@@ -4,7 +4,6 @@ about: Signaler un bug, demander une fonctionnalité, ou poser une question
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 <!--

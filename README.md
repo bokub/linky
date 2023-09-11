@@ -27,9 +27,9 @@ Notez qu'il vous faut un compteur Linky et un espace client Enedis pour pouvoir 
 ### Installation
 
 1. Installez [Node.js](https://nodejs.org/fr/download) sur votre machine. La version minimale supportée est Node 16.
-    - [Instructions Debian, Ubuntu & Mint](https://github.com/nodesource/distributions#installation-instructions)
-    - [Installateur Windows](https://nodejs.org/dist/v18.16.0/node-v18.16.0-x86.msi)
-    - [Installateur MacOS](https://nodejs.org/dist/v18.16.0/node-v18.16.0.pkg)
+   - [Instructions Debian, Ubuntu & Mint](https://github.com/nodesource/distributions#installation-instructions)
+   - [Installateur Windows](https://nodejs.org/dist/v18.16.0/node-v18.16.0-x86.msi)
+   - [Installateur MacOS](https://nodejs.org/dist/v18.16.0/node-v18.16.0.pkg)
 2. Ouvrez un terminal
 3. Installez `linky` avec `npm`:
 
@@ -180,8 +180,8 @@ session.userAgent = 'Mon super service';
 
 // Récupère la consommation quotidienne du 1er au 3 mai 2023
 session.getDailyConsumption('2023-05-01', '2023-05-04').then((result) => {
-    console.log(result);
-    /*
+  console.log(result);
+  /*
     {
       "reading_type": {
         "unit": "Wh",
@@ -198,8 +198,8 @@ session.getDailyConsumption('2023-05-01', '2023-05-04').then((result) => {
 
 // Récupère la puissance moyenne consommée le 1er mai 2023, sur un intervalle de 30 min
 session.getLoadCurve('2023-05-01', '2023-05-02').then((result) => {
-    console.log(result);
-    /*
+  console.log(result);
+  /*
     {
       "reading_type": {
         "unit": "W",
@@ -215,8 +215,8 @@ session.getLoadCurve('2023-05-01', '2023-05-02').then((result) => {
 
 // Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023
 session.getMaxPower('2023-05-01', '2023-05-04').then((result) => {
-    console.log(result);
-    /*
+  console.log(result);
+  /*
     {
       "reading_type": {
         "unit": "VA",
@@ -233,8 +233,8 @@ session.getMaxPower('2023-05-01', '2023-05-04').then((result) => {
 
 // Récupère la production quotidienne du 1er au 3 mai 2023
 session.getDailyProduction('2023-05-01', '2023-05-04').then((result) => {
-    console.log(result);
-    /*
+  console.log(result);
+  /*
     {
       "reading_type": {
         "unit": "Wh",
@@ -251,8 +251,8 @@ session.getDailyProduction('2023-05-01', '2023-05-04').then((result) => {
 
 // Récupère la puissance moyenne produite le 1er mai 2023, sur un intervalle de 30 min
 session.getProductionLoadCurve('2023-05-01', '2023-05-02').then((result) => {
-    console.log(result);
-    /*
+  console.log(result);
+  /*
     {
       "reading_type": {
         "unit": "W",
