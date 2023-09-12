@@ -10,9 +10,9 @@
 
 Ce module vous permet de récupérer votre consommation et production électrique Linky via les anciennes API _"Authorize V1"_ et _"Metering Data V4"_ d'Enedis
 
-### Attention : Cette documentation est valable uniquement pour la version 1 du module, qui ne fonctionnera plus après la désactivation de ces API par Enedis le 17 septembre 2023.
+### Attention : Suite à la désactivation des API d'Enedis Authorize V1 et Metering Data V4, la version 1 de ce module n'est plus fonctionnelle.
 
-### Vous êtes vivement encouragé à utiliser la [version 2](https://github.com/bokub/linky#readme) dès que possible.
+### Vous pouvez cependant passer à la version 2 de [bokub/linky](https://github.com/bokub/linky), compatible avec mon nouveau service [Conso API](https://conso.boris.sh/)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/17952318/93326183-b5ba2400-f818-11ea-85cf-c278a1e32b58.gif" alt="Screenshot">
