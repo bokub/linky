@@ -1,8 +1,8 @@
 # Linky
 
-[![Version](https://runkit.io/bokub/npm-version/branches/master/linky?style=flat)](https://www.npmjs.com/package/linky)
+[![Version](https://gradgen.bokub.workers.dev/npm/v/linky?gradient=b65cff,11cbfa&style=flat&label=version)](https://www.npmjs.com/package/linky)
 [![Build Status](https://flat.badgen.net/github/checks/bokub/linky?label=tests)](https://github.com/bokub/linky/actions/workflows/run.yml?query=branch%3Amaster)
-[![Codecov](https://flat.badgen.net/codecov/c/github/bokub/linky/master)](https://codecov.io/gh/bokub/linky)
+[![Codecov](https://img.shields.io/codecov/c/github/bokub/linky?style=flat-square)](https://codecov.io/gh/bokub/linky)
 [![Downloads](https://flat.badgen.net/npm/dy/linky?color=FF9800)](https://www.npmjs.com/package/linky)
 [![Node version](https://flat.badgen.net/badge/Node.js/>=%2016/blue)](https://github.com/bokub/prettier-config)
 [![Code style](https://flat.badgen.net/badge/code%20style/prettier/ff69b4)](https://github.com/bokub/prettier-config)
