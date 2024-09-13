@@ -1,18 +1,18 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`cli command "daily" should display a graph 1`] = `
+exports[`cli > command > "daily" should display a graph 1`] = `
 "
 Date        Valeur (Wh) Graphique                     
 2023-04-01  11776       ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
 `;
 
-exports[`cli command "dailyprod" should display a graph 1`] = `
+exports[`cli > command > "dailyprod" should display a graph 1`] = `
 "
 Date        Valeur (Wh) Graphique                     
 2023-04-01  643         ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
 `;
 
-exports[`cli command "loadcurve" should display a graph 1`] = `
+exports[`cli > command > "loadcurve" should display a graph 1`] = `
 "
 Date                 Valeur (W) Graphique                     
 2023-04-01 00:30:00  752        ■■■■■■■■
@@ -65,7 +65,7 @@ Date                 Valeur (W) Graphique
 2023-04-02 00:00:00  88         ■"
 `;
 
-exports[`cli command "loadcurveprod" should display a graph 1`] = `
+exports[`cli > command > "loadcurveprod" should display a graph 1`] = `
 "
 Date                 Valeur (W) Graphique                     
 2023-04-01 00:30:00  0          
@@ -118,13 +118,13 @@ Date                 Valeur (W) Graphique
 2023-04-02 00:00:00  0          "
 `;
 
-exports[`cli command "maxpower" should display a graph 1`] = `
+exports[`cli > command > "maxpower" should display a graph 1`] = `
 "
 Date                 Valeur (VA) Graphique                     
 2023-04-01 12:06:20  4638        ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"
 `;
 
-exports[`cli daily command should create directory and write to file when output flag is used  1`] = `
+exports[`cli > daily command > should create directory and write to file when output flag is used  1`] = `
 "{
   "usage_point_id": "11111111111111",
   "start": "2023-04-01",
@@ -145,13 +145,13 @@ exports[`cli daily command should create directory and write to file when output
 }"
 `;
 
-exports[`cli daily command should output CSV with 2 columns when --format=csv 1`] = `
+exports[`cli > daily command > should output CSV with 2 columns when --format=csv 1`] = `
 "
 Date,Valeur (Wh)
 2023-04-01,11776"
 `;
 
-exports[`cli daily command should output JSON when --format=json 1`] = `
+exports[`cli > daily command > should output JSON when --format=json 1`] = `
 "
 {
   "usage_point_id": "11111111111111",

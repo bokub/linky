@@ -9,9 +9,9 @@ dotenv.config({ path: '.env' });
 
 let fixtures = `const nock = require('nock');
 
-if(process.env.RECORDING){return}
-
 /* THIS FILE HAS BEEN GENERATED WITH npm run generate-fixtures */
+
+if(!process.env.RECORDING){
 
 nock('https://conso.boris.sh')
   .get(/99999999999999/)
@@ -72,6 +72,8 @@ for (const key in dates) {
     }
   }
 }
+
+fixtures += '}';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -4,7 +4,7 @@ import { getToken, saveToken } from '../bin/store.js';
 import { readFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
-
+import { describe, expect, it, test, beforeAll } from 'vitest';
 process.env.FORCE_COLOR = '0';
 
 const bin = './bin/cli.ts';

@@ -1,5 +1,6 @@
 import { APIError, Session } from '../lib/index.js';
 import jwt from 'jsonwebtoken';
+import { describe, expect, it } from 'vitest';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

@@ -10,8 +10,8 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
       - run: npm ci
@@ -24,17 +24,17 @@ jobs:
       matrix:
         node: [16, 18]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm run test:coverage
+      - run: npm run coverage
       - run: npm run build
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
         if: matrix.node == 18
         with:
-          files: ./coverage.lcov
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
     name: Publish on npm
@@ -44,8 +44,8 @@ jobs:
       - lint
       - test
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
       - run: npm ci
