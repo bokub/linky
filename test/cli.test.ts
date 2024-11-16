@@ -7,9 +7,16 @@ import { join } from 'path';
 import { describe, expect, it, test, beforeAll } from 'vitest';
 process.env.FORCE_COLOR = '0';
 
+const isNode16 = process.version.startsWith('v16');
 const bin = './bin/cli.ts';
 const linky = (args: string) =>
-  node(bin, args.split(' '), { nodeOptions: ['--experimental-vm-modules', '--loader=ts-node/esm'] });
+  node(bin, args.split(' '), {
+    nodeOptions: [
+      isNode16 ? '' : '--import=./test/fixtures/fixtures.cjs',
+      '--experimental-vm-modules',
+      '--loader=ts-node/esm',
+    ].filter(Boolean),
+  });
 
 const validToken = jwt.sign({ sub: ['11111111111111'] }, 'secret');
 const invalidToken = jwt.sign({ sub: ['99999999999999'] }, 'secret');
