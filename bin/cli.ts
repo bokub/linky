@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import updateNotifier from 'update-notifier';
 import dayjs from 'dayjs';
-import pkg from '../package.json' assert { type: 'json' };
+import { pkg } from './pkg.js';
 
 function exit(e: any) {
   if (e.message) {
