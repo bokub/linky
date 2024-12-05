@@ -1,5 +1,5 @@
 import Conf from 'conf';
-import pkg from '../package.json' assert { type: 'json' };
+import { pkg } from './pkg.js';
 
 const TOKEN = 'token';
 

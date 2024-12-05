@@ -5,7 +5,7 @@ import { mkdirp } from 'mkdirp';
 import fs from 'fs';
 import path from 'path';
 import { type APIResponse, Session } from '../lib/index.js';
-import pkg from '../package.json' assert { type: 'json' };
+import { pkg } from './pkg.js';
 
 export type Format = 'pretty' | 'json' | 'csv';
 
