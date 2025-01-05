@@ -1,10 +1,11 @@
 {
   "name": "linky",
   "description": "Easily retrieve your Linky power consumption",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "bokub",
   "license": "GPL-3.0-or-later",
   "exports": "./dist/lib/index.js",
+  "main": "./dist/lib/index.js",
   "bin": {
     "linky": "dist/bin/index.cjs"
   },
