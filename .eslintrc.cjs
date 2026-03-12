@@ -1,4 +1,5 @@
 module.exports = {
+  ignorePatterns: ['cli.cjs'],
   env: {
     browser: false,
     es2021: true,
