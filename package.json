@@ -1,7 +1,7 @@
 {
   "name": "linky",
   "description": "Easily retrieve your Linky power consumption",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "author": "bokub",
   "license": "GPL-3.0-or-later",
   "exports": "./dist/lib/index.js",
