@@ -11,7 +11,8 @@
   },
   "types": "dist/lib/index.d.ts",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "engines": {
     "node": ">=16"
@@ -60,7 +61,10 @@
     "typescript": "^5.0.4",
     "vitest": "^2.1.0"
   },
-  "repository": "https://github.com/bokub/linky",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bokub/linky.git"
+  },
   "homepage": "https://github.com/bokub/linky",
   "bugs": "https://github.com/bokub/linky/issues",
   "keywords": [
