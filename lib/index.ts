@@ -1,5 +1,4 @@
 import axios, { AxiosError } from 'axios';
-import qs from 'qs';
 import jwt from 'jsonwebtoken';
 
 const API_HOST = 'https://conso.boris.sh';
@@ -106,7 +105,7 @@ export class Session {
   }
 
   private callApi<T>(type: DataType, start: string, end: string): Promise<T> {
-    const url = `${API_HOST}/api/${type}?${qs.stringify({
+    const url = `${API_HOST}/api/${type}?${new URLSearchParams({
       start: start,
       end: end,
       prm: this.prm || this.prms[0],
