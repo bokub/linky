@@ -9,217 +9,291 @@ if (!process.env.RECORDING) {
     .persist();
 
   nock('https://conso.boris.sh')
-    .get(/api\/daily_consumption\?start=2023-04-02&end=2023-04-01/)
+    .get(/api\/consommation_quotidienne\?.*dateDebut=2023-04-02.*dateFin=2023-04-01/)
     .reply(400, {
       status: 400,
       message: 'The Enedis API returned an error',
-      error: { error: 'Invalid_request', error_description: 'Start date should be before end date.' },
+      error: { error: 'ADAM-ERR0002', error_description: 'La date de fin doit être supérieure à la date de début.' },
     })
     .persist();
 
   nock('https://conso.boris.sh')
-    .get(/api\/daily_consumption\?start=2023-04-01&end=2023-04-04/)
+    .get(/api\/consommation_quotidienne\?.*dateDebut=2023-04-01.*dateFin=2023-04-04/)
     .reply(200, {
-      usage_point_id: '11111111111111',
-      start: '2023-04-01',
-      end: '2023-04-04',
-      quality: 'BRUT',
-      reading_type: { unit: 'Wh', measurement_kind: 'energy', aggregate: 'sum', measuring_period: 'P1D' },
-      interval_reading: [
-        { value: '11776', date: '2023-04-01' },
-        { value: '14401', date: '2023-04-02' },
-        { value: '12820', date: '2023-04-03' },
+      idPrm: '11111111111111',
+      etapeMetier: 'BRUT',
+      periode: { dateDebut: '2023-04-01', dateFin: '2023-04-04' },
+      typeValeur: 'GLOBALE',
+      modeCalcul: 'DIFF.INDEX',
+      pas: 'P1D',
+      grandeur: [
+        {
+          grandeurMetier: 'CONS',
+          grandeurPhysique: 'EA',
+          unite: 'Wh',
+          points: [
+            { v: '9271', d: '2023-04-01' },
+            { v: '12724', d: '2023-04-02' },
+            { v: '14054', d: '2023-04-03' },
+          ],
+          calendrier: [],
+        },
       ],
+      contexte: [],
     })
     .persist();
 
   nock('https://conso.boris.sh')
-    .get(/api\/daily_consumption\?start=2023-04-01&end=2023-04-02/)
+    .get(/api\/consommation_quotidienne\?.*dateDebut=2023-04-01.*dateFin=2023-04-02/)
     .reply(200, {
-      usage_point_id: '11111111111111',
-      start: '2023-04-01',
-      end: '2023-04-02',
-      quality: 'BRUT',
-      reading_type: { unit: 'Wh', measurement_kind: 'energy', aggregate: 'sum', measuring_period: 'P1D' },
-      interval_reading: [{ value: '11776', date: '2023-04-01' }],
-    })
-    .persist();
-
-  nock('https://conso.boris.sh')
-    .get(/api\/consumption_load_curve\?start=2023-04-01&end=2023-04-02/)
-    .reply(200, {
-      usage_point_id: '11111111111111',
-      start: '2023-04-01',
-      end: '2023-04-02',
-      quality: 'BRUT',
-      reading_type: { unit: 'W', measurement_kind: 'power', aggregate: 'average' },
-      interval_reading: [
-        { value: '752', date: '2023-04-01 00:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '346', date: '2023-04-01 01:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '250', date: '2023-04-01 01:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '154', date: '2023-04-01 02:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '126', date: '2023-04-01 02:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '110', date: '2023-04-01 03:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '140', date: '2023-04-01 03:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '236', date: '2023-04-01 04:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '138', date: '2023-04-01 04:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '104', date: '2023-04-01 05:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '128', date: '2023-04-01 05:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '234', date: '2023-04-01 06:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '124', date: '2023-04-01 06:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '104', date: '2023-04-01 07:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '360', date: '2023-04-01 07:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '124', date: '2023-04-01 08:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '122', date: '2023-04-01 08:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '108', date: '2023-04-01 09:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '120', date: '2023-04-01 09:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '106', date: '2023-04-01 10:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '250', date: '2023-04-01 10:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '108', date: '2023-04-01 11:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '230', date: '2023-04-01 11:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '1594', date: '2023-04-01 12:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '3150', date: '2023-04-01 12:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '750', date: '2023-04-01 13:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '1178', date: '2023-04-01 13:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '566', date: '2023-04-01 14:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '206', date: '2023-04-01 14:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '440', date: '2023-04-01 15:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '1510', date: '2023-04-01 15:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '1004', date: '2023-04-01 16:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '666', date: '2023-04-01 16:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '446', date: '2023-04-01 17:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '276', date: '2023-04-01 17:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '510', date: '2023-04-01 18:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '588', date: '2023-04-01 18:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '404', date: '2023-04-01 19:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '286', date: '2023-04-01 19:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '2256', date: '2023-04-01 20:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '1620', date: '2023-04-01 20:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '684', date: '2023-04-01 21:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '312', date: '2023-04-01 21:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '166', date: '2023-04-01 22:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '148', date: '2023-04-01 22:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '86', date: '2023-04-01 23:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '144', date: '2023-04-01 23:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '88', date: '2023-04-02 00:00:00', interval_length: 'PT30M', measure_type: 'B' },
+      idPrm: '11111111111111',
+      etapeMetier: 'BRUT',
+      periode: { dateDebut: '2023-04-01', dateFin: '2023-04-02' },
+      typeValeur: 'GLOBALE',
+      modeCalcul: 'DIFF.INDEX',
+      pas: 'P1D',
+      grandeur: [
+        {
+          grandeurMetier: 'CONS',
+          grandeurPhysique: 'EA',
+          unite: 'Wh',
+          points: [{ v: '9271', d: '2023-04-01' }],
+          calendrier: [],
+        },
       ],
+      contexte: [],
     })
     .persist();
 
   nock('https://conso.boris.sh')
-    .get(/api\/consumption_max_power\?start=2023-04-01&end=2023-04-04/)
+    .get(/api\/courbe_de_charge_consommation\?.*dateDebut=2023-04-01.*dateFin=2023-04-02/)
     .reply(200, {
-      usage_point_id: '11111111111111',
-      start: '2023-04-01',
-      end: '2023-04-04',
-      quality: 'BRUT',
-      reading_type: { unit: 'VA', measurement_kind: 'power', aggregate: 'maximum', measuring_period: 'P1D' },
-      interval_reading: [
-        { value: '4638', date: '2023-04-01 12:06:20' },
-        { value: '4410', date: '2023-04-02 19:27:46' },
-        { value: '3570', date: '2023-04-03 21:42:12' },
+      idPrm: '11111111111111',
+      etapeMetier: 'BRUT',
+      periode: { dateDebut: '2023-04-01', dateFin: '2023-04-02' },
+      modeCalcul: 'MESURE',
+      grandeur: [
+        {
+          grandeurMetier: 'CONS',
+          grandeurPhysique: 'PA',
+          unite: 'W',
+          points: [
+            { v: '110', d: '2023-04-01 00:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '408', d: '2023-04-01 01:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '112', d: '2023-04-01 01:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '372', d: '2023-04-01 02:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '138', d: '2023-04-01 02:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '190', d: '2023-04-01 03:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '270', d: '2023-04-01 03:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '140', d: '2023-04-01 04:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '2720', d: '2023-04-01 04:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '2092', d: '2023-04-01 05:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '1396', d: '2023-04-01 05:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '1216', d: '2023-04-01 06:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '768', d: '2023-04-01 06:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '516', d: '2023-04-01 07:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '246', d: '2023-04-01 07:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '352', d: '2023-04-01 08:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '204', d: '2023-04-01 08:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '712', d: '2023-04-01 09:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '1062', d: '2023-04-01 09:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '294', d: '2023-04-01 10:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '236', d: '2023-04-01 10:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '170', d: '2023-04-01 11:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '208', d: '2023-04-01 11:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '196', d: '2023-04-01 12:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '178', d: '2023-04-01 12:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '822', d: '2023-04-01 13:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '264', d: '2023-04-01 13:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '146', d: '2023-04-01 14:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '248', d: '2023-04-01 14:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '190', d: '2023-04-01 15:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '190', d: '2023-04-01 15:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '226', d: '2023-04-01 16:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '160', d: '2023-04-01 16:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '210', d: '2023-04-01 17:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '182', d: '2023-04-01 17:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '154', d: '2023-04-01 18:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '182', d: '2023-04-01 18:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '92', d: '2023-04-01 19:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '238', d: '2023-04-01 19:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '86', d: '2023-04-01 20:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '100', d: '2023-04-01 20:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '126', d: '2023-04-01 21:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '82', d: '2023-04-01 21:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '128', d: '2023-04-01 22:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '98', d: '2023-04-01 22:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '84', d: '2023-04-01 23:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '128', d: '2023-04-01 23:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '100', d: '2023-04-02 00:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+          ],
+          calendrier: [],
+        },
       ],
+      contexte: [],
     })
     .persist();
 
   nock('https://conso.boris.sh')
-    .get(/api\/consumption_max_power\?start=2023-04-01&end=2023-04-02/)
+    .get(/api\/puissance_conso_max_quotidienne\?.*dateDebut=2023-04-01.*dateFin=2023-04-04/)
     .reply(200, {
-      usage_point_id: '11111111111111',
-      start: '2023-04-01',
-      end: '2023-04-02',
-      quality: 'BRUT',
-      reading_type: { unit: 'VA', measurement_kind: 'power', aggregate: 'maximum', measuring_period: 'P1D' },
-      interval_reading: [{ value: '4638', date: '2023-04-01 12:06:20' }],
-    })
-    .persist();
-
-  nock('https://conso.boris.sh')
-    .get(/api\/daily_production\?start=2023-04-01&end=2023-04-04/)
-    .reply(200, {
-      usage_point_id: '11111111111111',
-      start: '2023-04-01',
-      end: '2023-04-04',
-      quality: 'BRUT',
-      reading_type: { unit: 'Wh', measurement_kind: 'energy', aggregate: 'sum', measuring_period: 'P1D' },
-      interval_reading: [
-        { value: '643', date: '2023-04-01' },
-        { value: '6', date: '2023-04-02' },
-        { value: '15411', date: '2023-04-03' },
+      idPrm: '11111111111111',
+      etapeMetier: 'BRUT',
+      periode: { dateDebut: '2023-04-01', dateFin: '2023-04-04' },
+      modeCalcul: 'MESURE',
+      pas: 'P1D',
+      grandeur: [
+        {
+          grandeurMetier: 'CONS',
+          grandeurPhysique: 'PMA',
+          unite: 'VA',
+          points: [
+            { v: '3533', d: '2023-04-01 04:18:59' },
+            { v: '3092', d: '2023-04-02 04:13:22' },
+            { v: '3494', d: '2023-04-03 04:12:39' },
+          ],
+          calendrier: [],
+        },
       ],
+      contexte: [],
     })
     .persist();
 
   nock('https://conso.boris.sh')
-    .get(/api\/daily_production\?start=2023-04-01&end=2023-04-02/)
+    .get(/api\/puissance_conso_max_quotidienne\?.*dateDebut=2023-04-01.*dateFin=2023-04-02/)
     .reply(200, {
-      usage_point_id: '11111111111111',
-      start: '2023-04-01',
-      end: '2023-04-02',
-      quality: 'BRUT',
-      reading_type: { unit: 'Wh', measurement_kind: 'energy', aggregate: 'sum', measuring_period: 'P1D' },
-      interval_reading: [{ value: '643', date: '2023-04-01' }],
-    })
-    .persist();
-
-  nock('https://conso.boris.sh')
-    .get(/api\/production_load_curve\?start=2023-04-01&end=2023-04-02/)
-    .reply(200, {
-      usage_point_id: '11111111111111',
-      start: '2023-04-01',
-      end: '2023-04-02',
-      quality: 'BRUT',
-      reading_type: { unit: 'W', measurement_kind: 'power', aggregate: 'average' },
-      interval_reading: [
-        { value: '0', date: '2023-04-01 00:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 01:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 01:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 02:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 02:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 03:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 03:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 04:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 04:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 05:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 05:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 06:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 06:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 07:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 07:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 08:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 08:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 09:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 09:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 10:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 10:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '132', date: '2023-04-01 11:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '112', date: '2023-04-01 11:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '368', date: '2023-04-01 12:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '288', date: '2023-04-01 12:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '16', date: '2023-04-01 13:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '122', date: '2023-04-01 13:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '102', date: '2023-04-01 14:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '26', date: '2023-04-01 14:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '24', date: '2023-04-01 15:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 15:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 16:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '76', date: '2023-04-01 16:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '16', date: '2023-04-01 17:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 17:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 18:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '4', date: '2023-04-01 18:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 19:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 19:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 20:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 20:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 21:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 21:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 22:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 22:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 23:00:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-01 23:30:00', interval_length: 'PT30M', measure_type: 'B' },
-        { value: '0', date: '2023-04-02 00:00:00', interval_length: 'PT30M', measure_type: 'B' },
+      idPrm: '11111111111111',
+      etapeMetier: 'BRUT',
+      periode: { dateDebut: '2023-04-01', dateFin: '2023-04-02' },
+      modeCalcul: 'MESURE',
+      pas: 'P1D',
+      grandeur: [
+        {
+          grandeurMetier: 'CONS',
+          grandeurPhysique: 'PMA',
+          unite: 'VA',
+          points: [{ v: '3533', d: '2023-04-01 04:18:59' }],
+          calendrier: [],
+        },
       ],
+      contexte: [],
+    })
+    .persist();
+
+  nock('https://conso.boris.sh')
+    .get(/api\/production_quotidienne\?.*dateDebut=2023-04-01.*dateFin=2023-04-04/)
+    .reply(200, {
+      idPrm: '11111111111111',
+      etapeMetier: 'BRUT',
+      periode: { dateDebut: '2023-04-01', dateFin: '2023-04-04' },
+      typeValeur: 'GLOBALE',
+      modeCalcul: 'DIFF.INDEX',
+      pas: 'P1D',
+      grandeur: [
+        {
+          grandeurMetier: 'PROD',
+          grandeurPhysique: 'EA',
+          unite: 'Wh',
+          points: [
+            { v: '1882', d: '2023-04-01' },
+            { v: '12072', d: '2023-04-02' },
+            { v: '899', d: '2023-04-03' },
+          ],
+          calendrier: [],
+        },
+      ],
+      contexte: [],
+    })
+    .persist();
+
+  nock('https://conso.boris.sh')
+    .get(/api\/production_quotidienne\?.*dateDebut=2023-04-01.*dateFin=2023-04-02/)
+    .reply(200, {
+      idPrm: '11111111111111',
+      etapeMetier: 'BRUT',
+      periode: { dateDebut: '2023-04-01', dateFin: '2023-04-02' },
+      typeValeur: 'GLOBALE',
+      modeCalcul: 'DIFF.INDEX',
+      pas: 'P1D',
+      grandeur: [
+        {
+          grandeurMetier: 'PROD',
+          grandeurPhysique: 'EA',
+          unite: 'Wh',
+          points: [{ v: '1882', d: '2023-04-01' }],
+          calendrier: [],
+        },
+      ],
+      contexte: [],
+    })
+    .persist();
+
+  nock('https://conso.boris.sh')
+    .get(/api\/courbe_de_charge_production\?.*dateDebut=2023-04-01.*dateFin=2023-04-02/)
+    .reply(200, {
+      idPrm: '11111111111111',
+      etapeMetier: 'BRUT',
+      periode: { dateDebut: '2023-04-01', dateFin: '2023-04-02' },
+      modeCalcul: 'MESURE',
+      grandeur: [
+        {
+          grandeurMetier: 'PROD',
+          grandeurPhysique: 'PA',
+          unite: 'W',
+          points: [
+            { v: '0', d: '2023-04-01 00:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 01:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 01:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 02:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 02:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 03:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 03:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 04:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 04:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 05:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 05:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 06:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 06:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 07:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 07:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 08:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 08:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 09:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '2', d: '2023-04-01 09:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '88', d: '2023-04-01 10:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '30', d: '2023-04-01 10:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '78', d: '2023-04-01 11:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '336', d: '2023-04-01 11:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '28', d: '2023-04-01 12:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '28', d: '2023-04-01 12:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '40', d: '2023-04-01 13:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 13:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '256', d: '2023-04-01 14:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '540', d: '2023-04-01 14:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '390', d: '2023-04-01 15:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '584', d: '2023-04-01 15:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '410', d: '2023-04-01 16:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '270', d: '2023-04-01 16:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '308', d: '2023-04-01 17:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '220', d: '2023-04-01 17:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '112', d: '2023-04-01 18:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '38', d: '2023-04-01 18:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '6', d: '2023-04-01 19:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 19:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 20:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 20:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 21:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 21:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 22:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 22:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 23:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-01 23:30:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+            { v: '0', d: '2023-04-02 00:00:00', p: 'PT30M', n: 'B', iv: '0', ec: '0' },
+          ],
+          calendrier: [],
+        },
+      ],
+      contexte: [],
     })
     .persist();
 }

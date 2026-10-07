@@ -9,6 +9,8 @@
 
 > **N.B**: Because this tool is targeted for french people, the documentation is...in french
 
+> **N.B 2**:À partir d'octobre 2026, la version 2 ne fonctionnera plus, car les anciennes API Enedis seront arrêtées. Utilisez la version 3 de `linky` pour continuer à récupérer vos données.
+
 <p align="center">
   <img src="https://github.com/bokub/linky/assets/17952318/15aa5983-6c56-4ef0-b2e2-c663bf7f7087" alt="Linky CLI">
 </p>
@@ -64,6 +66,9 @@ linky loadcurve --start 2023-05-01 --end 2023-05-02
 
 # Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023
 linky maxpower --start 2023-05-01 --end 2023-05-04
+
+# Récupère la puissance maximale mensuelle (P1M) pour la grandeur PMA
+linky maxpower --start 2023-01-01 --end 2023-11-01 --pas P1M --grandeur-physique PMA
 ```
 
 Si vous produisez de l'électricité, vous pouvez également récupérer votre production quotidienne et votre courbe de charge (production par demi-heure)

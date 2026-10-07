@@ -84,7 +84,7 @@ describe('cli', () => {
         await linky(`daily -s 2023-04-02 -e 2023-04-01`);
       } catch (e) {
         expect((e as Error).message).toMatch('"status": 400');
-        expect((e as Error).message).toMatch('Start date should be before end date');
+        expect((e as Error).message).toMatch('La date de fin doit être supérieure à la date de début');
       }
     });
 
@@ -134,7 +134,7 @@ describe('cli', () => {
       await linky(`auth -t ${validToken}`);
       const { stdout } = await linky(`daily -s 2023-04-01 -e 2023-04-02 --format json`);
       expect(stdout).toMatchSnapshot();
-      expect(JSON.parse(stdout).interval_reading).toBeInstanceOf(Array);
+      expect(JSON.parse(stdout).grandeur[0].points).toBeInstanceOf(Array);
     });
 
     it('should output CSV with 2 columns when --format=csv', async () => {
