@@ -71,7 +71,7 @@ describe('cli', () => {
       expect.assertions(1);
       saveToken('');
       try {
-        await linky(`daily -s 2023-04-02 -e 2023-04-01`);
+        await linky(`daily -s 2026-04-02 -e 2026-04-01`);
       } catch (e) {
         expect((e as Error).message).toMatch("Vous n'avez aucun token enregistré");
       }
@@ -81,7 +81,7 @@ describe('cli', () => {
       expect.assertions(2);
       await linky(`auth -t ${validToken}`);
       try {
-        await linky(`daily -s 2023-04-02 -e 2023-04-01`);
+        await linky(`daily -s 2026-04-02 -e 2026-04-01`);
       } catch (e) {
         expect((e as Error).message).toMatch('"status": 400');
         expect((e as Error).message).toMatch('La date de fin doit être supérieure à la date de début');
@@ -92,19 +92,19 @@ describe('cli', () => {
       expect.assertions(2);
       await linky(`auth -t ${invalidToken}`);
       try {
-        await linky(`daily -s 2023-04-01 -e 2023-04-02`);
+        await linky(`daily -s 2026-04-01 -e 2026-04-02`);
       } catch (e) {
         expect((e as Error).message).toMatch('"status": 401');
       }
 
-      await expect(linky(`daily -s 2023-04-01 -e 2023-04-02 -t ${validToken}`)).resolves.toBeTruthy();
+      await expect(linky(`daily -s 2026-04-01 -e 2026-04-02 -t ${validToken}`)).resolves.toBeTruthy();
     });
 
     it('should throw an error when the PRM cannot be accessed', async () => {
       expect.assertions(1);
       await linky(`auth -t ${validToken}`);
       try {
-        await linky(`daily -s 2023-04-01 -e 2023-04-02 -p 22222222222222`);
+        await linky(`daily -s 2026-04-01 -e 2026-04-02 -p 22222222222222`);
       } catch (e) {
         expect((e as Error).message).toMatch("Ce token ne permet pas d'accéder au PRM");
       }
@@ -114,7 +114,7 @@ describe('cli', () => {
       expect.assertions(1);
       await linky(`auth -t ${invalidToken}`);
       try {
-        await linky(`daily -s 2023-04-01 -e 2023-04-02`);
+        await linky(`daily -s 2026-04-01 -e 2026-04-02`);
       } catch (e) {
         expect((e as Error).message).toMatch('"status": 401');
       }
@@ -124,7 +124,7 @@ describe('cli', () => {
       expect.assertions(1);
       await linky(`auth -t ${jwt.sign({ sub: ['11111111111111', '22222222222222', '99999999999999'] }, 'secret')}`);
       try {
-        await linky(`daily -s 2023-04-01 -e 2023-04-02 --prm 99999999999999`);
+        await linky(`daily -s 2026-04-01 -e 2026-04-02 --prm 99999999999999`);
       } catch (e) {
         expect((e as Error).message).toMatch('"status": 401');
       }
@@ -132,14 +132,14 @@ describe('cli', () => {
 
     it('should output JSON when --format=json', async () => {
       await linky(`auth -t ${validToken}`);
-      const { stdout } = await linky(`daily -s 2023-04-01 -e 2023-04-02 --format json`);
+      const { stdout } = await linky(`daily -s 2026-04-01 -e 2026-04-02 --format json`);
       expect(stdout).toMatchSnapshot();
       expect(JSON.parse(stdout).grandeur[0].points).toBeInstanceOf(Array);
     });
 
     it('should output CSV with 2 columns when --format=csv', async () => {
       await linky(`auth -t ${validToken}`);
-      const { stdout } = await linky(`daily -s 2023-04-01 -e 2023-04-02 --format csv`);
+      const { stdout } = await linky(`daily -s 2026-04-01 -e 2026-04-02 --format csv`);
       expect(stdout).toMatchSnapshot();
       expect(stdout.split('\n').every((line) => line.split(',').length === 2));
     });
@@ -148,7 +148,7 @@ describe('cli', () => {
       expect.assertions(1);
       await linky(`auth -t ${validToken}`);
       try {
-        await linky(`daily -s 2023-04-01 -e 2023-04-02 --format xml`);
+        await linky(`daily -s 2026-04-01 -e 2026-04-02 --format xml`);
       } catch (e) {
         expect((e as Error).message).toMatch('Le format "xml" est invalide');
       }
@@ -157,7 +157,7 @@ describe('cli', () => {
     it('should create directory and write to file when output flag is used ', async () => {
       await linky(`auth -t ${validToken}`);
       const outputPath = join(tmpdir(), (Math.random() + 1).toString(36).substring(2), 'output.json');
-      const { stdout } = await linky(`daily -s 2023-04-01 -e 2023-04-02 --output ${outputPath} --format json`);
+      const { stdout } = await linky(`daily -s 2026-04-01 -e 2026-04-02 --output ${outputPath} --format json`);
       expect(stdout).toBe('');
 
       const fileContent = readFileSync(outputPath, 'utf8');
@@ -168,7 +168,7 @@ describe('cli', () => {
       expect.assertions(1);
       await linky(`auth -t ${validToken}`);
       try {
-        await linky(`daily -s 2023-04-01 -e 2023-04-02 --output / --format json`);
+        await linky(`daily -s 2026-04-01 -e 2026-04-02 --output / --format json`);
       } catch (e) {
         expect((e as Error).message).toMatch("Impossible d'écrire dans /");
       }
@@ -182,7 +182,7 @@ describe('cli', () => {
     test.each(['daily', 'loadcurve', 'maxpower', 'dailyprod', 'loadcurveprod'])(
       '"%s" should display a graph',
       async (command) => {
-        const { stdout } = await linky(`${command} -s 2023-04-01 -e 2023-04-02`);
+        const { stdout } = await linky(`${command} -s 2026-04-01 -e 2026-04-02`);
         expect(stdout).toMatchSnapshot();
       }
     );

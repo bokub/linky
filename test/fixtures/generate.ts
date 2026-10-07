@@ -24,20 +24,20 @@ type DataTypeKey = keyof typeof DataType;
 
 const dates: Record<DataTypeKey, string[][]> = {
   daily_consumption: [
-    ['2023-04-02', '2023-04-01'],
-    ['2023-04-01', '2023-04-04'],
-    ['2023-04-01', '2023-04-02'],
+    ['2026-04-02', '2026-04-01'],
+    ['2026-04-01', '2026-04-04'],
+    ['2026-04-01', '2026-04-02'],
   ],
-  consumption_load_curve: [['2023-04-01', '2023-04-02']],
+  consumption_load_curve: [['2026-04-01', '2026-04-02']],
   consumption_max_power: [
-    ['2023-04-01', '2023-04-04'],
-    ['2023-04-01', '2023-04-02'],
+    ['2026-04-01', '2026-04-04'],
+    ['2026-04-01', '2026-04-02'],
   ],
   daily_production: [
-    ['2023-04-01', '2023-04-04'],
-    ['2023-04-01', '2023-04-02'],
+    ['2026-04-01', '2026-04-04'],
+    ['2026-04-01', '2026-04-02'],
   ],
-  production_load_curve: [['2023-04-01', '2023-04-02']],
+  production_load_curve: [['2026-04-01', '2026-04-02']],
 };
 
 const consumptionSession: Session = new Session(process.env.CONSUMPTION_TOKEN as string);
