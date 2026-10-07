@@ -4,12 +4,12 @@
 [![Build Status](https://flat.badgen.net/github/checks/bokub/linky?label=tests)](https://github.com/bokub/linky/actions/workflows/run.yml?query=branch%3Amaster)
 [![Codecov](https://img.shields.io/codecov/c/github/bokub/linky?style=flat-square)](https://codecov.io/gh/bokub/linky)
 [![Downloads](https://flat.badgen.net/npm/dy/linky?color=FF9800)](https://www.npmjs.com/package/linky)
-[![Node version](https://flat.badgen.net/badge/Node.js/>=%2016/blue)](https://github.com/bokub/prettier-config)
+![Node version](https://flat.badgen.net/badge/Node.js/>=%2016/blue)
 [![Code style](https://flat.badgen.net/badge/code%20style/prettier/ff69b4)](https://github.com/bokub/prettier-config)
 
 > **N.B**: Because this tool is targeted for french people, the documentation is...in french
 
-> **N.B 2**:À partir d'octobre 2026, la version 2 ne fonctionnera plus, car les anciennes API Enedis seront arrêtées. Utilisez la version 3 de `linky` pour continuer à récupérer vos données.
+> **N.B 2**: À partir d'octobre 2026, la version 2 ne fonctionnera plus, car les anciennes API Enedis seront arrêtées. Utilisez la version 3 de `linky` pour continuer à récupérer vos données.
 
 <p align="center">
   <img src="https://github.com/bokub/linky/assets/17952318/15aa5983-6c56-4ef0-b2e2-c663bf7f7087" alt="Linky CLI">
@@ -58,27 +58,27 @@ linky auth --token <votre-token>
 Une fois votre token sauvegardé, vous pourrez récupérer votre consommation quotidienne, votre courbe de charge (consommation par demi-heure), et votre consommation maximale par jour
 
 ```bash
-# Récupère la consommation quotidienne du 1er au 3 mai 2023
-linky daily --start 2023-05-01 --end 2023-05-04
+# Récupère la consommation quotidienne du 1er au 3 mai 2026
+linky daily --start 2026-05-01 --end 2026-05-04
 
-# Récupère la puissance moyenne consommée le 1 mai 2023, sur un intervalle de 30 min
-linky loadcurve --start 2023-05-01 --end 2023-05-02
+# Récupère la puissance moyenne consommée le 1 mai 2026, sur un intervalle de 30 min
+linky loadcurve --start 2026-05-01 --end 2026-05-02
 
-# Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023
-linky maxpower --start 2023-05-01 --end 2023-05-04
+# Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2026
+linky maxpower --start 2026-05-01 --end 2026-05-04
 
 # Récupère la puissance maximale mensuelle (P1M) pour la grandeur PMA
-linky maxpower --start 2023-01-01 --end 2023-11-01 --pas P1M --grandeur-physique PMA
+linky maxpower --start 2026-01-01 --end 2026-11-01 --pas P1M --grandeur-physique PMA
 ```
 
 Si vous produisez de l'électricité, vous pouvez également récupérer votre production quotidienne et votre courbe de charge (production par demi-heure)
 
 ```bash
-# Récupère la production quotidienne du 1er au 3 mai 2023
-linky dailyprod --start 2023-05-01 --end 2023-05-04
+# Récupère la production quotidienne du 1er au 3 mai 2026
+linky dailyprod --start 2026-05-01 --end 2026-05-04
 
-# Récupère la puissance moyenne produite le 1 mai 2023, sur un intervalle de 30 min
-linky loadcurveprod --start 2023-05-01 --end 2023-05-02
+# Récupère la puissance moyenne produite le 1 mai 2026, sur un intervalle de 30 min
+linky loadcurveprod --start 2026-05-01 --end 2026-05-02
 ```
 
 #### Dates par défaut
@@ -131,7 +131,7 @@ Vous pouvez changer le format d'affichage de sortie grâce au paramètre `--form
 Les formats disponibles sont `json`, `csv` et `pretty` (par défaut)
 
 ```bash
-linky daily --start 2023-05-01 --end 2023-05-02 --format json
+linky daily --start 2026-05-01 --end 2026-05-02 --format json
 ```
 
 Vous pouvez sauvegarder vos résultats dans un fichier en combinant les paramètres `--output` et `--format`
@@ -141,7 +141,7 @@ Vous pouvez sauvegarder vos résultats dans un fichier en combinant les paramèt
 linky loadcurve --output chemin/vers/ma_conso.json --format json
 
 # Sauvegarde une semaine de consommation au format CSV
-linky daily --start 2023-05-01 --end 2023-05-07 --output chemin/vers/ma_conso.csv --format csv
+linky daily --start 2026-05-01 --end 2026-05-07 --output chemin/vers/ma_conso.csv --format csv
 ```
 
 Vous pouvez masquer les messages et animations de progression grâce au paramètre `--quiet` afin de faciliter l'intégration dans des scripts
@@ -183,91 +183,124 @@ session = new Session(token, prm);
 // Celui-ci doit permettre d'identifier l'origine des requêtes envoyées à Conso API.
 session.userAgent = 'Mon super service';
 
-// Récupère la consommation quotidienne du 1er au 3 mai 2023
-session.getDailyConsumption('2023-05-01', '2023-05-04').then((result) => {
+// Récupère la consommation quotidienne du 1er au 3 mai 2026
+session.getDailyConsumption('2026-05-01', '2026-05-04').then((result) => {
   console.log(result);
   /*
-    {
-      "reading_type": {
-        "unit": "Wh",
-        "measurement_kind": "energy"
-      },
-      "interval_reading": [
-        { "value": "12873", "date": "2023-05-01" },
-        { "value": "12296", "date": "2023-05-02" },
-        { "value": "14679", "date": "2023-05-03" }
-      ]
-    ...
+   {
+     "periode": { "dateDebut": "2026-05-01", "dateFin": "2026-05-04" },
+     "pas": "P1D",
+     "grandeur": [
+       {
+         "grandeurMetier": "CONS",
+         "grandeurPhysique": "EA",
+         "unite": "Wh",
+         "points": [
+           { "v": "6261", "d": "2026-05-01" },
+           { "v": "4882", "d": "2026-05-02" },
+           { "v": "6291", "d": "2026-05-03" }
+         ],
+         "calendrier": []
+       }
+     ],
+     ...
+   }
     */
 });
 
-// Récupère la puissance moyenne consommée le 1er mai 2023, sur un intervalle de 30 min
-session.getLoadCurve('2023-05-01', '2023-05-02').then((result) => {
+// Récupère la puissance moyenne consommée le 1er mai 2026, sur un intervalle de 30 min
+session.getLoadCurve('2026-05-01', '2026-05-02').then((result) => {
   console.log(result);
   /*
-    {
-      "reading_type": {
-        "unit": "W",
-        "measurement_kind": "power"
-      },
-      "interval_reading": [
-        { "value": "752", "date": "2023-05-01 00:30:00" },
-        { "value": "346", "date": "2023-05-01 01:00:00" },
-        { "value": "250", "date": "2023-05-01 01:30:00" },
-        ...
+   {
+     "periode": { "dateDebut": "2026-05-01", "dateFin": "2026-05-02" },
+     "grandeur": [
+       {
+         "grandeurMetier": "CONS",
+         "grandeurPhysique": "PA",
+         "unite": "W",
+         "points": [
+           { "v": "108", "d": "2026-05-01 00:30:00", "p": "PT30M", "n": "B", "iv": "0", "ec": "0" },
+           { "v": "156", "d": "2026-05-01 01:00:00", "p": "PT30M", "n": "B", "iv": "0", "ec": "0" },
+           { "v": "166", "d": "2026-05-01 01:30:00", "p": "PT30M", "n": "B", "iv": "0", "ec": "0" },
+           ...
+         ]
+       }
+     ],
+     ...
+   }
     */
 });
 
-// Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2023
-session.getMaxPower('2023-05-01', '2023-05-04').then((result) => {
+// Récupère la puissance maximale de consommation atteinte quotidiennement du 1er au 3 mai 2026
+session.getMaxPower('2026-05-01', '2026-05-04').then((result) => {
   console.log(result);
   /*
-    {
-      "reading_type": {
-        "unit": "VA",
-        "measurement_kind": "power"
-      },
-      "interval_reading": [
-        { "value": "4638", "date": "2023-05-01 12:06:20" },
-        { "value": "4410", "date": "2023-05-02 19:27:46" },
-        { "value": "3570", "date": "2023-05-03 21:42:12" }
-      ]
-    ...
+   {
+     "periode": { "dateDebut": "2026-05-01", "dateFin": "2026-05-04" },
+     "pas": "P1D",
+     "grandeur": [
+       {
+         "grandeurMetier": "CONS",
+         "grandeurPhysique": "PMA",
+         "unite": "VA",
+         "points": [
+           { "v": "2475", "d": "2026-05-01 04:40:46" },
+           { "v": "2418", "d": "2026-05-02 04:10:18" },
+           { "v": "3325", "d": "2026-05-03 22:10:33" }
+         ]
+       }
+     ],
+     ...
+   }
     */
 });
 
-// Récupère la production quotidienne du 1er au 3 mai 2023
-session.getDailyProduction('2023-05-01', '2023-05-04').then((result) => {
+// Récupère la production quotidienne du 1er au 3 mai 2026
+session.getDailyProduction('2026-05-01', '2026-05-04').then((result) => {
   console.log(result);
   /*
-    {
-      "reading_type": {
-        "unit": "Wh",
-        "measurement_kind": "energy"
-      },
-      "interval_reading": [
-        { "value": "12873", "date": "2023-05-01" },
-        { "value": "12296", "date": "2023-05-02" },
-        { "value": "14679", "date": "2023-05-03" }
-      ]
-    ...
+   {
+     "periode": { "dateDebut": "2026-05-01", "dateFin": "2026-05-04" },
+     "pas": "P1D",
+     "grandeur": [
+       {
+         "grandeurMetier": "PROD",
+         "grandeurPhysique": "EA",
+         "unite": "Wh",
+         "points": [
+           { "v": "11339", "d": "2026-05-01" },
+           { "v": "890", "d": "2026-05-02" },
+           { "v": "8530", "d": "2026-05-03" }
+         ]
+       }
+     ],
+     ...
+   }
     */
 });
 
-// Récupère la puissance moyenne produite le 1er mai 2023, sur un intervalle de 30 min
-session.getProductionLoadCurve('2023-05-01', '2023-05-02').then((result) => {
+// Récupère la puissance moyenne produite le 1er mai 2026, sur un intervalle de 30 min
+session.getProductionLoadCurve('2026-05-01', '2026-05-02').then((result) => {
   console.log(result);
   /*
-    {
-      "reading_type": {
-        "unit": "W",
-        "measurement_kind": "power"
-      },
-      "interval_reading": [
-        { "value": "752", "date": "2023-05-01 00:30:00" },
-        { "value": "346", "date": "2023-05-01 01:00:00" },
-        { "value": "250", "date": "2023-05-01 01:30:00" },
-        ...
+   {
+     "periode": { "dateDebut": "2026-05-01", "dateFin": "2026-05-02" },
+     "grandeur": [
+       {
+         "grandeurMetier": "PROD",
+         "grandeurPhysique": "PA",
+         "unite": "W",
+         "points": [
+           { "v": "0", "d": "2026-05-01 00:30:00", "p": "PT30M", "n": "B", "iv": "0", "ec": "0" },
+           { "v": "0", "d": "2026-05-01 01:00:00", "p": "PT30M", "n": "B", "iv": "0", "ec": "0" },
+           { "v": "0", "d": "2026-05-01 01:30:00", "p": "PT30M", "n": "B", "iv": "0", "ec": "0" }
+           ...
+         ]
+       }
+     ],
+     ...
+   }
     */
 });
 ```
