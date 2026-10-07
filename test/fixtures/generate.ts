@@ -1,6 +1,6 @@
 import { writeFileSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
-import { APIError, Session } from '../../lib/index.js';
+import { APIError, DataType, Session } from '../../lib/index.js';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import prettier from 'prettier';
@@ -20,7 +20,9 @@ nock('https://conso.boris.sh')
 
 `;
 
-const dates: { [key: string]: string[][] } = {
+type DataTypeKey = keyof typeof DataType;
+
+const dates: Record<DataTypeKey, string[][]> = {
   daily_consumption: [
     ['2023-04-02', '2023-04-01'],
     ['2023-04-01', '2023-04-04'],
@@ -41,9 +43,9 @@ const dates: { [key: string]: string[][] } = {
 const consumptionSession: Session = new Session(process.env.CONSUMPTION_TOKEN as string);
 const productionSession: Session = new Session(process.env.PRODUCTION_TOKEN as string);
 
-for (const key in dates) {
+for (const key of Object.keys(dates) as DataTypeKey[]) {
   for (const [start, end] of dates[key]) {
-    fixtures += `nock('https://conso.boris.sh').get(/api\\/${key}\\?start=${start}&end=${end}/)`;
+    fixtures += `nock('https://conso.boris.sh').get(/api\\/${DataType[key]}\\?.*dateDebut=${start}.*dateFin=${end}/)`;
     try {
       let result: any = {};
       switch (key) {
@@ -63,7 +65,7 @@ for (const key in dates) {
           result = await productionSession.getProductionLoadCurve(start, end);
           break;
       }
-      result.usage_point_id = '11111111111111';
+      result.idPrm = '11111111111111';
       fixtures += `.reply(200, ${JSON.stringify(result)}).persist();\n\n`;
       console.info(`saved response 200 for ${key} from ${start} to ${end}`);
     } catch (e) {

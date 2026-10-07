@@ -4,25 +4,31 @@ import jwt from 'jsonwebtoken';
 const API_HOST = 'https://conso.boris.sh';
 
 export enum DataType {
-  daily_consumption = 'daily_consumption',
-  consumption_load_curve = 'consumption_load_curve',
-  consumption_max_power = 'consumption_max_power',
-  daily_production = 'daily_production',
-  production_load_curve = 'production_load_curve',
+  daily_consumption = 'consommation_quotidienne',
+  consumption_load_curve = 'courbe_de_charge_consommation',
+  consumption_max_power = 'puissance_conso_max_quotidienne',
+  daily_production = 'production_quotidienne',
+  production_load_curve = 'courbe_de_charge_production',
 }
 
 export type APIResponse = {
-  usage_point_id: string;
-  start: string;
-  end: string;
-  quality: string;
-  interval_reading: Array<{ value: string; date: string }>;
-  reading_type: {
-    unit: string;
-    measurement_kind: string;
-    aggregate: string;
-    measuring_period?: string;
+  idPrm: string;
+  etapeMetier: string;
+  periode: {
+    dateDebut: string;
+    dateFin: string;
   };
+  typeValeur: string;
+  modeCalcul: string;
+  pas: string;
+  grandeur: Array<{
+    grandeurMetier: string;
+    grandeurPhysique: string;
+    unite: string;
+    points: Array<{ v: string | null; d: string }>;
+    calendrier: unknown[];
+  }>;
+  contexte: unknown[];
 };
 
 export class APIError extends Error {
@@ -36,32 +42,6 @@ export class APIError extends Error {
     );
   }
 }
-
-export type EnergyResponse = APIResponse & {
-  reading_type: {
-    unit: 'Wh';
-    measurement_kind: 'energy';
-    aggregate: 'sum';
-    measuring_period: 'P1D';
-  };
-};
-
-export type AveragePowerResponse = APIResponse & {
-  reading_type: {
-    unit: 'W';
-    measurement_kind: 'power';
-    aggregate: 'average';
-  };
-};
-
-export type MaxPowerResponse = APIResponse & {
-  reading_type: {
-    unit: 'VA';
-    measurement_kind: 'power';
-    aggregate: 'maximum';
-    measuring_period: 'P1D';
-  };
-};
 
 export class Session {
   private prms: string[] = [];
@@ -84,32 +64,44 @@ export class Session {
     }
   }
 
-  getDailyConsumption(start: string, end: string): Promise<EnergyResponse> {
-    return this.callApi<EnergyResponse>(DataType.daily_consumption, start, end);
+  getDailyConsumption(start: string, end: string): Promise<APIResponse> {
+    return this.callApi(DataType.daily_consumption, start, end);
   }
 
-  getLoadCurve(start: string, end: string): Promise<AveragePowerResponse> {
-    return this.callApi<AveragePowerResponse>(DataType.consumption_load_curve, start, end);
+  getLoadCurve(start: string, end: string): Promise<APIResponse> {
+    return this.callApi(DataType.consumption_load_curve, start, end);
   }
 
-  getMaxPower(start: string, end: string): Promise<MaxPowerResponse> {
-    return this.callApi<MaxPowerResponse>(DataType.consumption_max_power, start, end);
+  getMaxPower(start: string, end: string, pas?: string, grandeurPhysique?: string): Promise<APIResponse> {
+    return this.callApi(DataType.consumption_max_power, start, end, { mesuresPas: pas, grandeurPhysique });
   }
 
-  getDailyProduction(start: string, end: string): Promise<EnergyResponse> {
-    return this.callApi<EnergyResponse>(DataType.daily_production, start, end);
+  getDailyProduction(start: string, end: string): Promise<APIResponse> {
+    return this.callApi(DataType.daily_production, start, end);
   }
 
-  getProductionLoadCurve(start: string, end: string): Promise<AveragePowerResponse> {
-    return this.callApi<AveragePowerResponse>(DataType.production_load_curve, start, end);
+  getProductionLoadCurve(start: string, end: string): Promise<APIResponse> {
+    return this.callApi(DataType.production_load_curve, start, end);
   }
 
-  private callApi<T>(type: DataType, start: string, end: string): Promise<T> {
-    const url = `${API_HOST}/api/${type}?${new URLSearchParams({
-      start: start,
-      end: end,
-      prm: this.prm || this.prms[0],
-    })}`;
+  private callApi<T>(
+    type: DataType,
+    start: string,
+    end: string,
+    optionalParams: { mesuresPas?: string; grandeurPhysique?: string } = {}
+  ): Promise<T> {
+    const params = new URLSearchParams({
+      dateDebut: start,
+      dateFin: end,
+      pointId: this.prm || this.prms[0],
+    });
+    if (optionalParams.mesuresPas) {
+      params.set('mesuresPas', optionalParams.mesuresPas);
+    }
+    if (optionalParams.grandeurPhysique) {
+      params.set('grandeurPhysique', optionalParams.grandeurPhysique);
+    }
+    const url = `${API_HOST}/api/${type}?${params}`;
 
     return axios
       .get<T>(url, {

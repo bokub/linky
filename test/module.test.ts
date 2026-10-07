@@ -12,30 +12,30 @@ describe('Linky module', () => {
     } catch (e) {
       expect((e as APIError).message).toContain('Conso API a répondu avec une erreur');
       expect((e as APIError).code).toBe(400);
-      expect((e as APIError).toString()).toContain('Invalid_request');
+      expect((e as APIError).toString()).toContain('ADAM-ERR0002');
     }
   });
 
   it('can retrieve daily consumption', async () => {
     const data = await session.getDailyConsumption('2023-04-01', '2023-04-04');
-    expect(data.reading_type.unit).toBe('Wh');
-    expect(data.interval_reading.length).toBe(3);
-    expect(data.interval_reading.map((d) => d.date)).toStrictEqual(['2023-04-01', '2023-04-02', '2023-04-03']);
+    expect(data.grandeur[0].unite).toBe('Wh');
+    expect(data.grandeur[0].points.length).toBe(3);
+    expect(data.grandeur[0].points.map((point) => point.d)).toStrictEqual(['2023-04-01', '2023-04-02', '2023-04-03']);
   });
 
   it('can retrieve load curve', async () => {
     const data = await session.getLoadCurve('2023-04-01', '2023-04-02');
-    expect(data.reading_type.unit).toBe('W');
-    expect(data.interval_reading.length).toBe(48);
-    expect(data.interval_reading[0].date).toBe(`2023-04-01 00:30:00`);
-    expect(data.interval_reading[3].date).toBe(`2023-04-01 02:00:00`);
+    expect(data.grandeur[0].unite).toBe('W');
+    expect(data.grandeur[0].points.length).toBe(48);
+    expect(data.grandeur[0].points[0].d).toBe(`2023-04-01 00:30:00`);
+    expect(data.grandeur[0].points[3].d).toBe(`2023-04-01 02:00:00`);
   });
 
   it('can retrieve max power', async () => {
     const data = await session.getMaxPower('2023-04-01', '2023-04-04');
-    expect(data.reading_type.unit).toBe('VA');
-    expect(data.interval_reading.length).toBe(3);
-    expect(data.interval_reading.map((d) => d.date.slice(0, 10))).toStrictEqual([
+    expect(data.grandeur[0].unite).toBe('VA');
+    expect(data.grandeur[0].points.length).toBe(3);
+    expect(data.grandeur[0].points.map((point) => point.d.slice(0, 10))).toStrictEqual([
       '2023-04-01',
       '2023-04-02',
       '2023-04-03',
@@ -44,16 +44,16 @@ describe('Linky module', () => {
 
   it('can retrieve daily production', async () => {
     const data = await session.getDailyProduction('2023-04-01', '2023-04-04');
-    expect(data.reading_type.unit).toBe('Wh');
-    expect(data.interval_reading.length).toBe(3);
-    expect(data.interval_reading.map((d) => d.date)).toStrictEqual(['2023-04-01', '2023-04-02', '2023-04-03']);
+    expect(data.grandeur[0].unite).toBe('Wh');
+    expect(data.grandeur[0].points.length).toBe(3);
+    expect(data.grandeur[0].points.map((point) => point.d)).toStrictEqual(['2023-04-01', '2023-04-02', '2023-04-03']);
   });
 
   it('can retrieve production load curve', async () => {
     const data = await session.getProductionLoadCurve('2023-04-01', '2023-04-02');
-    expect(data.reading_type.unit).toBe('W');
-    expect(data.interval_reading.length).toBe(48);
-    expect(data.interval_reading[0].date).toBe(`2023-04-01 00:30:00`);
-    expect(data.interval_reading[3].date).toBe(`2023-04-01 02:00:00`);
+    expect(data.grandeur[0].unite).toBe('W');
+    expect(data.grandeur[0].points.length).toBe(48);
+    expect(data.grandeur[0].points[0].d).toBe(`2023-04-01 00:30:00`);
+    expect(data.grandeur[0].points[3].d).toBe(`2023-04-01 02:00:00`);
   });
 });

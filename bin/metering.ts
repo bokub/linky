@@ -17,6 +17,8 @@ export type MeteringFlags = {
   format: Format;
   prm?: string;
   token?: string;
+  pas?: string;
+  grandeurPhysique?: string;
 };
 
 export class MeteringHandler {
@@ -56,7 +58,7 @@ export class MeteringHandler {
 
   maxPower() {
     return this.handlePromise(
-      this.session.getMaxPower(this.flags.start, this.flags.end),
+      this.session.getMaxPower(this.flags.start, this.flags.end, this.flags.pas, this.flags.grandeurPhysique),
       'Récupération de la puissance maximale quotidienne'
     );
   }
@@ -103,17 +105,28 @@ export class MeteringHandler {
 }
 
 function render(format: Format, color: boolean, response: APIResponse): string {
+  const points = response.grandeur.flatMap((grandeur) =>
+    grandeur.points.map((point) => ({ date: point.d, value: point.v, unit: grandeur.unite }))
+  );
+  const invalidPoints = points.filter((point) => point.value === null || !Number.isFinite(Number(point.value)));
+  invalidPoints.forEach((point) => {
+    console.warn(`Valeur non numérique reçue pour ${point.date} : ${JSON.stringify(point.value)}`);
+  });
+  const numericValues = points
+    .filter((point) => point.value !== null && Number.isFinite(Number(point.value)))
+    .map((point) => Number(point.value));
+
   switch (format) {
     case 'json':
       return JSON.stringify(response, null, 2);
 
     case 'csv':
-      return `Date,Valeur (${response.reading_type.unit})
-${response.interval_reading.map((x: { date: string; value: string }) => `${x.date},${x.value}`).join('\n')}`;
+      return `Date,Valeur (${points[0]?.unit ?? ''})
+${points.map((point) => `${point.date},${point.value}`).join('\n')}`;
 
     case 'pretty': {
-      const maxValue = Math.max(...response.interval_reading.map((x) => +x.value));
-      const displayTime = response.reading_type.measurement_kind !== 'energy';
+      const maxValue = Math.max(0, ...numericValues);
+      const dateWidth = points.length ? Math.max(...points.map((point) => point.date.length)) : 10;
       const chartLength = 30;
       const chalkLevel = chalk.level;
       if (!color) {
@@ -122,19 +135,26 @@ ${response.interval_reading.map((x: { date: string; value: string }) => `${x.dat
       const result =
         // Headers
         [
-          chalk.yellow.underline(`Date${' '.repeat(displayTime ? 16 : 7)}`),
-          chalk.green.underline(`Valeur (${response.reading_type.unit})`),
+          chalk.yellow.underline(`Date${' '.repeat(dateWidth - 'Date'.length + 1)}`),
+          chalk.green.underline(`Valeur (${points[0]?.unit ?? ''})`),
           chalk.cyan.underline(`Graphique${' '.repeat(chartLength - 9)}`),
         ].join(' ') +
         '\n' +
-        response.interval_reading
-          .map(
-            (line) =>
-              // Data
-              chalk.yellow(`${line.date}  `) +
-              chalk.green(`${line.value}`) +
-              ' '.repeat(10 + response.reading_type.unit.length - line.value.toString().length) +
-              chalk.cyan('■'.repeat(maxValue && line.value ? Math.ceil((chartLength * +line.value) / maxValue) : 0))
+        points
+          .map((point) =>
+            // Data
+            (
+              chalk.yellow(`${point.date.padEnd(dateWidth)}  `) +
+              chalk.green(`${point.value ?? 'null'}`) +
+              ' '.repeat(10 + point.unit.length - String(point.value ?? 'null').length) +
+              chalk.cyan(
+                '■'.repeat(
+                  maxValue && point.value !== null && Number.isFinite(Number(point.value))
+                    ? Math.ceil((chartLength * Number(point.value)) / maxValue)
+                    : 0
+                )
+              )
+            ).trimEnd()
           )
           .join('\n');
       chalk.level = chalkLevel;

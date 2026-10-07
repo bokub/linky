@@ -37,13 +37,15 @@ const mainHelp = `
         --format    -f      Determine le format d'affichage de sortie du script. Options: pretty, json, csv. Par défaut: pretty
         --quiet     -q      N'affiche pas les messages et animations de progression. Optionnel
         --output    -o      Fichier de sortie. Optionnel
+        --pas               Pas de mesure pour maxpower: "P1D" (jour) ou "P1M" (mois). Optionnel
+        --grandeur-physique Grandeur physique pour maxpower: "PMA" ou "TOUT". Optionnel
         
     Exemples:
       linky auth --token xxx.yyy.zzz
       linky daily
-      linky dailyprod --start 2023-01-01 --end 2023-01-08
-      linky maxpower --start 2023-05-01 --end 2023-05-15 --format json --quiet
-      linky loadcurve -s 2023-01-01 -e 2023-01-08 -o data/ma_conso.json --format json
+      linky dailyprod --start 2026-01-01 --end 2026-01-08 --format json --quiet
+      linky maxpower --start 2025-01-01 --end 2026-01-01 --pas P1M --grandeur-physique PMA
+      linky loadcurve -s 2026-01-01 -e 2026-01-08 -o data/ma_conso.json --format json
       linky loadcurveprod -p 225169
 `;
 
@@ -62,6 +64,8 @@ const cli = meow(mainHelp, {
   description: false,
   flags: {
     prm: { type: 'string', shortFlag: 'p' },
+    pas: { type: 'string' },
+    grandeurPhysique: { type: 'string' },
     token: { type: 'string', shortFlag: 't' },
     start: { type: 'string', shortFlag: 's', default: yesterday },
     end: { type: 'string', shortFlag: 'e', default: today },
@@ -79,6 +83,8 @@ const meteringFlags: MeteringFlags = {
   format: cli.flags.format as Format,
   prm: cli.flags.prm,
   token: cli.flags.token,
+  pas: cli.flags.pas,
+  grandeurPhysique: cli.flags.grandeurPhysique,
 };
 
 const notifier = updateNotifier({ pkg });
